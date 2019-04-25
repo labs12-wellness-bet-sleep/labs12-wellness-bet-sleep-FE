@@ -28,7 +28,7 @@ class Register extends Compoent {
             email: this.state.email 
         }
 
-        axios.post("https://dashboard.heroku.com/apps/sleep-bet/register", user)
+        axios.post("https://sleep-bet.herokuapp.com/register", user)
             .then(result => console.log(result))
             .catch(error => console.log(error));
     }
