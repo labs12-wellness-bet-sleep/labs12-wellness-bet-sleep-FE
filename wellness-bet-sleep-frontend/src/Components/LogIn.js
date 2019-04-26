@@ -27,7 +27,7 @@ class Login extends Compoent {
             email: this.state.email 
         }
 
-        axios.post("https://sleep-bet.herokuapp.com/login", user)
+        axios.get("https://sleep-bet.herokuapp.com/login", user)
             .then(result => console.log(result))
             .catch(error => console.log(error));
     }
