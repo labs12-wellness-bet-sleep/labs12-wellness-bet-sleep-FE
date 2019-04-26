@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import User from "./User.js";
 
 class Users extends Compoent {
     constructor(props) {
@@ -29,3 +30,5 @@ class Users extends Compoent {
         )
     }
 }
+
+export default Users;
