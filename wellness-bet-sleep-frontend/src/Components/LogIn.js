@@ -38,6 +38,8 @@ class Login extends Compoent {
 
         <div ClassName="login">
 
+        <h2>Login</h2>
+
         <form onSubmit={this.login}>
 
             <b>Name:</b>
@@ -55,3 +57,5 @@ class Login extends Compoent {
     }
 
 }
+
+export default Login;
