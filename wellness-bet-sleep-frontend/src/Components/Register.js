@@ -20,6 +20,7 @@ class Register extends Component {
 
     handleChanges = e => {
         e.preventDefault();
+        console.log(e.target.name, e.target.value);
         this.setState({[e.target.name]: e.target.value});
     }
 
@@ -32,7 +33,10 @@ class Register extends Component {
         }
 
         axios.post("https://sleep-bet.herokuapp.com/register", user)
-            .then(result => console.log(result))
+            .then(result => {
+                
+                console.log("Congratulations on registering!");
+                console.log(result)})
             .catch(error => console.log(error));
     }
 

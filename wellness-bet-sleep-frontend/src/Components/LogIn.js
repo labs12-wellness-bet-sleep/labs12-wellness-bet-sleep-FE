@@ -20,6 +20,7 @@ class Login extends Component {
     handleChanges = e => {
 
         e.preventDefault();
+        console.log(e.target.name, e.target.value);
         this.setState({[e.target.name]: e.target.value});
     }
 
@@ -32,7 +33,9 @@ class Login extends Component {
         }
 
         axios.get("https://sleep-bet.herokuapp.com/login", user)
-            .then(result => console.log(result))
+            .then(result => { 
+                console.log("Congratulations on logging on!");
+                return console.log(result)})
             .catch(error => console.log(error));
     }
 
