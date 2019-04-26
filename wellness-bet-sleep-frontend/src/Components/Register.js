@@ -38,6 +38,8 @@ class Register extends Compoent {
         return(
             <div ClassName="register">
 
+            <h2>Register</h2>
+
             <form onSubmit={this.register}>
                 <b>Name:</b>
                 <input name="username" type="text" onChange={() => this.handleChanges}></input>
@@ -56,3 +58,5 @@ class Register extends Compoent {
     }
 
 }
+
+export default Register; 
