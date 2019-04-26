@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import Home from "./Components/Home.js";
-import Login from "./Components/Login.js";
+import Login from "./Components/LogIn.js";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
 
@@ -13,10 +13,12 @@ function App() {
   return (
     <div className="App">
 
-      <Link to="/" activeClassName="selected">Home</Link>
-      <Link to="/users">List of Users</Link>
-      <Link to="/login">Login</Link>
-      <Link to="/register">register</Link>
+      <nav>
+      <Link to="/" activeClassName="selected" >Home </Link>
+      <Link to="/users"> List of Users </Link>
+      <Link to="/login"> Login </Link>
+      <Link to="/register"> Register</Link>
+      </nav>
     
       <Route path={'/'} component={Home}/> 
       <Route path={'/users'} component={Users}/> 

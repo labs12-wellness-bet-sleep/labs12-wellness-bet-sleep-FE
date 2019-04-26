@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import User from "./User.js";
+import axios from 'axios';
 
-class Users extends Compoent {
+
+class Users extends Component {
     constructor(props) {
+    super(props);
 
     this.state = {
-        users = []
+        users: []
     }
 
     }
 
     componentDidMount(){
-        axios.post("https://sleep-bet.herokuapp.com/api/users", user)
+        axios.get("https://sleep-bet.herokuapp.com/api/users")
             .then(result => {
                 this.setState({users: result.data})
             })
@@ -23,7 +26,7 @@ class Users extends Compoent {
             <div className="Users">
             <h2>List Of Users:</h2>
             {this.state.users.map(user => {
-                <User user={user}/>
+                return <User user={user}/>
             })}
             </div>
 
