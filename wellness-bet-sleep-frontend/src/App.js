@@ -12,6 +12,12 @@ import Users from "./Components/Users.js";
 function App() {
   return (
     <div className="App">
+
+      <Link to="/" activeClassName="selected">Home</Link>
+      <Link to="/users">List of Users</Link>
+      <Link to="/login">Login</Link>
+      <Link to="/register">register</Link>
+    
       <Route path={'/'} component={Home}/> 
       <Route path={'/users'} component={Users}/> 
       <Route path={'/login'} component={Login}/>
