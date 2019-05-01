@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-// import { auth } from './FirebaseConfig';
+import { auth } from './FirebaseConfig';
 
 import './App.css';
 
@@ -17,15 +17,24 @@ class App extends Component {
     }
   }
 
-  // componentDidMount = () => {
-  
-  // }
+  componentDidMount = () => {
+    this.authListener()
+  }
 
-  // authListener = () => {
-  //   auth().onAuthStateChanged((user) => {
-  //     console.log(user)
-  //   })
-  // }
+  authListener = () => {
+    auth.onAuthStateChanged((users) => {
+      console.log(users, 'in auth listener')
+      if(users) {
+        this.setState({
+          users
+        })
+      } else {
+        this.setState({
+          users: null
+        })
+      }
+    })
+  }
 
   render () {
   return (
@@ -42,6 +51,8 @@ class App extends Component {
       <Route path={'/users'} component={Users}/> 
       <Route path={'/login'} component={Login}/>
       <Route path={'/register'} component={Register}/>
+
+      {this.state.users ? (<Users/>) : (<Login/>)}
     </div>
   )
 }
