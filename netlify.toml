@@ -1,0 +1,4 @@
+[build]
+base = "wellness-bet-sleep-frontend/"
+publish = "wellness-bet-sleep-frontend/build/"
+command = "yarn build"

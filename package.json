@@ -1,5 +1,13 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "firebase": "^5.10.1"
+=======
+    "netlify": "^2.4.4"
+  },
+
+  "scripts": {
+    "build": "./wellness-bet-sleep-frontend/index.js"
+>>>>>>> 3dd426a3d888d85a04ad6c882c57b2c395b427bc
   }
 }
