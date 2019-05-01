@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "netlify": "^2.4.4"
-  },
-
-  "scripts": {
-    "build": "./wellness-bet-sleep-frontend/index.js"
-  }
-}

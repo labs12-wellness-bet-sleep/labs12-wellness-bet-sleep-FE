@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+// import { auth } from './FirebaseConfig';
 
-import logo from './logo.svg';
 import './App.css';
 
 import Home from "./Components/Home.js";
@@ -9,7 +9,25 @@ import Login from "./Components/LogIn.js";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
 
-function App() {
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: {}
+    }
+  }
+
+  // componentDidMount = () => {
+  
+  // }
+
+  // authListener = () => {
+  //   auth().onAuthStateChanged((user) => {
+  //     console.log(user)
+  //   })
+  // }
+
+  render () {
   return (
     <div className="App">
 
@@ -25,7 +43,8 @@ function App() {
       <Route path={'/login'} component={Login}/>
       <Route path={'/register'} component={Register}/>
     </div>
-  );
+  )
+}
 }
 
 export default App;
