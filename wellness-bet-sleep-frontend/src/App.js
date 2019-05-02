@@ -4,8 +4,8 @@ import { auth } from './FirebaseConfig';
 
 import './App.css';
 
-import Home from "./Components/home/Home";
-import Login from "./Components/LogIn.js";
+import Home from './Components/home/Home';
+import Login from "./Components/login/LogIn";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
 
@@ -52,7 +52,7 @@ class App extends Component {
       <Route path={'/login'} component={Login}/>
       <Route path={'/register'} component={Register}/>
 
-      {this.state.users ? (<Users/>) : (<Login/>)}
+      {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
     </div>
   )
 }

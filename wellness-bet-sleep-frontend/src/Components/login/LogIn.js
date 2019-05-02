@@ -1,0 +1,151 @@
+import React, { Component } from 'react';
+import axios from 'axios';
+import { auth, googleProvider } from '../../FirebaseConfig';
+import styled from 'styled-components';
+
+const LoginWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 80%;
+    border: 1px solid red;
+`;
+
+const LoginTitle = styled.div`
+    color: white;
+    font-size: 2rem;
+    
+    border: 1px solid orange;
+    span {
+        padding-top: 4rem;
+    }
+    /* h3 {
+        font-size: 2rem;
+        border: 1px solid pink;
+    }
+    h2 {
+        margin-bottom: 3rem;
+        border: 1px solid purple;
+    } */
+`;
+const LoginFormWrapper = styled.form`
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    justify-content: space-around;
+    border: 3px solid green;
+`;
+
+const LoginFormInput = styled.input`
+    border: none;
+    border-radius: 2rem;
+    /* background-color: #60769588; */
+    background-color: #abb5c488;
+    height: 45px;
+
+    ::placeholder {
+        color: white;
+        padding-left: 1rem;
+        font-size: 1rem;
+    }
+`;
+class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: "",
+            password: "",
+            loggedIn: false, 
+            loginMessage: "Please log in."
+        }
+    }
+
+    componentDidMount(){
+        if(this.state.loggedIn == false){
+            this.setState({loginMessage: "Please log in."})
+        }
+    }
+
+
+    handleChanges = e => {
+        e.preventDefault();
+        console.log(e.target.name, e.target.value);
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    loginWithEmail = e => {
+        e.preventDefault();
+        auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then((user) => {
+                console.log(user)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    signUp = event => {
+        event.preventDefault()
+        auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(user => {
+            console.log(user)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    loginWithGoogle = event => {
+        event.preventDefault()
+        auth.signInWithPopup(googleProvider)
+        .then(user => {
+            console.log(user, 'google signin')
+        })
+        .catch(err => console.error(err));
+    }
+    
+    render() {
+
+        return(
+
+        <LoginWrapper>
+
+           {/* <div className="login-message">
+            {this.state.loginMessage}
+            </div> */}
+        <LoginTitle>
+            {/* <h3>Wellness Bet</h3>  <h2>Sleep</h2> */}
+            Wellness Bet <br/>  <span> Sleep</span>
+        </LoginTitle>
+        {/* <h2>Login</h2> */}
+
+        <LoginFormWrapper>
+                <LoginFormInput
+                    name="email" 
+                    placeholder='Email'
+                    type="email" 
+                    id='email' 
+                    onChange={(e) => this.handleChanges(e)}/>
+          
+                <LoginFormInput 
+                    name="password" 
+                    placeholder='Password'
+                    type="password" 
+                    id='password' 
+                    onChange={(e) => this.handleChanges(e)
+                }/>
+            
+            <button onClick={this.loginWithEmail}>Login</button> 
+            <button onClick={this.signUp}>Sign Up</button>
+            <button onClick={this.loginWithGoogle}>Login With Google</button>
+            <button onClick={this.loginWithGoogle}>SignUp with Google</button>
+
+        </LoginFormWrapper>
+        
+        </LoginWrapper>
+        )
+    }
+
+}
+
+export default Login;
