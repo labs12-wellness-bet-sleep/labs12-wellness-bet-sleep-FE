@@ -11,11 +11,11 @@ class Register extends Component {
       username: "",
       email: "",
       password: "",
-      fullName: '',
+      fullName: "",
       registered: false,
       welcomeMessage: "Please register before logging in.",
       profilePhotoImg: null,
-      profilePhotoUrl: ""
+      profilePhoto: ""
     };
   }
 
@@ -31,89 +31,148 @@ class Register extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleUploadChange = e => {
-    if (e.target.files[0]) {
-      const profilePhotoImg = e.target.files[0];
-      this.setState(() => ({ profilePhotoImg }));
-    }
-  };
+  //   handleUploadChange = e => {
+  //     e.preventDefault();
+  //     if (e.target.files[0]) {
+  //       const profilePhotoImg = e.target.files[0];
+  //       this.setState(() => ({ profilePhotoImg }));
+  //     }
+  //   };
 
-  handleUpload = () => {
-    const { profilePhotoImg } = this.state;
-    const uploadTask = storage
-      .ref(`images/${profilePhotoImg.name}`)
-      .put(profilePhotoImg);
-    uploadTask.on(
-      "state_change",
-      snapshot => {
-        // progress function
-      },
-      error => {
-        console.log(error);
-      },
-      () => {
-        // complete function
-        storage
-          .ref("images")
-          .child(profilePhotoImg.name)
-          .getDownloadURL()
-          .then(url => {
-            console.log(url);
-          });
-      }
-    );
-  };
+  //   handleUpload = () => {
+  //     const { profilePhotoImg } = this.state;
+  //     const uploadTask = storage
+  //       .ref(`images/${profilePhotoImg.name}`)
+  //       .put(profilePhotoImg);
+  //     uploadTask.on(
+  //       "state_change",
+  //       snapshot => {
+  //         // progress function
+  //       },
+  //       error => {
+  //         console.log(error);
+  //       },
+  //       () => {
+  //         // complete function
+  //         storage
+  //           .ref("images")
+  //           .child(profilePhotoImg.name)
+  //           .getDownloadURL()
+  //           .then(url => {
+  //             console.log(url);
+  //             this.setState({profilePhoto: url})
+  //           });
+  //       }
+  //     );
+  //   };
+
+  //   register = e => {
+  //     e.preventDefault();
+
+  //     const user = {
+  //       username: this.state.username,
+  //       password: this.state.password,
+  //       email: this.state.email,
+  //       fullName: this.state.fullName,
+  //       profilePhoto: this.state.profilePhoto
+  //     };
+
+  //     const { profilePhotoImg } = this.state;
+  //     const uploadTask = storage
+  //       .ref(`images/${profilePhotoImg.name}`)
+  //       .put(profilePhotoImg);
+  //     uploadTask.on(
+  //       "state_changed",
+  //       snapshot => {
+  //         // progress function
+  //       },
+  //       error => {
+  //         console.log(error);
+  //       },
+  //       () => {
+  //         // complete function
+  //         storage
+  //           .ref("images")
+  //           .child(profilePhotoImg.name)
+  //           .getDownloadURL()
+  //           .then(url => {
+  //             console.log(url);
+  //             this.setState({ profilePhoto: url });
+  //           });
+  //       }
+  //     );
+
+  //     axios
+  //       .post("https://sleep-bet.herokuapp.com/api/users/register", user)
+  //       .then(result => {
+  //         console.log(result);
+  //         this.setState({
+  //           registered: true,
+  //           welcomeMessage: `Congratulations for registering, ${
+  //             result.data.username
+  //           }`
+  //         });
+  //         console.log("Congratulations on registering!");
+  //         console.log(result);
+  //       })
+  //       .catch(error => console.log(error));
+
+  //     this.props.history.push("/users");
+  //   };
 
   register = e => {
     e.preventDefault();
 
-    const user = {
-      username: this.state.username,
-      password: this.state.password,
-      email: this.state.email,
-      fullName: this.state.fullName
-    };
+    let currentImageName = "firebase-image-" + Date.now();
 
-    const { profilePhotoImg } = this.state;
-    const uploadTask = storage
-      .ref(`images/${profilePhotoImg.name}`)
-      .put(profilePhotoImg);
-    uploadTask.on(
+    let uploadImage = storage
+      .ref(`images/${currentImageName}`)
+      .put(e.target.files[0]);
+
+    uploadImage.on(
       "state_changed",
-      (snapshot) => {
-        // progress function
-      },
+      snapshot => {},
       error => {
-        console.log(error);
+        alert(error);
       },
       () => {
-        // complete function
         storage
           .ref("images")
-          .child(profilePhotoImg.name)
+          .child(currentImageName)
           .getDownloadURL()
           .then(url => {
-            console.log(url);
+            this.setState({
+              profilePhoto: url
+            });
+
+            // store image object in the database
+            const user = {
+              username: this.state.username,
+              password: this.state.password,
+              email: this.state.email,
+              fullName: this.state.fullName,
+              profilePhoto: url
+            };
+
+            axios
+              .post("https://sleep-bet.herokuapp.com/api/users/register", user)
+              .then(result => {
+                console.log(result);
+                this.setState({
+                  registered: true,
+                  welcomeMessage: `Congratulations for registering, ${
+                    result.data.username
+                  }`
+                });
+                console.log("Congratulations on registering!");
+                console.log(result);
+              })
+              .catch(error => console.log(error));
+
+            this.props.history.push("/users");
           });
       }
     );
-
-    axios
-      .post("https://sleep-bet.herokuapp.com/api/users/register", user)
-      .then(result => {
-        console.log(result);
-        this.setState({
-          registered: true,
-          welcomeMessage: `Congratulations for registering, ${
-            result.data.username
-          }`
-        });
-        console.log("Congratulations on registering!");
-        console.log(result);
-      })
-      .catch(error => console.log(error));
-
-    this.props.history.push("/users");
   };
 
   render() {
@@ -124,7 +183,7 @@ class Register extends Component {
         <div className="registerMessage">{this.state.welcomeMessage}</div>
 
         <form onSubmit={this.register}>
-        <b>Full Name:</b>
+          <b>Full Name:</b>
           <input
             name="fullName"
             type="text"
@@ -153,8 +212,9 @@ class Register extends Component {
 
           <b>Profile Photo:</b>
 
-          <input type="file" onChange={this.handleUploadChange} />
+          {/* <input type="file" onChange={e => this.handleUploadChange(e)} /> */}
           {/* <button onClick={this.handleUpload}>Upload</button> */}
+          <input type="file" onChange={e => this.register(e)} />
 
           <button type="submit">Submit</button>
         </form>
