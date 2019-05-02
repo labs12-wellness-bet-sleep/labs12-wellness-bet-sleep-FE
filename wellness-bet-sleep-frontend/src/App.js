@@ -4,7 +4,7 @@ import { auth } from './FirebaseConfig';
 
 import './App.css';
 
-import Home from "./Components/Home.js";
+import Home from "./Components/home/Home";
 import Login from "./Components/LogIn.js";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
