@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { auth, googleProvider } from '../FirebaseConfig';
 
 class Login extends Component {
     constructor(props) {
-
         super(props);
-
         this.state = {
-            username: "",
+            email: "",
             password: "",
             loggedIn: false, 
             loginMessage: "Please log in."
@@ -22,32 +21,42 @@ class Login extends Component {
 
 
     handleChanges = e => {
-
         e.preventDefault();
         console.log(e.target.name, e.target.value);
         this.setState({[e.target.name]: e.target.value});
     }
 
-    login = e => {
-
+    loginWithEmail = e => {
         e.preventDefault();
-
-        const user = {
-            username: this.state.username,
-            password: this.state.password,
-            email: this.state.email 
-        }
-
-        axios.post("https://sleep-bet.herokuapp.com/auth/login", user)
-            .then(result => { 
-                this.setState({loggedIn: true, loginMessage: result.data.message })
-                console.log("Congratulations on logging on!");
-                return console.log(result)})
-            .catch(error => console.log(error));
-
-        this.props.history.push("/users");
+        auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then((user) => {
+                console.log(user)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
+    signUp = event => {
+        event.preventDefault()
+        auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(user => {
+            console.log(user)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    loginWithGoogle = event => {
+        event.preventDefault()
+        auth.signInWithPopup(googleProvider)
+        .then(user => {
+            console.log(user, 'google signin')
+        })
+        .catch(err => console.error(err));
+    }
+    
     render() {
 
         return(
@@ -60,15 +69,18 @@ class Login extends Component {
 
         <h2>Login</h2>
 
-        <form onSubmit={this.login}>
+        <form>
 
-            <b>Name:</b>
-            <input name="username" type="text" onChange={(e) => this.handleChanges(e)}></input>
+            <b>email:</b>
+            <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input>
 
             <b>Password:</b>
             <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input>
             
-            <button type="submit">Submit</button>
+            <button onClick={this.loginWithEmail}>Login</button> 
+            <button onClick={this.signUp}>Sign Up</button>
+            <button onClick={this.loginWithGoogle}>Login With Google</button>
+            <button onClick={this.loginWithGoogle}>SignUp with Google</button>
 
         </form>
         
