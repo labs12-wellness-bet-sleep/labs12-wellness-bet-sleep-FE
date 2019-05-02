@@ -31,39 +31,40 @@ class Register extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleUploadChange = e => {
-    e.preventDefault();
-    if (e.target.files[0]) {
-      const profilePhotoImg = e.target.files[0];
-      this.setState(() => ({ profilePhotoImg }));
-    }
-  };
+  // handleUploadChange = e => {
+  //   e.preventDefault();
+  //   if (e.target.files[0]) {
+  //     const profilePhotoImg = e.target.files[0];
+  //     this.setState(() => ({ profilePhotoImg }));
+  //   }
+  // };
 
   register = e => {
     e.preventDefault();
 
-    const { profilePhotoImg } = this.state;
-    const uploadTask = storage
-      .ref(`images/${profilePhotoImg}"firebase-image-"${Date.now()}`)
-      .put(profilePhotoImg);
-    uploadTask.on(
+    let currentImageName = "firebase-image-" + Date.now();
+
+    let uploadImage = storage
+      .ref(`images/${currentImageName}`)
+      .put(e.target.files[0]);
+
+    uploadImage.on(
       "state_changed",
-      snapshot => {
-        // progress function
-      },
+      snapshot => {},
       error => {
-        console.log(error);
+        alert(error);
       },
       () => {
-        // complete function
         storage
           .ref("images")
-          .child(profilePhotoImg.name)
+          .child(currentImageName)
           .getDownloadURL()
           .then(url => {
-            console.log(url);
-            this.setState({ profilePhoto: url });
+            this.setState({
+              profilePhoto: url
+            });
 
+            // store image object in the database
             const user = {
               username: this.state.username,
               password: this.state.password,
@@ -130,7 +131,8 @@ class Register extends Component {
 
           <b>Profile Photo:</b>
 
-          <input type="file" onChange={e => this.handleUploadChange(e)} />
+          {/* <input type="file" onChange={e => this.handleUploadChange(e)} /> */}
+          <input type="file" onChange={e => this.register(e)} />
 
           <button type="submit">Submit</button>
         </form>
