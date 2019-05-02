@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { auth } from '../FirebaseConfig';
+import { auth, googleProvider } from '../FirebaseConfig';
 
 class Login extends Component {
     constructor(props) {
@@ -47,6 +47,16 @@ class Login extends Component {
             console.log(error)
         })
     }
+
+    loginWithGoogle = event => {
+        event.preventDefault()
+        auth.signInWithPopup(googleProvider)
+        .then(user => {
+            console.log(user, 'google signin')
+        })
+        .catch(err => console.error(err));
+    }
+    
     render() {
 
         return(
@@ -69,6 +79,8 @@ class Login extends Component {
             
             <button onClick={this.loginWithEmail}>Login</button> 
             <button onClick={this.signUp}>Sign Up</button>
+            <button onClick={this.loginWithGoogle}>Login With Google</button>
+            <button onClick={this.loginWithGoogle}>SignUp with Google</button>
 
         </form>
         
