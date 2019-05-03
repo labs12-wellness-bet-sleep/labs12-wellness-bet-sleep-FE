@@ -10,6 +10,6 @@
   },
 
   "scripts": {
-    "build": "./wellness-bet-sleep-frontend/index.js"
+    "build": "./wellness-bet-sleep-frontend/src/index.js"
   }
 }
