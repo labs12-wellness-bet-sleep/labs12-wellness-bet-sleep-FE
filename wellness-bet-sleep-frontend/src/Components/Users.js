@@ -15,7 +15,7 @@ class Users extends Component {
     }
 
     componentDidMount(){
-        axios.get("https://sleep-bet.herokuapp.com/api/users")
+        axios.get("http://localhost:8080/api/users")
             .then(result => {
                 this.setState({users: result.data})
             })
@@ -31,7 +31,7 @@ class Users extends Component {
             <button onClick={this.logout}>Logout</button>
             <h2>List Of Users:</h2>
             {this.state.users.map(user => {
-                return <User user={user}/>
+                return <User key={user.id} user={user}/>
             })}
             </div>
 

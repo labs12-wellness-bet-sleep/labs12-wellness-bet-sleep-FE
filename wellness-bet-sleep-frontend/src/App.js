@@ -8,6 +8,7 @@ import Home from "./Components/Home.js";
 import Login from "./Components/LogIn.js";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
+import Groups from './Components/Views/GroupsView/Groups.js';
 
 class App extends Component {
   constructor(props) {
@@ -50,7 +51,8 @@ class App extends Component {
       <Route path={'/'} component={Home}/> 
       <Route path={'/users'} component={Users}/> 
       <Route path={'/login'} component={Login}/>
-      <Route path={'/register'} component={Register}/>
+      <Route path={'/register'} component={Register}/>  
+      <Route path="/newusers/:id/groups" component={Groups} />    
 
       {this.state.users ? (<Users/>) : (<Login/>)}
     </div>
