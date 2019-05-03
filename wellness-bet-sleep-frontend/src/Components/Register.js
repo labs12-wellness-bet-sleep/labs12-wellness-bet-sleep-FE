@@ -74,7 +74,7 @@ class Register extends Component {
             };
 
             axios
-              .post("http://localhost:8080/api/users/register", user)
+              .post("https://sleep-bet.herokuapp.com/api/users/register", user)
               .then(result => {
                 console.log(result);
                 this.setState({

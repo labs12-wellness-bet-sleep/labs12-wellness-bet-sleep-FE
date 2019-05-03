@@ -26,13 +26,13 @@ class Groups extends Component {
   }
 
   fetchUser = id => {
-    axios.get(`http://localhost:8080/api/users/${id}`).then(res => {
+    axios.get(`https://sleep-bet.herokuapp.com/api/users/${id}`).then(res => {
       this.setState({ user: res.data });
     });
   };
 
   fetchGroups = id => {
-    axios.get(`http://localhost:8080/api/users/${id}/groups`).then(res => {
+    axios.get(`https://sleep-bet.herokuapp.com/api/users/${id}/groups`).then(res => {
         console.log(res);
       this.setState({ groups: res.data.groups });
     });
