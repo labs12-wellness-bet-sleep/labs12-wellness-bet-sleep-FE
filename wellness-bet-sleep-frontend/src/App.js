@@ -47,11 +47,11 @@ class App extends Component {
       <Link to="/register"> Register</Link>
       </nav>
     
-      <Route path={'/'} component={Home}/> 
-      <Route path={'/users'} component={Users}/> 
-      <Route path={'/login'} component={Login}/>
-      <Route path={'/register'} component={Register}/>
-
+      <Route exact path={'/'} component={Home}/> 
+      <Route exact path={'/users'} component={Users}/> 
+      <Route exact path={'/login'} component={Login}/>
+      <Route exact path={'/register'} component={Register}/>
+      
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
     </div>
   )

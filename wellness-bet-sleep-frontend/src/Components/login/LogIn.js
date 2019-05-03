@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from'react-router-dom';
 import axios from 'axios';
 import { auth, googleProvider } from '../../FirebaseConfig';
 import styled from 'styled-components';
@@ -7,47 +8,71 @@ const LoginWrapper = styled.div`
     display: flex;
     flex-direction: column;
     height: auto;
-    width: 80%;
-    border: 1px solid red;
+    width: 30%;
+    /* border: 1px solid red; */
+    
 `;
 
 const LoginTitle = styled.div`
     color: white;
     font-size: 2rem;
     
-    border: 1px solid orange;
+    /* border: 1px solid orange; */
     span {
         padding-top: 4rem;
     }
-    /* h3 {
-        font-size: 2rem;
-        border: 1px solid pink;
-    }
-    h2 {
-        margin-bottom: 3rem;
-        border: 1px solid purple;
-    } */
 `;
 const LoginFormWrapper = styled.form`
     display: flex;
     flex-direction: column;
-    height: 250px;
+    height: auto;
     justify-content: space-around;
-    border: 3px solid green;
+    /* border: 3px solid green; */
 `;
 
 const LoginFormInput = styled.input`
     border: none;
     border-radius: 2rem;
-    /* background-color: #60769588; */
     background-color: #abb5c488;
-    height: 45px;
-
+    margin-top: 2rem;
+    height: 55px;
+    width: 95%;
     ::placeholder {
         color: white;
         padding-left: 1rem;
         font-size: 1rem;
     }
+`;
+const LoginFormButtons = styled.div`
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-around;
+    margin-top: 2rem;
+    align-items: center;
+    /* height: 300px; */
+    /* border: 1px solid orange; */
+`;
+const LoginFormLinks = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    /* border: 1px solid red; */
+    .register-link {
+        color: #585a5e;
+        text-decoration: none;
+    }
+`;
+
+const LoginFormButton = styled.button`
+    border: none;
+    background-color: none; 
+    border: none;
+    border-radius: 2rem;
+    background-color: #004CA8;
+    color: white;
+    font-size: 1rem;
+    height: 55px;
+    width: 100%;
 `;
 class Login extends Component {
     constructor(props) {
@@ -135,12 +160,18 @@ class Login extends Component {
                     onChange={(e) => this.handleChanges(e)
                 }/>
             
-            <button onClick={this.loginWithEmail}>Login</button> 
-            <button onClick={this.signUp}>Sign Up</button>
-            <button onClick={this.loginWithGoogle}>Login With Google</button>
-            <button onClick={this.loginWithGoogle}>SignUp with Google</button>
-
+            <LoginFormButtons>
+                <LoginFormButton onClick={this.loginWithEmail}>Get Started</LoginFormButton> 
+                {/* <LoginFormButton onClick={this.loginWithEmail}>Login</LoginFormButton> 
+                <LoginFormButton onClick={this.signUp}>Sign Up</LoginFormButton> */}
+                
+                {/* <LoginFormButton onClick={this.loginWithGoogle}>SignUp with Google</LoginFormButton> */}
+            </LoginFormButtons>
         </LoginFormWrapper>
+        <LoginFormLinks>
+            <Link to="/register" className='register-link'>Create Account</Link>
+            <div onClick={this.loginWithGoogle}><Link className='register-link'>Login With Google</Link></div>
+        </LoginFormLinks>
         
         </LoginWrapper>
         )

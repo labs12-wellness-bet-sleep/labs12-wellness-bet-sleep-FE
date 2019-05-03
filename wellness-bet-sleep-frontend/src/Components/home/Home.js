@@ -3,29 +3,27 @@ import '../../App.css'
 import styled from 'styled-components';
 import Login from '../login/LogIn';
 
-const Overlay = styled.div`
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     align-items: center;
-`;
 const LoginWrapper = styled.div`
-  
-   width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0 auto;
+    width: 70%;
+    /* border: 1px solid green; */
 `;
+
 function Home(props) {
     return (
+        <div className='home'>
+            <div className='overlay'>
+                <LoginWrapper>
+                    <Login/>
+                </LoginWrapper>
+                
+            </div>         
+        </div>
         
-        <section className='home'> 
-        
-        <Overlay className='overlay'>
-        <LoginWrapper >
-            <Login/>
-        </LoginWrapper>
-        </Overlay>
-        
-        </section>
-       
     
     )
 }
