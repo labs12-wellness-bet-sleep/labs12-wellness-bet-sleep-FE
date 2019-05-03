@@ -1,0 +1,15 @@
+{
+  "name": "labs12-wellness-bet-sleep-FE",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/labs12-wellness-bet-sleep/labs12-wellness-bet-sleep-FE.git",
+  "author": "Francis Chen <fncis.chen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "netlify": "^2.4.4"
+  },
+
+  "scripts": {
+    "build": "./wellness-bet-sleep-frontend/index.js"
+  }
+}
