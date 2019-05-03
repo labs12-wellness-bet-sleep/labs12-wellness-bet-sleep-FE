@@ -109,7 +109,7 @@ class Login extends Component {
             })
     }
 
-    signUp = event => {
+    registerWithEmail = event => {
         event.preventDefault()
         auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(user => {
