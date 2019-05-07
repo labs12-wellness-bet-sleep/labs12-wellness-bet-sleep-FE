@@ -6,9 +6,9 @@
   "author": "Francis Chen <fncis.chen@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "netlify": "^2.4.4"
+    "netlify": "^2.4.4",
+    "netlify-cli": "^2.11.15"
   },
-
   "scripts": {
     "build": "./wellness-bet-sleep-frontend/src/index.js"
   }
