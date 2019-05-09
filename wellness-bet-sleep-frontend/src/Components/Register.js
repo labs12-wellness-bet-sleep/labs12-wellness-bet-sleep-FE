@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from '../axios-sleep';
 
 import { storage } from "../FirebaseConfig";
 
@@ -74,7 +74,7 @@ class Register extends Component {
             };
 
             axios
-              .post("https://sleep-bet.herokuapp.com/api/users/register", user)
+              .post("/api/users/register", user)
               .then(result => {
                 console.log(result);
                 this.setState({

@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 
-function Home(props) {
+// import Users from './Users';
+// import GroupForm from './group/GroupForm';
+
+const Home = props => {
     return (
+        <>
         <div className="Home"> 
         "Welcome to our website."
+        {/* <Users /> */}
+        
+        
         </div>
+        </>
     )
 }
 

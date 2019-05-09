@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from "../../axios-sleep";
+
 
 class SendEmail extends Component {
   state = {
@@ -8,16 +9,16 @@ class SendEmail extends Component {
       sender: "",
       subject: "",
       text: "",
-      html: ""
+      
     }
   };
 
   sendEmail = e => {
     const { email } = this.state;
     axios.get(
-      `http://localhost:8080/api/joinLink/?recipient=${email.recipient}&sender=${
+      `/api/joinLink/?recipient=${email.recipient}&sender=${
         email.sender
-      }&topic=${email.subject}&text=${email.text}&link=${email.html}`
+      }&topic=${email.subject}&text=${email.text}`
     ).catch(err => console.log(err));
   };
   render() {
