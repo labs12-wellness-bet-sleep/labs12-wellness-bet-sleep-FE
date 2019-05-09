@@ -17,7 +17,7 @@ class Register extends Component {
     }
 
     componentDidMount(){
-        if(this.state.registered == false){
+        if(this.state.registered === false){
             this.setState({welcomeMessage: "Please register before logging in."})
         }
     }
@@ -52,7 +52,7 @@ class Register extends Component {
     render() {
 
         return(
-            <div ClassName="register">
+            <div className="register">
 
             <h2>Register</h2>
 

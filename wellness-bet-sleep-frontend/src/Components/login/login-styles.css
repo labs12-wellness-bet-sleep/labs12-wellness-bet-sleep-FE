@@ -1,0 +1,16 @@
+.log-reg-links{
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid red; */
+}
+
+.register-link {
+    color: #12121377;
+    text-decoration: none;
+}
+
+.register-link:hover {
+    
+    border-bottom: 1px solid #004CA8;
+}

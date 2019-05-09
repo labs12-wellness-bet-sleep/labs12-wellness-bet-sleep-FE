@@ -13,19 +13,20 @@ const LoginWrapper = styled.div`
     /* border: 1px solid green; */
 `;
 
-function Home(props) {
+class  Home extends Component {
+    render() {
+        console.log(this.props, 'home props')
     return (
         <div className='home'>
             <div className='overlay'>
                 <LoginWrapper>
-                    <Login/>
+                    <Login history={this.props.history}/>
                 </LoginWrapper>
                 
             </div>         
-        </div>
-        
-    
+        </div>    
     )
+}
 }
 
 export default Home
