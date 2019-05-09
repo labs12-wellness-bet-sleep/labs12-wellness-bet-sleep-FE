@@ -1,83 +1,144 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
+
+import { storage } from "../FirebaseConfig";
 
 class Register extends Component {
-    constructor(props) {
-
-        super(props);
+  constructor(props) {
+    super(props);
 
     this.state = {
-        username: "",
-        email: "",
-        password: "",
-        registered: false,
-        welcomeMessage: "Please register before logging in."
+      username: "",
+      email: "",
+      password: "",
+      fullName: "",
+      registered: false,
+      welcomeMessage: "Please register before logging in.",
+      profilePhotoImg: null,
+      profilePhoto: ""
+    };
+  }
+
+  componentDidMount() {
+    if (this.state.registered == false) {
+      this.setState({ welcomeMessage: "Please register before logging in." });
     }
+  }
 
-    }
+  handleChanges = e => {
+    e.preventDefault();
+    console.log(e.target.name, e.target.value);
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
-    componentDidMount(){
-        if(this.state.registered === false){
-            this.setState({welcomeMessage: "Please register before logging in."})
-        }
-    }
+  // handleUploadChange = e => {
+  //   e.preventDefault();
+  //   if (e.target.files[0]) {
+  //     const profilePhotoImg = e.target.files[0];
+  //     this.setState(() => ({ profilePhotoImg }));
+  //   }
+  // };
 
-    handleChanges = e => {
-        e.preventDefault();
-        console.log(e.target.name, e.target.value);
-        this.setState({[e.target.name]: e.target.value});
-    }
+  register = e => {
+    e.preventDefault();
 
-    register = e => {
+    let currentImageName = "firebase-image-" + Date.now();
 
-        e.preventDefault();
-        
-        const user = {
-            username: this.state.username,
-            password: this.state.password,
-            email: this.state.email 
-        }
+    let uploadImage = storage
+      .ref(`images/${currentImageName}`)
+      .put(e.target.files[0]);
 
-        axios.post("https://sleep-bet.herokuapp.com/auth/register", user)
-            .then(result => {
+    uploadImage.on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        alert(error);
+      },
+      () => {
+        storage
+          .ref("images")
+          .child(currentImageName)
+          .getDownloadURL()
+          .then(url => {
+            this.setState({
+              profilePhoto: url
+            });
+
+            // store image object in the database
+            const user = {
+              username: this.state.username,
+              password: this.state.password,
+              email: this.state.email,
+              fullName: this.state.fullName,
+              profilePhoto: url
+            };
+
+            axios
+              .post("https://sleep-bet.herokuapp.com/api/users/register", user)
+              .then(result => {
                 console.log(result);
-                this.setState({registered: true, welcomeMessage: `Congratulations for registering, ${result.data.username}`})
+                this.setState({
+                  registered: true,
+                  welcomeMessage: `Congratulations for registering, ${
+                    result.data.username
+                  }`
+                });
                 console.log("Congratulations on registering!");
-                console.log(result)})
-            .catch(error => console.log(error));
+                console.log(result);
+              })
+              .catch(error => console.log(error));
 
             this.props.history.push("/users");
-    }
+          });
+      }
+    );
+  };
 
-    render() {
+  render() {
+    return (
+      <div className="register">
+        <h2>Register</h2>
 
-        return(
-            <div className="register">
+        <div className="registerMessage">{this.state.welcomeMessage}</div>
 
-            <h2>Register</h2>
+        <form onSubmit={this.register}>
+          <b>Full Name:</b>
+          <input
+            name="fullName"
+            type="text"
+            onChange={e => this.handleChanges(e)}
+          />
+          <b>User Name:</b>
+          <input
+            name="username"
+            type="text"
+            onChange={e => this.handleChanges(e)}
+          />
 
-            <div className="registerMessage">
-            {this.state.welcomeMessage}
-            </div>
+          <b>Email:</b>
+          <input
+            name="email"
+            type="text"
+            onChange={e => this.handleChanges(e)}
+          />
 
-            <form onSubmit={this.register}>
-                <b>Name:</b>
-                <input name="username" type="text" onChange={(e) => this.handleChanges(e)}></input>
+          <b>Password:</b>
+          <input
+            name="password"
+            type="password"
+            onChange={e => this.handleChanges(e)}
+          />
 
-                <b>Email:</b>
-                <input name="email" type="text" onChange={(e) => this.handleChanges(e)}></input>
+          <b>Profile Photo:</b>
 
-                <b>Password:</b>
-                <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input>
-                
-                <button type="submit">Submit</button>
-            </form>
+          {/* <input type="file" onChange={e => this.handleUploadChange(e)} /> */}
+          <input type="file" onChange={e => this.register(e)} />
 
-            </div>
-        )
-        
-    }
-
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    );
+  }
 }
 
-export default Register; 
+export default Register;
