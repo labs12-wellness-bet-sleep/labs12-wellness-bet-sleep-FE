@@ -5,6 +5,15 @@ import AggregatedSleepGraph from "./AggregatedSleepGraph.js";
 import TimeLeft from "./TimeLeft.js";
 import UserSleepStatus from "./UserSleepStatus.js";
 import UsersRanking from "./UsersRanking.js"
+import styled from 'styled-components'
+
+const HeaderData = styled.div`
+
+`
+
+const HorizontalInfo = styled.div`
+
+`
 
 export default class GroupDashboard extends Component {
 
