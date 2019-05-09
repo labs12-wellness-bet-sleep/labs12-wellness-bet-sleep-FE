@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { storage } from "../../FirebaseConfig";
+import './register-styles.css';
 
-import { storage } from "../FirebaseConfig";
 
 class Register extends Component {
   constructor(props) {
@@ -88,7 +89,7 @@ class Register extends Component {
               })
               .catch(error => console.log(error));
 
-            this.props.history.push("/users");
+            // this.props.history.push("/users");
           });
       }
     );
@@ -96,7 +97,10 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="register">
+        <div className='register'>
+
+        <div className='overlay'>
+      <div className="registe-wrapperr">
         <h2>Register</h2>
 
         <div className="registerMessage">{this.state.welcomeMessage}</div>
@@ -133,9 +137,14 @@ class Register extends Component {
 
           {/* <input type="file" onChange={e => this.handleUploadChange(e)} /> */}
           <input type="file" onChange={e => this.register(e)} />
-
+            <div className='img-preview'>
+                <img src={this.state.profilePhoto}/>
+            </div>
+        
           <button type="submit">Submit</button>
         </form>
+      </div>
+      </div>
       </div>
     );
   }

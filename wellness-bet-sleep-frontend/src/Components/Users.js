@@ -26,14 +26,14 @@ class Users extends Component {
             console.log('we ran into an error getting the users')
         }
     }
-    // componentDidMount(){
-    //     axios.get("https://localhost8080/api/users")
-    //     // axios.get("https://sleep-bet.herokuapp.com/api/users")
-    //         .then(result => {
-    //             this.setState({users: result.data})
-    //         })
-    //         .catch(error => console.log(error));
-    // }
+    componentDidMount(){
+        // axios.get("https://localhost8080/api/users")
+        axios.get("https://sleep-bet.herokuapp.com/api/users")
+            .then(result => {
+                this.setState({users: result.data})
+            })
+            .catch(error => console.log(error));
+    }
 
     logout = () => {
         auth.signOut()

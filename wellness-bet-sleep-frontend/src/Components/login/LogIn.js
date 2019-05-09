@@ -129,8 +129,6 @@ const styles = theme => ({
    
     button: {
         border: 'none',
-        backgroundColor: 'none', 
-        border: 'none',
         borderRadius: '2rem',
         backgroundColor:'#004CA8',
         color: 'white',
