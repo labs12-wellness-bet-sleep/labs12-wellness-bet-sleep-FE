@@ -15,6 +15,8 @@ export default class GroupDashboard extends Component {
 
             groupID: "",
 
+            group: "",
+            groupUsers: [],
             loggedInUsersAndData: {},
             
             fitbitUserID: "",
@@ -24,49 +26,74 @@ export default class GroupDashboard extends Component {
             currentUserSleep: "",
             currentUserAggregatedSleep: "",
 
+            startDate: "",
+            endDate: "",
             daysLeft: "",
 
         }
     }
 
     componentDidMount() {
-        this.retrieveUserSleepData();
+        this.getGroupID();
+        this.getGroupInfo(groupID);
+        this.getDateRange();
         this.calculateTimeLeft();
+        this.getCurrentUserSleepData();
+        this.calculateCurrentUserAggregatedData();
     }
 
     getDateRange() {
+        this.setState({startDate: group.startDate, endDate: group.endDate})
+    }
+
+    // check firebase restricted 
+    getGroupID() {
 
     }
 
+    getGroupInfo(id) {
+        axios.get(`https://sleep-bet.herokuapp.com/api/groups/:${id}`)
+        .then(response => this.setState({group: response.data}))
+        .catch(err => console.log(err));
+    }
+
+    // https://www.tutorialspoint.com/How-to-subtract-days-from-a-date-in-JavaScript
     calculateTimeLeft() {
-
+        let todaysDate = new Date();
+        let daysRemaining = endDate - todaysDate.getDate();
+        this.setState({daysLeft: daysRemaining}); 
     }
 
-    // 
-
-    retrieveUserSleepData() {
-
+    getCurrentUserSleepData() {
+        axios.get(`https://api.fitbit.com/1.2/user/${this.state.fitbitUserID}/sleep/date/${this.state.startDate}/${this.state.endDate}.json`)
+                .then(data => {
+                    this.setState({currentUserSleep: data });
+        })
     }
 
-    amountOfSleepLeft() {
+    calculateCurrentUserAggregatedData() {
 
-    }
+        // alternative b) make up random numbers
 
-    // go on fitBit to retrieve data?
-    logSleep() {
+        this.state.currentUserSleep.map(sleepNight => {
+            this.setState({currentUserAggregatedSleep: currentUserAggregatedSleep += sleepNight.timeleft})
+        })
 
+        this.setState({currentUserAggregatedSleep: currentUserAggregatedSleep/60});
     }
 
     render(){
         return(
+
             <div className="GroupDashboard">
             
-            <UsersRanking users={this.state.loggedInUsersAndData}/>
-            <TimeLeft/>
-            <UserSleepStatus/>
+            <UsersRanking users={this.state.loggedInUsersAndData} startDate={this.state.startDate} endDate={this.state.endDate}/>
+            <TimeLeft timeleft={this.state.daysLeft}/>
+            <UserSleepStatus currentUserSleep={this.state.currentUserSleep} totalSleep={currentUserAggregatedSleep}/>
 
             <AggregatedSleepGraph loggedInUsersAndData={this.state.loggedInUsersAndData}/>
             </div>
+        
         );
     }
 }
