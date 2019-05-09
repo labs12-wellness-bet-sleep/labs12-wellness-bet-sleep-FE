@@ -5,7 +5,8 @@ function User(props){
 
         <div className="user">
         
-        <img src={props.user.photoUrl} alt='Profile'/>
+
+        <img src={props.user.profilePhoto} alt='uploaded profile photo' height='200' width='200'/>
 
         <ul>
         <li><b>Username :</b> {props.user.username}</li>
