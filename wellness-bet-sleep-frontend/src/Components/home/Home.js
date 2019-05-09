@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './home-styled.css'
 import '../../App.css'
 import styled from 'styled-components';
 import Login from '../login/LogIn';
@@ -19,9 +20,9 @@ class  Home extends Component {
     return (
         <div className='home'>
             <div className='overlay'>
-                <LoginWrapper>
+                <div className='login'>
                     <Login history={this.props.history}/>
-                </LoginWrapper>
+                </div>
                 
             </div>         
         </div>    

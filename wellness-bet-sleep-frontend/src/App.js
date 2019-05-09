@@ -40,12 +40,12 @@ class App extends Component {
   return (
     <div className="App">
 
-      <nav>
+      {/* <nav>
       <NavLink to="/" activeclass="selected" >Home </NavLink>
       <NavLink to="/users"> List of Users </NavLink>
       <NavLink to="/login"> Login </NavLink>
       <NavLink to="/register"> Register</NavLink>
-      </nav>
+      </nav> */}
       <Route
           exact path ='/login'
           render={props =>
