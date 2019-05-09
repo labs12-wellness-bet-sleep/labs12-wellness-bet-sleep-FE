@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import { storage } from "../FirebaseConfig";
+import { storage, auth } from "../FirebaseConfig";
 
 class Register extends Component {
   constructor(props) {
@@ -44,54 +44,70 @@ class Register extends Component {
 
     let currentImageName = "firebase-image-" + Date.now();
 
-    let uploadImage = storage
-      .ref(`images/${currentImageName}`)
-      .put(e.target.files[0]);
 
-    uploadImage.on(
-      "state_changed",
-      snapshot => {},
-      error => {
-        alert(error);
-      },
-      () => {
-        storage
-          .ref("images")
-          .child(currentImageName)
-          .getDownloadURL()
-          .then(url => {
-            this.setState({
-              profilePhoto: url
-            });
+    let email = this.state.email; 
+    let password = this.state.password;
 
-            // store image object in the database
-            const user = {
-              username: this.state.username,
-              password: this.state.password,
-              email: this.state.email,
-              fullName: this.state.fullName,
-              profilePhoto: url
-            };
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(({user}) => {
+      console.log("OAuth User:", user);
+      const {uid, email, ra} = user; 
 
-            axios
-              .post("https://sleep-bet.herokuapp.com/api/users/register", user)
-              .then(result => {
-                console.log(result);
+      localStorage.setItem("token", ra);
+
+      let uploadImage = storage
+        .ref(`images/${currentImageName}`)
+        .put(e.target.files[0]);
+
+        uploadImage.on(
+          "state_changed",
+          snapshot => {},
+          error => {
+            alert(error);
+          },
+          () => {
+            storage
+              .ref("images")
+              .child(currentImageName)
+              .getDownloadURL()
+              .then(url => {
                 this.setState({
-                  registered: true,
-                  welcomeMessage: `Congratulations for registering, ${
-                    result.data.username
-                  }`
+                  profilePhoto: url
                 });
-                console.log("Congratulations on registering!");
-                console.log(result);
-              })
-              .catch(error => console.log(error));
+    
+                // store image object in the database
+                const user = {
+                  username: this.state.username,
+                  email: this.state.email,
+                  fullName: this.state.fullName,
+                  profilePhoto: url
+                };
+    
+                axios
+                  .post("https://sleep-bet.herokuapp.com/api/users/register", user)
+                  .then(result => {
+                    console.log(result);
+                    this.setState({
+                      registered: true,
+                      welcomeMessage: `Congratulations for registering, ${
+                        result.data.username
+                      }`
+                    });
+                    console.log("Congratulations on registering!");
+                    console.log(result);
+                  })
+                  .catch(error => console.log(error));
+    
+                this.props.history.push("/users");
+              });
+          }
+        );
 
-            this.props.history.push("/users");
-          });
-      }
-    );
+
+    })
+    .catch(error => {
+      console.log(error);
+    });
   };
 
   render() {

@@ -15,7 +15,7 @@ class Users extends Component {
     }
 
     componentDidMount(){
-        axios.get("https://sleep-bet.herokuapp.com/api/users")
+        axios.get("http://localhost:5000/api/users")
             .then(result => {
                 this.setState({users: result.data})
             })

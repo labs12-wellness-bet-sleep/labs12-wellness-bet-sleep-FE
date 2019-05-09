@@ -30,21 +30,26 @@ class Login extends Component {
         e.preventDefault();
         auth.signInWithEmailAndPassword(this.state.email, this.state.password)
             .then((user) => {
-                console.log(user)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
 
-    signUp = event => {
-        event.preventDefault()
-        auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(user => {
-            console.log(user)
-        })
-        .catch(error => {
-            console.log(error)
+                console.log(user)
+
+                axios
+                .post("https://sleep-bet.herokuapp.com/api/users/login", user)
+                .then(result => {
+                  console.log(result);
+                  this.setState({
+                    loggedIn: true,
+                    loginMessage: `Congratulations for logging in, ${
+                      result.data.username
+                    }`
+                  })
+                
+                }).catch(error => console.log(error))
+
+            })
+            .catch(
+                error => {
+                console.log(error)
         })
     }
 
@@ -78,7 +83,6 @@ class Login extends Component {
             <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input>
             
             <button onClick={this.loginWithEmail}>Login</button> 
-            <button onClick={this.signUp}>Sign Up</button>
             <button onClick={this.loginWithGoogle}>Login With Google</button>
             <button onClick={this.loginWithGoogle}>SignUp with Google</button>
 
