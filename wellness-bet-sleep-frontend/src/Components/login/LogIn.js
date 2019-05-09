@@ -195,12 +195,16 @@ class Login extends Component {
         auth.signInWithEmailAndPassword(email, password)
         .then(user => {
             console.log(user)
+            this.setState({
+                loggedIn: true
+            })
         })
         .catch(error => {
             console.log(error)
         })
-    }
+    };
 
+    //Email and Password Register
     registerWithEmail = () => {
         const email = this.usrEmail.current.value
         const password = this.usrPassword.current.value
@@ -216,6 +220,7 @@ class Login extends Component {
         })
     };
    
+    //Google Login
     loginWithGoogle = event => {
         event.preventDefault()
         auth.signInWithPopup(googleProvider)
@@ -227,7 +232,7 @@ class Login extends Component {
     
         })
         .catch(err => console.error(err))
-    }
+    };
     
     render() {
         const { classes } = this.props;    
