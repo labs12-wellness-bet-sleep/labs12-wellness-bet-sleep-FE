@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { auth } from '../FirebaseConfig';
 import User from "./User.js";
-import axios from 'axios';
+import axios from '../axios-sleep';
 
 
 class Users extends Component {
@@ -15,7 +15,7 @@ class Users extends Component {
     }
 
     componentDidMount(){
-        axios.get("http://localhost:5000/api/users")
+        axios.get("/api/users")
             .then(result => {
                 this.setState({users: result.data})
             })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axios from '../axios-sleep';
 import { auth, googleProvider } from '../FirebaseConfig';
 
 class Login extends Component {
@@ -29,12 +29,12 @@ class Login extends Component {
     loginWithEmail = e => {
         e.preventDefault();
         auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then((user) => {
-
+            .then(({user}) => {
+                const { uid, email, ra} = user;
                 console.log(user)
-
+                localStorage.setItem("token", ra);
                 axios
-                .post("https://sleep-bet.herokuapp.com/api/users/login", user)
+                .get(`/api/users/login/${email}`, {headers: {"authorization": ra}})
                 .then(result => {
                   console.log(result);
                   this.setState({
@@ -56,10 +56,15 @@ class Login extends Component {
     loginWithGoogle = event => {
         event.preventDefault()
         auth.signInWithPopup(googleProvider)
-        .then(user => {
+        .then(({user}) => {
             console.log(user, 'google signin')
+            localStorage.setItem("token", user.ra);
+            axios.get(`/api/users/login/${user.email}`, {headers: {"authorization":user.ra}} ).
+            then(response => {
+                console.log(response);
+            })
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
     }
     
     render() {
