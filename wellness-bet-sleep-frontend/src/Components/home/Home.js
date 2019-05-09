@@ -10,7 +10,7 @@ const LoginWrapper = styled.div`
     height: 100vh;
     margin: 0 auto;
     width: 70%;
-    /* border: 1px solid green; */
+    border: 1px solid green;
 `;
 
 class  Home extends Component {

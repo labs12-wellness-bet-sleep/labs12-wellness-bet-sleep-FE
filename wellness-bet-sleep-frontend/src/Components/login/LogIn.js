@@ -117,7 +117,7 @@ const styles = theme => ({
         backgroundColor: '#b0b4b969',
         color: 'white',
         fontSize: '1.2rem',
-        marginTop: '2rem',
+        // marginTop: '2rem',
         paddingLeft: '4rem',
         height: '70px',
         width: '80%',
@@ -133,6 +133,7 @@ const styles = theme => ({
         fontSize: '1rem',
         height: '70px',
         marginTop: '2rem',
+        // width: '100%',
         '&:hover': {
             backgroundColor:'#004CA8',
         }
@@ -214,20 +215,8 @@ class Login extends Component {
             console.log(error)
         })
     };
-    // registerWithEmail = event => {
-    //     event.preventDefault()
-    //     auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-    //     .then(user => {
-    //         console.log(user)
-    //     })
-    //     .catch(error => {
-    //         console.log(error)
-    //     })
-    //     // console.log('register with email')
-    // }
-
+   
     loginWithGoogle = event => {
-        const { history } = this.props;
         event.preventDefault()
         auth.signInWithPopup(googleProvider)
         .then(user => {
@@ -241,14 +230,19 @@ class Login extends Component {
     }
     
     render() {
-        const { classes } = this.props;
-// console.log(this.props.history, this.state.loggedIn, 'props history and login')
-    
+        const { classes } = this.props;    
         return(
 
-        <div>
-            <img src={wellnessLogo}/>
-            <form >
+        <div className='login-wrapper'>
+            <header className='login-header'>
+                {/* <div > */}
+                <img src={wellnessLogo} alt='Wellness Logo' className='wellness-logo'/>
+                {/* </div> */}
+                <br />
+                <span className='top'>Wellness Bet </span><br />
+                <span className='bottom'>Sleep</span>
+            </header>
+            <form className='login-form'>
              <FontAwesomeIcon icon={faUserCircle} size='lg' className='fa-users'/>
             <TextField
                 autoFocus
