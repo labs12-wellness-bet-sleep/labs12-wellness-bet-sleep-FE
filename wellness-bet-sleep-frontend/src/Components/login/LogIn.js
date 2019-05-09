@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from'react-router-dom';
+import { Link,  } from'react-router-dom';
 
 import { auth, googleProvider } from '../../FirebaseConfig';
 import Users from '../Users';
@@ -7,9 +7,9 @@ import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { withStyles, withTheme } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
+
+import { withStyles, } from '@material-ui/core/styles';
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
@@ -150,7 +150,9 @@ class Login extends Component {
             password: "",
             loggedIn: false, 
             loginMessage: "Please log in."
-        }
+        };
+        this.usrEmail = React.createRef();
+        this.usrPassword = React.createRef();
     }
 
     componentDidMount(){
@@ -279,11 +281,13 @@ class Login extends Component {
               <br />
                 <Button 
                     fullWidth
-                    className={classes.button}>
+                    className={classes.button}
+                    onClick={this.loginWithEmail}>
                     Get Started             
                 </Button>
         </form>
         <div className='log-reg-links'>
+        <button onClick={this.registerWithEmail}>Sign Up</button>
             <Link to="/register" className='register-link' activeClassName='active'>Create Account</Link>
             <div onClick={this.loginWithGoogle}><Link className='register-link' activeClassName='active'>Login With Google</Link></div>
         </div>
