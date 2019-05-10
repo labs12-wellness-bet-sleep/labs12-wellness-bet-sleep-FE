@@ -10,7 +10,7 @@ import styled from 'styled-components'
 const HeaderData = styled.div`
     display: flex;
     flex-directon: row; 
-
+    color: #89cff0;
     justify-content: space-between;
 `
 
@@ -144,6 +144,7 @@ export default class GroupDashboard extends Component {
         for(let i = 0; i < sleepDataAmount; i++) {
             totalSleepPerPerson[i] = {
                 username: participants[i].username,
+                photo: participants[i].profilePhoto,
                 amountOfSleep: Math.floor((Math.random()*50) + 1)
             }
         }
@@ -190,7 +191,7 @@ export default class GroupDashboard extends Component {
             </HeaderData>
 
             <HorizontalInfo>
-            <UsersRanking usersSleepData={this.state.groupUsers} startDate={this.state.startDate} endDate={this.state.endDate}/>
+            <UsersRanking usersSleepData={this.state.aggregatedSleepPerUser}/>
             <TimeLeft timeleft={this.state.daysLeft}/>
             <UserSleepStatus currentUserSleep={this.state.currentUserSleep} totalSleep={this.state.currentUserAggregatedSleep}/>
             </HorizontalInfo>
