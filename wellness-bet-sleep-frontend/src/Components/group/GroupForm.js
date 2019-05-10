@@ -65,7 +65,7 @@ class GroupForm extends Component {
     //   joinCode: ""
     // });
     const newGroup = this.state;
-    const userId = localStorage.getItem("uid");
+    const userId = localStorage.getItem("token");
     const sentItems = { ...newGroup, userId };
     axios
       .post("/api/groups/invite", sentItems)

@@ -39,7 +39,7 @@ class GroupPage extends Component {
   }
 
   getGroups = () => {
-    const userId = localStorage.getItem("uid");
+    const userId = localStorage.getItem("token");
 
     console.log(userId, 'Error');
 
