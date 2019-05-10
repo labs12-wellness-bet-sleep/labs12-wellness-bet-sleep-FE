@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Route, Link, NavLink } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 import { auth } from './FirebaseConfig';
 
 import './App.css';
 
-import Home from "./Components/Home.js";
-import Login from "./Components/LogIn.js";
+import Home from './Components/home/Home';
+import Login from "./Components/login/LogIn";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
 import SendEmail from './Components/Email/SendEmail.js';
@@ -42,22 +42,28 @@ class App extends Component {
   return (
     <div className="App">
 
-      <nav>
-      <NavLink to="/" >Home </NavLink>
-      <Link to="/users"> List of Users </Link>
-      <Link to="/login"> Login </Link>
-      <Link to="/register"> Register</Link>
-      <Link to="/email"> Send Invite</Link>
-      </nav>
-    
-      <Route path='/' exact component={Home}/> 
-      <Route path='/users' exact component={Users}/> 
-      <Route path='/login' component={Login}/>
-      <Route path='/register' component={Register}/>
-      <Route path='/email' component={SendEmail}/>
-
-      {this.state.users ? (<Users/>) : (<Login/>)}
-      <GroupPage />
+      {/* <nav>
+      <NavLink to="/" activeclass="selected" >Home </NavLink>
+      <NavLink to="/users"> List of Users </NavLink>
+      <NavLink to="/login"> Login </NavLink>
+      <NavLink to="/register"> Register</NavLink>
+      </nav> */}
+      <Route
+          exact path ='/login'
+          render={props =>
+            <Login
+              {...props}
+            />
+          }
+        />
+      {/* <Route exact path={'/'} component={Home}/>  */}
+      <Route exact path ='/' render={props => <Home {...props} /> } />
+      <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
+      {/* <Route exact path='/login'/> */}
+      {/* <Route exact path={'/login'} component={Login}/> */}
+      <Route exact path={'/register'} component={Register}/>
+      
+      {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
     </div>
   )
 }
