@@ -8,6 +8,7 @@ import Home from './Components/home/Home';
 import Login from "./Components/login/LogIn";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
+import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
 
 class App extends Component {
   constructor(props) {
@@ -62,6 +63,8 @@ class App extends Component {
       <Route exact path={'/register'} component={Register}/>
       
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
+
+      <Route path={'/groupDashboard'} component={GroupDashboard}/>
     </div>
   )
 }
