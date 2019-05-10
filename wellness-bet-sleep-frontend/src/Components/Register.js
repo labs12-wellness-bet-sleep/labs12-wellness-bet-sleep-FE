@@ -92,12 +92,10 @@ class Register extends Component {
 
             this.props.history.push("/users");
 
-    }
+    })
 
-          });
-      }
-    );
-  };
+         });
+     }
 
   render() {
     return (
