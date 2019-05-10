@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 import { auth } from './FirebaseConfig';
 
 import './App.css';
 
-import Home from "./Components/Home.js";
-import Login from "./Components/LogIn.js";
+import Home from './Components/home/Home';
+import Login from "./Components/login/LogIn";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
 
@@ -40,19 +40,28 @@ class App extends Component {
   return (
     <div className="App">
 
-      <nav>
-      <Link to="/" activeClassName="selected" >Home </Link>
-      <Link to="/users"> List of Users </Link>
-      <Link to="/login"> Login </Link>
-      <Link to="/register"> Register</Link>
-      </nav>
-    
-      <Route path={'/'} component={Home}/> 
-      <Route path={'/users'} component={Users}/> 
-      <Route path={'/login'} component={Login}/>
-      <Route path={'/register'} component={Register}/>
-
-      {this.state.users ? (<Users/>) : (<Login/>)}
+      {/* <nav>
+      <NavLink to="/" activeclass="selected" >Home </NavLink>
+      <NavLink to="/users"> List of Users </NavLink>
+      <NavLink to="/login"> Login </NavLink>
+      <NavLink to="/register"> Register</NavLink>
+      </nav> */}
+      <Route
+          exact path ='/login'
+          render={props =>
+            <Login
+              {...props}
+            />
+          }
+        />
+      {/* <Route exact path={'/'} component={Home}/>  */}
+      <Route exact path ='/' render={props => <Home {...props} /> } />
+      <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
+      {/* <Route exact path='/login'/> */}
+      {/* <Route exact path={'/login'} component={Login}/> */}
+      <Route exact path={'/register'} component={Register}/>
+      
+      {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
     </div>
   )
 }
