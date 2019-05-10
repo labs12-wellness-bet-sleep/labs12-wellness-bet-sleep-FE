@@ -1,7 +1,60 @@
 import React, { Component } from 'react';
 import axios from '../axios-sleep';
+import { Link } from 'react-router-dom';
 import { auth, googleProvider } from '../FirebaseConfig';
+import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
+import './../App.css';
+import './login/login-styles.css'
+import wellnessLogo from './../assets/images/wellness-logo.png';
 
+
+const styles = theme => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+    },
+    input: {
+      
+        border: 'none',
+        borderRadius: '2rem',
+        backgroundColor: '#b0b4b969',
+        color: 'white',
+        fontSize: '1.2rem',
+        // marginTop: '2rem',
+        paddingLeft: '4rem',
+        height: '70px',
+        width: '80%',
+    }, 
+   
+    button: {
+        border: 'none',
+        backgroundColor: 'none', 
+        border: 'none',
+        borderRadius: '2rem',
+        backgroundColor:'#004CA8',
+        color: 'white',
+        fontSize: '1rem',
+        height: '70px',
+        marginTop: '2rem',
+        // width: '100%',
+        '&:hover': {
+            backgroundColor:'#004CA8',
+        }
+    }
+  });
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -51,6 +104,7 @@ class Login extends Component {
                 error => {
                 console.log(error)
         })
+        this.props.history.push('/users')
     }
 
     loginWithGoogle = event => {
@@ -65,29 +119,71 @@ class Login extends Component {
             })
         })
         .catch(err => console.error(err))
+      
     }
     
     render() {
-
+        const { classes } = this.props;  
         return(
 
-        <div ClassName="login">
-
-           <div className="login-message">
+        <div ClassName="login-wrapper">
+ <header className='login-header'>
+                {/* <div > */}
+                <img src={wellnessLogo} alt='Wellness Logo' className='wellness-logo'/>
+                {/* </div> */}
+                <br />
+                <span className='top'>Wellness Bet </span><br />
+                <span className='bottom'>Sleep</span>
+            </header>
+           {/* <div className="login-message">
             {this.state.loginMessage}
             </div>
 
-        <h2>Login</h2>
+        <h2>Login</h2> */}
 
-        <form>
+        <form className='login-form'>
+        <FontAwesomeIcon icon={faUserCircle} size='lg' className='fa-users'/>
+            <TextField
+                autoFocus
+                type="email"
+                fullWidth
+                required
+                onChange={(e) => this.handleChanges(e)}
+                placeholder='Email'
+                InputProps={{
+                    className: classes.input,
+                    disableUnderline: true ,
+                }}
+              />
 
-            <b>email:</b>
-            <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input>
+            <FontAwesomeIcon icon={faLock}  className='fa-lock'/>
+            <TextField
+                fullWidth
+                type="password"
+                required
+                inputRef={this.usrPassword}
+                placeholder='Password'
+                InputProps={{
+                    className: classes.input,
+                    disableUnderline: true ,
+                }}
+              />
+            {/* <b>email:</b> */}
+            {/* <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input> */}
 
-            <b>Password:</b>
-            <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input>
-            
-            <button onClick={this.loginWithEmail}>Login</button> 
+            {/* <b>Password:</b>
+            <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input> */}
+            <Button 
+                    fullWidth
+                    className={classes.button}
+                    onClick={this.loginWithEmail}>
+                    Get Started             
+                </Button>
+            {/* <button onClick={this.loginWithEmail}>Login</button>  */}
+            <div className='log-reg-links'>
+            <Link to="/register" className='register-link' activeClassName='active'>Create Account</Link>
+            <div onClick={this.loginWithGoogle}><Link className='register-link' activeClassName='active'>Login With Google</Link></div>
+        </div>
             <button onClick={this.loginWithGoogle}>Login With Google</button>
             <button onClick={this.loginWithGoogle}>SignUp with Google</button>
 
@@ -99,4 +195,5 @@ class Login extends Component {
 
 }
 
-export default Login;
+export default withStyles(styles)(Login);
+// export default Login;
