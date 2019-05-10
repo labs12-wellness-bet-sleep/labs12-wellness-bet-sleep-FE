@@ -3,6 +3,7 @@ import './home-styled.css'
 import '../../App.css'
 import styled from 'styled-components';
 import Login from '../login/LogIn';
+// import Login from '../login/LogIn';
 
 const LoginWrapper = styled.div`
     display: flex;
