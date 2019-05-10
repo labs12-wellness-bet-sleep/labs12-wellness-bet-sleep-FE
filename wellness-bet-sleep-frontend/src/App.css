@@ -2,32 +2,49 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+/* 
+.home {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background: url('./assets/images/alexandru-zdrobau-176844-unsplash (1).jpg') no-repeat center center ;
+  position: relative;
+  height: 100vh;
+
+} */
+
+/* .overlay {
+  background-color: #5787c19d;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+   z-index: 2;
+} */
+
+.fa-users {
+  color: #12121377;
+  position: relative;
+  margin-left: 1rem;
+  right: 130px;
+  top: 78px;
+  /* border: 1px solid red; */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.fa-lock {
+  color: #12121377;
+  position: relative;
+  margin-left: 1rem;
+  right: 130px;
+  padding: .25rem;
+  top: 83px;
+  border: .1rem solid #12121377;
+  border-radius: 50%;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.colors {
+  background-color: #5b5c5e88;
+  color: #585a5e;
+  background-color: #b0b4b969;
 }

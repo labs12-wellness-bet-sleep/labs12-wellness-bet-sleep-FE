@@ -21,9 +21,19 @@ class Users extends Component {
             })
             .catch(error => console.log(error));
     }
+    // componentDidMount(){
+    //     axios.get("https://localhost8080/api/users")
+    //     // axios.get("https://sleep-bet.herokuapp.com/api/users")
+    //         .then(result => {
+    //             this.setState({users: result.data})
+    //         })
+    //         .catch(error => console.log(error));
+    // }
 
     logout = () => {
         auth.signOut()
+        this.props.history.push('/')
+        console.log('log out')
     }
     render() {
         return(
