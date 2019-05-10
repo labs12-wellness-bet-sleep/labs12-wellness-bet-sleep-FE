@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import axios from "../../axios-sleep.js";
 
+import { connect } from "react-redux";
+import { addGroup } from "../../Store/Actions/group";
+
+import Groups from "./Groups";
+
 class GroupForm extends Component {
   constructor(props) {
     super(props);
@@ -15,85 +20,50 @@ class GroupForm extends Component {
     };
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if(this.props.activeItem &&
-  //     prevProps.activeItem !== this.props.activeItem
-  //     ) {
-  //       this.setState({ prevProps.activeItem })
+  // handleChanges = ev => {
+  //   ev.persist();
+  //   let value = ev.target.value;
+  //   if (ev.target.name === "buyInAmt" || ev.target.name === "potTotal") {
+  //     value = parseInt(value, 10);
+  //   }
+  //   this.setState(prevState => ({
+  //     ...prevState,
+  //     [ev.target.name]: value
+  //   }));
+  // };
+
+  // addGroup = e => {
+  //   e.preventDefault();
+  //   this.props.addGroup(this.state.group, this.props.userId);
+  //   this.setState({
+  //     group: {
+  //       ...this.state.group,
+  //       joinCode: ""
   //     }
-  // }
+  //   });
+  // };
 
-  handleChanges = ev => {
-    ev.persist();
-    let value = ev.target.value;
-    if (ev.target.name === "buyInAmt" || ev.target.name === "potTotal") {
-      value = parseInt(value, 10);
-    }
-    this.setState(prevState => ({
-      ...prevState,
-      [ev.target.name]: value
-    }));
-  };
+  addGroup = (event) => {
+    event.preventDefault();
+    // add code to create the smurf using the api
+    this.props.addAnotherGroup(event, this.state)
 
-  handleSubmit = e => {
-    if (this.props.activeItem) {
-      this.props.updateGroup(e, this.state);
-    } else {
-      this.props.addAnotherGroup(e, this.state);
-    }
     this.setState({
       groupName: "",
       buyInAmt: "",
       startDate: "",
       endDate: "",
       groupMessage: "",
-      potTotal: ""
+      potTotal: "",
+      joinCode: ""
     });
-  };
-
-  addGroup = event => {
-    event.preventDefault();
-    // this.props.addAnotherGroup(event, this.state);
-
-    // this.setState({
-    //   groupName: "",
-    //   buyInAmt: "",
-    //   startDate: "",
-    //   endDate: "",
-    //   groupMessage: "",
-    //   potTotal: "",
-    //   joinCode: ""
-    // });
-    const newGroup = this.state;
-    const userId = localStorage.getItem("token");
-    const sentItems = { ...newGroup, userId };
-    axios
-      .post("/api/groups/invite", sentItems)
-      .then(res => {
-        console.log(res);
-        this.props.getGroups();
-        this.setState({
-          groupName: "",
-          buyInAmt: "",
-          startDate: "",
-          endDate: "",
-          groupMessage: "",
-          potTotal: "",
-          joinCode: ""
-        });
-      })
-      .catch(err => console.log(err.response));
-  };
-
-  handleInputChange = e => {
-    e.persist();
-    this.setState({ [e.target.name]: e.target.value });
-  };
+      
+  }
 
   render() {
     return (
       <div className="SmurfForm">
-        <form onSubmit={this.addGroup}>
+        {/* <form onSubmit={this.addGroup}>
           <input
             onChange={this.handleInputChange}
             placeholder="Group Name"
@@ -139,10 +109,38 @@ class GroupForm extends Component {
           <button type="submit" className="addBtn" onSubmit={() => this.addGroup()}>
             Add Group
           </button>
+        </form> */}
+        <form onSubmit={this.addGroup}>
+          <input
+            onChange={this.handleInputChange}
+            placeholder="Group Name"
+            value={this.state.joinCode}
+            name="joinCode"
+            className="groupInput"
+          />
+
+          <button
+            type="submit"
+            className="addBtn"
+            onSubmit={() => this.addGroup()}
+          >
+            Add Group
+          </button>
         </form>
+        <section>
+          
+        </section>
       </div>
     );
   }
 }
 
+// const mapStateToProps = state => ({
+//   userId: state.groups.user
+// });
+
+// export default connect(
+//   mapStateToProps,
+//   { addGroup }
+// )(GroupForm);
 export default GroupForm;

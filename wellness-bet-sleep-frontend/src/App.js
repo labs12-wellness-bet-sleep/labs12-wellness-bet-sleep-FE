@@ -46,8 +46,9 @@ class App extends Component {
       <NavLink to="/" activeclass="selected" >Home </NavLink>
       <NavLink to="/users"> List of Users </NavLink>
       <NavLink to="/login"> Login </NavLink>
-      <NavLink to="/register"> Register</NavLink>
+      <NavLink to="/register"> Register</NavLink>      
       </nav> */}
+      <NavLink to="/groups"> Group Page </NavLink>
       <Route
           exact path ='/login'
           render={props =>
@@ -62,6 +63,7 @@ class App extends Component {
       {/* <Route exact path='/login'/> */}
       {/* <Route exact path={'/login'} component={Login}/> */}
       <Route exact path={'/register'} component={Register}/>
+      <Route exact path='/groups' component={GroupPage}/>
       
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
     </div>

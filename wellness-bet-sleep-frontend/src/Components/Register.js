@@ -8,7 +8,6 @@ class Register extends Component {
     super(props);
 
     this.state = {
-
       username: "",
       email: "",
       password: "",
@@ -24,7 +23,6 @@ class Register extends Component {
   componentDidMount() {
     if (this.state.registered == false) {
       this.setState({ welcomeMessage: "Please register before logging in." });
-
     }
   }
 
@@ -47,20 +45,21 @@ class Register extends Component {
 
     let currentImageName = "firebase-image-" + Date.now();
 
-    let email = this.state.email;
+
+    let email = this.state.email; 
     let password = this.state.password;
 
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        console.log("OAuth User:", user);
-        const { uid, email, ra } = user;
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(({user}) => {
+      console.log("OAuth User:", user);
+      const {uid, email, ra} = user; 
 
-        localStorage.setItem("token", ra);
+      
+      localStorage.setItem("token", ra);
 
-        let uploadImage = storage
-          .ref(`images/${currentImageName}`)
-          .put(this.state.file);
+      let uploadImage = storage
+        .ref(`images/${currentImageName}`)
+        .put(this.state.file);
 
         uploadImage.on(
           "state_changed",
@@ -74,23 +73,21 @@ class Register extends Component {
               .child(currentImageName)
               .getDownloadURL()
               .then(url => {
-                console.log(url);
+                console.log(url)
                 this.setState({
                   profilePhoto: url
                 });
-
+               
                 // store image object in the database
                 const user = {
-                  // username: this.state.username,
+                  username: this.state.username,
                   email: this.state.email,
                   fullName: this.state.fullName,
                   profilePhoto: url
                 };
-
+                
                 axios
-                  .post("/api/users/register", user, {
-                    headers: { authorization: ra }
-                  })
+                  .post("/api/users/register", user, {headers: {"authorization":ra}})
                   .then(result => {
                     console.log(result);
                     this.setState({
@@ -103,38 +100,42 @@ class Register extends Component {
                     console.log(result);
                   })
                   .catch(error => console.log(error));
-
+    
                 this.props.history.push("/users");
               });
           }
         );
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
 
-  fileHandler = e => {
-    this.setState({
-      file: e.target.files[0]
+
+    })
+    .catch(error => {
+      console.log(error);
     });
   };
 
+
+  fileHandler =(e)=> {
+    this.setState({
+      file: e.target.files[0]
+    })
+  }
+
+  
   loginWithGoogle = event => {
-    event.preventDefault();
-    auth
-      .signInWithPopup(googleProvider)
-      .then(({ user }) => {
-        console.log(user, "google signin");
+    event.preventDefault()
+    auth.signInWithPopup(googleProvider)
+    .then(({user}) => {
+        console.log(user, 'google signin')
         let currentImageName = "firebase-image-" + Date.now();
 
-        console.log("OAuth User:", user);
-        const { uid, email, ra } = user;
 
-        localStorage.setItem("token", ra);
+      console.log("OAuth User:", user);
+      const {uid, email, ra} = user; 
+      
+      localStorage.setItem("token", ra);
         let uploadImage = storage
-          .ref(`images/${currentImageName}`)
-          .put(this.state.file);
+        .ref(`images/${currentImageName}`)
+        .put(this.state.file);
         uploadImage.on(
           "state_changed",
           snapshot => {},
@@ -147,11 +148,11 @@ class Register extends Component {
               .child(currentImageName)
               .getDownloadURL()
               .then(url => {
-                console.log(url);
+                console.log(url)
                 this.setState({
                   profilePhoto: url
                 });
-
+               
                 // store image object in the database
                 const user = {
                   username: this.state.username,
@@ -159,11 +160,9 @@ class Register extends Component {
                   fullName: this.state.fullName,
                   profilePhoto: url
                 };
-
+                
                 axios
-                  .post("/api/users/register", user, {
-                    headers: { authorization: ra }
-                  })
+                  .post("/api/users/register", user, {headers: {"authorization":ra}})
                   .then(result => {
                     console.log(result);
                     this.setState({
@@ -176,14 +175,16 @@ class Register extends Component {
                     console.log(result);
                   })
                   .catch(error => console.log(error));
-
+    
                 this.props.history.push("/users");
               });
           }
         );
-      })
-      .catch(err => console.error(err));
-  };
+    })
+    .catch(err => console.error(err));
+
+}
+
 
   render() {
     return (
@@ -223,21 +224,14 @@ class Register extends Component {
           <b>Profile Photo:</b>
 
           {/* <input type="file" onChange={e => this.handleUploadChange(e)} /> */}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={e => this.fileHandler(e)}
-          />
+          <input type="file" accept="image/*" onChange={e => this.fileHandler(e)} />
 
           <button>Submit</button>
-          <button type="button" onClick={this.loginWithGoogle}>
-            SignUp with Google
-          </button>
+          <button type="button" onClick={this.loginWithGoogle}>SignUp with Google</button>
         </form>
       </div>
     );
   }
-
 }
 
 export default Register;

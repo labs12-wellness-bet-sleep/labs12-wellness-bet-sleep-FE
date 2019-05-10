@@ -15,7 +15,9 @@ class Users extends Component {
     }
 
     componentDidMount(){
-        axios.get("/api/users")
+        const token = localStorage.getItem('token');
+        console.log('User token:', token);
+        axios.get("/api/users", {headers: {"authorization":token}})
             .then(result => {
                 this.setState({users: result.data})
             })

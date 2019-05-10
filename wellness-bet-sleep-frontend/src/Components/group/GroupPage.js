@@ -6,6 +6,7 @@ import Groups from "./Groups";
 import { Route, NavLink } from "react-router-dom";
 import axios from "../../axios-sleep.js";
 
+
 class GroupPage extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +26,7 @@ class GroupPage extends Component {
   }
 
   componentDidMount() {
+    // const userId = localStorage.getItem("id");
     // axios
     //   .get("/api/groups")
     //   .then(res => {
@@ -39,7 +41,7 @@ class GroupPage extends Component {
   }
 
   getGroups = () => {
-    const userId = localStorage.getItem("token");
+    const userId = localStorage.getItem("id");
 
     console.log(userId, 'Error');
 
@@ -107,6 +109,8 @@ class GroupPage extends Component {
   render() {
     return (
       <>
+      <div>
+      <h1> Welcome to Group Page </h1>
         <NavLink to="/group-page">Group Home</NavLink>
         <NavLink to="/group-form"> Group Form </NavLink>
 
@@ -116,11 +120,11 @@ class GroupPage extends Component {
           render={props => (
             <Groups
               {...props}
-              
+              getGroups={this.getGroups}              
               deleteGroup={this.deleteGroup}
               groups={this.state.groups}
               setUpdateForm={this.setUpdateForm}
-            // updateGroup={this.updateGroup}
+            updateGroup={this.updateGroup}
 
             />
           )}
@@ -130,12 +134,15 @@ class GroupPage extends Component {
           render={props => (
             <GroupForm
               {...props}
-              getGroups={this.getGroups}
+              // getGroups={this.getGroups}
               addAnotherGroup={this.addAnotherGroup}
               updateGroup={this.updateGroup}
             />
           )}
         />
+
+      </div>
+
       </>
     );
   }
