@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
-// import d3 from "d3";
+
+import {RadialChart} from 'react-vis';
+
+/// https://uber.github.io/react-vis/documentation/getting-started/creating-a-new-react-vis-project
+/// https://github.com/uber/react-vis/blob/master/docs/radial-chart.md
 
 const RoundedItem = styled.div`
     border-radius: 7px;
@@ -9,6 +13,9 @@ const RoundedItem = styled.div`
     height: 300px;
     margin: 2%;
     width: 33%;
+
+    display: flex;
+    flex-directon: column;
 `
 
 export default class TimeLeft extends Component {
@@ -17,26 +24,18 @@ export default class TimeLeft extends Component {
         super(props)
     }
 
-    renderRing() {
-        var maxWidth = 200;
-        var maxHeight = 200;
-        var outerRadius = 100;
-        var ringWidth = 20;
-
-
-        // https://bl.ocks.org/jiankuang/a591ff3331044f8c9a59764a1424bb07
-        // function drawRing(config) {
-        //     var pie = d3.layout.pie().value(function (d) {
-        //         return d.count;
-        //     });
-    }
-
     render(){
+
+        let data = [{angle: 5, label:"14 hours left"}, {angle: 2}]; 
+
         return(
 
             <RoundedItem>
             <div className="TimeLeft">
             <h2>Time Left:</h2>
+            <RadialChart data={data}  width={200}
+            height={200} showLabels={true}/>
+            <svg refs="ring"/>
             </div>
             </RoundedItem>
         );
