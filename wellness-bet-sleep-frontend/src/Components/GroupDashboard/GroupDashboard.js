@@ -8,11 +8,19 @@ import UsersRanking from "./UsersRanking.js"
 import styled from 'styled-components'
 
 const HeaderData = styled.div`
+    display: flex;
+    flex-directon: row; 
 
+    justify-content: space-between;
+`
+
+const HeaderItem = styled.div`
+    width: 33%;
 `
 
 const HorizontalInfo = styled.div`
-
+    display: flex;
+    flex-directon: row; 
 `
 
 export default class GroupDashboard extends Component {
@@ -167,10 +175,25 @@ export default class GroupDashboard extends Component {
         return(
 
             <div className="GroupDashboard">
-            
+
+            <HeaderData>
+
+            <HeaderItem>
+            <b><h2>Group: {this.state.group.groupName}</h2></b>
+
+            <b>Last day of competiton: {this.state.group.endDate}</b>
+            </HeaderItem>
+
+            <HeaderItem>
+            <h2>Pot Total: $500</h2>
+            </HeaderItem>
+            </HeaderData>
+
+            <HorizontalInfo>
             <UsersRanking usersSleepData={this.state.groupUsers} startDate={this.state.startDate} endDate={this.state.endDate}/>
             <TimeLeft timeleft={this.state.daysLeft}/>
             <UserSleepStatus currentUserSleep={this.state.currentUserSleep} totalSleep={this.state.currentUserAggregatedSleep}/>
+            </HorizontalInfo>
 
             <AggregatedSleepGraph loggedInUsersAndData={this.state.loggedInUsersAndData}/>
             </div>
