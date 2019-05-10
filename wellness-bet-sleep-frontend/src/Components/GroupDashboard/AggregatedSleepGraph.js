@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import * as d3 from "d3";
+import {XYPlot, LineSeries, HorizontalGridLines,
+    VerticalGridLines,  XAxis,
+    YAxis, ChartLabel} from 'react-vis';
 
 const RoundedItem = styled.div`
     border-radius: 7px;
@@ -10,7 +12,7 @@ const RoundedItem = styled.div`
     margin: 2%;
 `
 
-
+// https://github.com/uber/react-vis/blob/master/docs/line-series.md
 export default class AggregatedSleepGraph extends Component {
 
     constructor(props){
@@ -26,6 +28,40 @@ export default class AggregatedSleepGraph extends Component {
             <RoundedItem>
             <div className="AggregatedSleepGraph">
             <h2>Competition Statistics:</h2>
+
+            <XYPlot height={300} width={700}>
+
+            <HorizontalGridLines style={{stroke: '#B7E9ED'}} />
+            <VerticalGridLines style={{stroke: '#B7E9ED'}} /> 
+
+            <XAxis />
+            <YAxis />
+
+            <ChartLabel 
+            text="X Axis"
+            className="alt-x-label"
+            includeMargin={false}
+            xPercent={0.025}
+            yPercent={1.01}
+            />
+
+          <ChartLabel 
+            text="Y Axis"
+            className="alt-y-label"
+            includeMargin={false}
+            xPercent={0.06}
+            yPercent={0.06}
+            style={{
+              transform: 'rotate(-90)',
+              textAnchor: 'end'
+            }}
+            />
+            {this.props.sleepCoordinatesPerPerson.map(person => {
+              return <LineSeries data={person.coordinates} style={{strokeWidth: 5}}/>
+            })}
+
+            </XYPlot>
+
             </div>
             </RoundedItem>
         );

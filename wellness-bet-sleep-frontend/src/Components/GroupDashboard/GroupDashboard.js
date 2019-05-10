@@ -160,7 +160,7 @@ export default class GroupDashboard extends Component {
                 }
 
                 for(let days = 0; days < amountOfDays; days++) {
-                    sleepGraphCoordinatesPerPerson[i].coordinates[days] = [days, totalSleepPerPerson[i].amountOfSleep - days]
+                    sleepGraphCoordinatesPerPerson[i].coordinates[days] = {"x": days, "y": totalSleepPerPerson[i].amountOfSleep - days}
                 }
             }
 
@@ -196,7 +196,7 @@ export default class GroupDashboard extends Component {
             <UserSleepStatus currentUserSleep={this.state.currentUserSleep} totalSleep={this.state.currentUserAggregatedSleep}/>
             </HorizontalInfo>
 
-            <AggregatedSleepGraph loggedInUsersAndData={this.state.loggedInUsersAndData}/>
+            <AggregatedSleepGraph sleepCoordinatesPerPerson={this.state.sleepGraphCoordinatesPerPerson}/>
             </div>
         
         );
