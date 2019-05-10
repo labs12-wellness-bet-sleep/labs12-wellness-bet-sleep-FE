@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import d3 from "d3";
 
 const RoundedItem = styled.div`
     border-radius: 7px;
