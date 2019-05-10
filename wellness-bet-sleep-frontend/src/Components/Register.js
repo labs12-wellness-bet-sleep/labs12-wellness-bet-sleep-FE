@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from "../axios-sleep";
 
-import { storage } from "../FirebaseConfig";
+import { storage, auth, googleProvider } from "../FirebaseConfig";
 
 class Register extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+
       username: "",
       email: "",
       password: "",
@@ -15,13 +16,15 @@ class Register extends Component {
       registered: false,
       welcomeMessage: "Please register before logging in.",
       profilePhotoImg: null,
-      profilePhoto: ""
+      profilePhoto: "",
+      file: null
     };
   }
 
   componentDidMount() {
     if (this.state.registered == false) {
       this.setState({ welcomeMessage: "Please register before logging in." });
+
     }
   }
 
@@ -44,55 +47,146 @@ class Register extends Component {
 
     let currentImageName = "firebase-image-" + Date.now();
 
-    let uploadImage = storage
-      .ref(`images/${currentImageName}`)
-      .put(e.target.files[0]);
 
-    uploadImage.on(
-      "state_changed",
-      snapshot => {},
-      error => {
-        alert(error);
-      },
-      () => {
-        storage
-          .ref("images")
-          .child(currentImageName)
-          .getDownloadURL()
-          .then(url => {
-            this.setState({
-              profilePhoto: url
-            });
+    let email = this.state.email; 
+    let password = this.state.password;
 
-            // store image object in the database
-            const user = {
-              username: this.state.username,
-              password: this.state.password,
-              email: this.state.email,
-              fullName: this.state.fullName,
-              profilePhoto: url
-            };
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(({user}) => {
+      console.log("OAuth User:", user);
+      const {uid, email, ra} = user; 
 
-            axios
-              .post("https://sleep-bet.herokuapp.com/api/users/register", user)
-              .then(result => {
-                console.log(result);
+      
+      localStorage.setItem("token", ra);
+
+      let uploadImage = storage
+        .ref(`images/${currentImageName}`)
+        .put(this.state.file);
+
+        uploadImage.on(
+          "state_changed",
+          snapshot => {},
+          error => {
+            alert(error);
+          },
+          () => {
+            storage
+              .ref("images")
+              .child(currentImageName)
+              .getDownloadURL()
+              .then(url => {
+                console.log(url)
                 this.setState({
-                  registered: true,
-                  welcomeMessage: `Congratulations for registering, ${
-                    result.data.username
-                  }`
+                  profilePhoto: url
                 });
-                console.log("Congratulations on registering!");
-                console.log(result);
-              })
-              .catch(error => console.log(error));
+               
+                // store image object in the database
+                const user = {
+                  username: this.state.username,
+                  email: this.state.email,
+                  fullName: this.state.fullName,
+                  profilePhoto: url
+                };
+                
+                axios
+                  .post("/api/users/register", user, {headers: {"authorization":ra}})
+                  .then(result => {
+                    console.log(result);
+                    this.setState({
+                      registered: true,
+                      welcomeMessage: `Congratulations for registering, ${
+                        result.data.username
+                      }`
+                    });
+                    console.log("Congratulations on registering!");
+                    console.log(result);
+                  })
+                  .catch(error => console.log(error));
+    
+                this.props.history.push("/users");
+              });
+          }
+        );
 
-            this.props.history.push("/users");
-          });
-      }
-    );
+
+    })
+    .catch(error => {
+      console.log(error);
+    });
   };
+
+
+  fileHandler =(e)=> {
+    this.setState({
+      file: e.target.files[0]
+    })
+  }
+
+  
+  loginWithGoogle = event => {
+    event.preventDefault()
+    auth.signInWithPopup(googleProvider)
+    .then(({user}) => {
+        console.log(user, 'google signin')
+        let currentImageName = "firebase-image-" + Date.now();
+
+
+      console.log("OAuth User:", user);
+      const {uid, email, ra} = user; 
+      
+      localStorage.setItem("token", ra);
+        let uploadImage = storage
+        .ref(`images/${currentImageName}`)
+        .put(this.state.file);
+        uploadImage.on(
+          "state_changed",
+          snapshot => {},
+          error => {
+            alert(error);
+          },
+          () => {
+            storage
+              .ref("images")
+              .child(currentImageName)
+              .getDownloadURL()
+              .then(url => {
+                console.log(url)
+                this.setState({
+                  profilePhoto: url
+                });
+               
+                // store image object in the database
+                const user = {
+                  username: this.state.username,
+                  email: email,
+                  fullName: this.state.fullName,
+                  profilePhoto: url
+                };
+                
+                axios
+                  .post("/api/users/register", user, {headers: {"authorization":ra}})
+                  .then(result => {
+                    console.log(result);
+                    this.setState({
+                      registered: true,
+                      welcomeMessage: `Congratulations for registering, ${
+                        result.data.username
+                      }`
+                    });
+                    console.log("Congratulations on registering!");
+                    console.log(result);
+                  })
+                  .catch(error => console.log(error));
+    
+                this.props.history.push("/users");
+              });
+          }
+        );
+    })
+    .catch(err => console.error(err));
+
+}
+
 
   render() {
     return (
@@ -132,13 +226,15 @@ class Register extends Component {
           <b>Profile Photo:</b>
 
           {/* <input type="file" onChange={e => this.handleUploadChange(e)} /> */}
-          <input type="file" onChange={e => this.register(e)} />
+          <input type="file" accept="image/*" onChange={e => this.fileHandler(e)} />
 
-          <button type="submit">Submit</button>
+          <button>Submit</button>
+          <button type="button" onClick={this.loginWithGoogle}>SignUp with Google</button>
         </form>
       </div>
     );
   }
+
 }
 
 export default Register;

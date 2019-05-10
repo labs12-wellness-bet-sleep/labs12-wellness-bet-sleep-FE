@@ -1,0 +1,70 @@
+.login-wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    /* width: 40%;  */
+    /* height: 300px; */
+    /* border: 1px solid red; */
+}
+
+.login-header {
+    color: white;
+    margin-top: 2rem;
+    width: 60%;
+    /* border: 1px solid orange; */
+}
+.wellness-logo {
+    width: 60%;
+    /* border: 1px solid green; */
+}
+
+.login-form {
+    /* border: 1px solid firebrick; */
+}
+.fa-users {
+    color: #12121377;
+    position: relative;
+    margin-left: 1rem;
+    right: 130px;
+    top: 45px;
+    /* border: 1px solid red; */
+  }
+  
+  .fa-lock {
+    color: #12121377;
+    position: relative;
+    margin-left: 1rem;
+    right: 130px;
+    padding: .25rem;
+    top: 49px;
+    border: .1rem solid #12121377;
+    border-radius: 50%;
+  }
+.log-reg-links{
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /* border: 1px solid red; */
+}
+
+.register-link {
+    color: #12121377;
+    text-decoration: none;
+}
+
+.register-link:hover {
+    
+    border-bottom: 1px solid #004CA8;
+}
+
+.top {
+    font-size: 1.5rem;
+}
+
+.bottom {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-top: .8rem;
+}

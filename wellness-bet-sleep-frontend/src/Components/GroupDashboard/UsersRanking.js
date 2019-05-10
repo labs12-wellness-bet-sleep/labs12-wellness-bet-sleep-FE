@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Users from "./Dashboard/UserDashboardData.js";
 
 export default class UsersRanking extends Component {
     

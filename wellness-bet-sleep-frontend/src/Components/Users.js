@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { auth } from '../FirebaseConfig';
 import User from "./User.js";
-import axios from 'axios';
+import axios from '../axios-sleep';
 
 
 class Users extends Component {
@@ -15,15 +15,25 @@ class Users extends Component {
     }
 
     componentDidMount(){
-        axios.get("https://sleep-bet.herokuapp.com/api/users")
+        axios.get("/api/users")
             .then(result => {
                 this.setState({users: result.data})
             })
             .catch(error => console.log(error));
     }
+    // componentDidMount(){
+    //     axios.get("https://localhost8080/api/users")
+    //     // axios.get("https://sleep-bet.herokuapp.com/api/users")
+    //         .then(result => {
+    //             this.setState({users: result.data})
+    //         })
+    //         .catch(error => console.log(error));
+    // }
 
     logout = () => {
         auth.signOut()
+        this.props.history.push('/')
+        console.log('log out')
     }
     render() {
         return(
