@@ -10,6 +10,11 @@ const RoundedItem = styled.div`
     border-color: #89cff0;
     height: 400px;
     margin: 2%;
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
 `
 
 // https://github.com/uber/react-vis/blob/master/docs/line-series.md

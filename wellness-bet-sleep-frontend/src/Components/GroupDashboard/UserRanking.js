@@ -23,7 +23,7 @@ export default class UserRanking extends Component {
 
             <Ranking>
                 <div className="photo"><ProfilePic><img src={this.props.userSleepData.photo} width="45px"/></ProfilePic></div>
-                <div className="username">{this.props.userSleepData.username}</div>
+                <div className="username">{this.props.userSleepData.fullName}</div>
                 <div className="sleepAmount">{this.props.userSleepData.amountOfSleep} hours</div>
             </Ranking>
         );
