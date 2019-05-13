@@ -4,7 +4,7 @@ import axios from "../../axios-sleep.js";
 import { connect } from "react-redux";
 import { addGroup } from "../../Store/Actions/group";
 
-import Groups from "./Groups";
+// import Groups from "./Groups";
 
 class GroupForm extends Component {
   constructor(props) {
@@ -45,24 +45,25 @@ class GroupForm extends Component {
 
   addGroup = (event) => {
     event.preventDefault();
-    // add code to create the smurf using the api
+    // add code to create the group using the api
     this.props.addAnotherGroup(event, this.state)
 
     this.setState({
-      groupName: "",
-      buyInAmt: "",
-      startDate: "",
-      endDate: "",
-      groupMessage: "",
-      potTotal: "",
+      // groupName: "",
+      // buyInAmt: "",
+      // startDate: "",
+      // endDate: "",
+      // groupMessage: "",
+      // potTotal: "",
       joinCode: ""
     });
+    console.log('button clicked');
       
   }
 
   render() {
     return (
-      <div className="SmurfForm">
+      <div className="groupForm">
         {/* <form onSubmit={this.addGroup}>
           <input
             onChange={this.handleInputChange}
@@ -110,14 +111,14 @@ class GroupForm extends Component {
             Add Group
           </button>
         </form> */}
-        <form onSubmit={this.addGroup}>
+        {/* <form onSubmit={() => this.addGroup()}>
           <input
             onChange={this.handleInputChange}
             placeholder="Group Name"
             value={this.state.joinCode}
             name="joinCode"
             className="groupInput"
-          />
+          /> */}
 
           <button
             type="submit"
@@ -126,10 +127,8 @@ class GroupForm extends Component {
           >
             Add Group
           </button>
-        </form>
-        <section>
-          
-        </section>
+        {/* </form> */}
+        
       </div>
     );
   }

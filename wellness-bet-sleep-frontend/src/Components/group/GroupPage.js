@@ -6,7 +6,6 @@ import Groups from "./Groups";
 import { Route, NavLink } from "react-router-dom";
 import axios from "../../axios-sleep.js";
 
-
 class GroupPage extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +42,7 @@ class GroupPage extends Component {
   getGroups = () => {
     const userId = localStorage.getItem("id");
 
-    console.log(userId, 'Error');
+    console.log(userId, "Error");
 
     axios
       .get(`/api/groups/`)
@@ -59,6 +58,7 @@ class GroupPage extends Component {
     axios
       .post("/api/groups/invite", anotherGroup)
       .then(res => {
+        console.log(res.data)
         this.setState({
           groups: res.data
         });
@@ -108,42 +108,49 @@ class GroupPage extends Component {
 
   render() {
     return (
-      <>
-      <div>
-      <h1> Welcome to Group Page </h1>
-        <NavLink to="/group-page">Group Home</NavLink>
-        <NavLink to="/group-form"> Group Form </NavLink>
+      
+        <div>
+          <h1> Welcome to Group Page </h1>
+          <NavLink to="/group-page">Group Home</NavLink>
+          <NavLink to="/group-form"> Group Form </NavLink>
 
-        <Route
-          path="/group-page"
-          exact
-          render={props => (
-            <Groups
-              {...props}
-              getGroups={this.getGroups}              
-              deleteGroup={this.deleteGroup}
-              groups={this.state.groups}
-              setUpdateForm={this.setUpdateForm}
-            updateGroup={this.updateGroup}
+          <Route
+            path="/group-page"
+            exact
+            render={props => (
+              <Groups
+                {...props}
+                getGroups={this.getGroups}
+                deleteGroup={this.deleteGroup}
+                groups={this.state.groups}
+                setUpdateForm={this.setUpdateForm}
+                updateGroup={this.updateGroup}
+              />
+            )}
+          />
+          {/* <Route
+            path="/group-form"
+            render={props => (
+              <GroupForm
+                {...props}
+                // getGroups={this.getGroups}
+                addAnotherGroup={this.addAnotherGroup}
+                updateGroup={this.updateGroup}
+              />
+            )}
+          /> */}
+          <GroupForm getGroups={this.getGroups}
+                addAnotherGroup={this.addAnotherGroup}
+                updateGroup={this.updateGroup} />
 
-            />
-          )}
-        />
-        <Route
-          path="/group-form"
-          render={props => (
-            <GroupForm
-              {...props}
-              // getGroups={this.getGroups}
-              addAnotherGroup={this.addAnotherGroup}
-              updateGroup={this.updateGroup}
-            />
-          )}
-        />
-
-      </div>
-
-      </>
+                <Groups getGroups={this.getGroups}
+                deleteGroup={this.deleteGroup}
+                groups={this.state.groups}
+                setUpdateForm={this.setUpdateForm}
+                updateGroup={this.updateGroup}
+                /> 
+        </div>
+      
     );
   }
 }
