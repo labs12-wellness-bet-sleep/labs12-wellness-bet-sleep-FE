@@ -4,11 +4,13 @@ import { auth } from './FirebaseConfig';
 
 import './App.css';
 
+import Dashboard from './Components/dashboard/Dashboard';
 import Home from './Components/home/Home';
 import Login from "./Components/login/LogIn";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
 import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
+
 
 class App extends Component {
   constructor(props) {
@@ -55,6 +57,14 @@ class App extends Component {
             />
           }
         />
+        <Route
+       path="/dashboard"
+      render={(props)=>(
+        <Dashboard
+        {...props}
+         />
+      )}
+      />
       {/* <Route exact path={'/'} component={Home}/>  */}
       <Route exact path ='/' render={props => <Home {...props} /> } />
       <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
