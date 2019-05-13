@@ -1,5 +1,6 @@
 .login-wrapper {
     align-items: center;
+    justify-content: center;
     display: flex;
     flex-direction: column;
     height: auto;
@@ -10,23 +11,29 @@
 
 .login-header {
     color: white;
-    margin-top: 2rem;
-    width: 60%;
+    margin: 0 auto;
+    /* margin-top: 2rem; */
+    width: 75%;
     /* border: 1px solid orange; */
 }
 .wellness-logo {
-    width: 60%;
+    width: 50%;
     /* border: 1px solid green; */
 }
 
 .login-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    /* margin: 0 auto; */
+    /* width: 60%; */
     /* border: 1px solid firebrick; */
 }
 .fa-users {
     color: #12121377;
     position: relative;
     margin-left: 1rem;
-    right: 130px;
+    right: 0;
     top: 45px;
     /* border: 1px solid red; */
   }
@@ -35,7 +42,7 @@
     color: #12121377;
     position: relative;
     margin-left: 1rem;
-    right: 130px;
+    right: 0;
     padding: .25rem;
     top: 49px;
     border: .1rem solid #12121377;

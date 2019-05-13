@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from'react-router-dom';
-
+import axios from '../../axios-sleep';
+import { Link } from 'react-router-dom';
 import { auth, googleProvider } from '../../FirebaseConfig';
-import Users from '../Users';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,93 +12,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
-import '../../App';
+import './../../App.css';
 import './login-styles.css'
-import wellnessLogo from '../../assets/images/wellness-logo.png';
+import wellnessLogo from './../../assets/images/wellness-logo.png';
 
-
-
-const LoginWrapper = styled.div`
-/* align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    width: 40%; */
-    border: 1px solid red;
-    
-`;
-
-const LoginTitle = styled.div`
-    color: white;
-    font-size: 2rem;
-    
-    /* border: 1px solid orange; */
-    .top {
-        margin-bottom: .5rem;
-    }
-    .bottom {
-        font-weight: bold;
-    }
-`;
-const LoginFormWrapper = styled.form`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    height: auto;
-    width: auto;
-    justify-content: space-around;
-    width: 100%;
-    /* border: 3px solid green; */
-`;
-
-const LoginFormInput = styled.input`
-    border: none;
-    border-radius: 2rem;
-    background-color: #abb5c488;
-    color: white;
-    font-size: 1rem;
-    margin-top: 2rem;
-    padding-left: 4rem;
-    height: 55px;
-    width: 60%;
-    ::placeholder {
-        color: white;
-        font-size: 1rem;
-    }
- `;
-// const LoginFormButtons = styled.div`
-//     display: flex;
-//     /* flex-direction: column; */
-//     justify-content: space-around;
-//     margin-top: 2rem;
-//     /* align-items: center; */
-//     width: 100%;
-//     border: 1px solid orange;
-// `;
-const LoginFormLinks = styled.div`
-    display: flex;
-    justify-content: space-around;
-    margin-top: 2rem;
-    width: 100%;
-    /* border: 1px solid red; */
-    .register-link {
-        color: #585a5e;
-        text-decoration: none;
-    }
-`;
-
-const LoginFormButton = styled.button`
-    border: none;
-    background-color: none; 
-    border: none;
-    border-radius: 2rem;
-    background-color: #004CA8;
-    color: white;
-    font-size: 1rem;
-    height: 55px;
-    margin-top: 2rem;
-    width: 75%;
-`;
 
 const styles = theme => ({
     container: {
@@ -139,7 +55,6 @@ const styles = theme => ({
         }
     }
   });
-
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -152,7 +67,7 @@ class Login extends Component {
     }
 
     componentDidMount(){
-        if(this.state.loggedIn === false){
+        if(this.state.loggedIn == false){
             this.setState({loginMessage: "Please log in."})
         }
     }
@@ -164,82 +79,55 @@ class Login extends Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    // handleChange = name => event => {
-    //     console.log(event.target.name, event.target.value);
-    //     this.setState({
-    //       [name]: event.target.value,
-    //     });
-    //   };
+    loginWithEmail = e => {
+        e.preventDefault();
+        auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then(({user}) => {
+                const { uid, email, ra} = user;
+                console.log(user)
+                localStorage.setItem("token", ra);
+                axios
+                .get(`/api/users/login/${email}`, {headers: {"authorization": ra}})
+                .then(result => {
+                  console.log(result);
+                  this.setState({
+                    loggedIn: true,
+                    loginMessage: `Congratulations for logging in, ${
+                      result.data.username
+                    }`
+                  })
+                
+                }).catch(error => console.log(error))
 
-    // loginWithEmail = e => {
-    //     e.preventDefault();
-    //     auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-    //         .then((user) => {
-    //             console.log(user)
-    //         })
-    //         .catch(error => {
-    //             console.log(error)
-    //         })
-    //        this.setState({
-    //            loggedIn: true
-    //        })
-           
-    // }
-
-    loginWithEmail = () => {
-        const email = this.usrEmail.current.value
-        const password = this.usrPassword.current.value
-        this.usrEmail.current.value = ''
-        this.usrPassword.current.value = ''
-        if (!email || !password) return;
-        auth.signInWithEmailAndPassword(email, password)
-        .then(user => {
-            console.log(user)
-            this.setState({
-                loggedIn: true
             })
+            .catch(
+                error => {
+                console.log(error)
         })
-        .catch(error => {
-            console.log(error)
-        })
-    };
+        this.props.history.push('/users')
+    }
 
-    //Email and Password Register
-    registerWithEmail = () => {
-        const email = this.usrEmail.current.value
-        const password = this.usrPassword.current.value
-        this.usrEmail.current.value = ''
-        this.usrPassword.current.value = ''
-        if (!email || !password) return;
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(user => {
-            console.log(user)
-        })
-        .catch(error => {
-            console.log(error)
-        })
-    };
-   
-    //Google Login
     loginWithGoogle = event => {
         event.preventDefault()
         auth.signInWithPopup(googleProvider)
-        .then(user => {
+        .then(({user}) => {
             console.log(user, 'google signin')
-            this.setState({
-                loggedIn: true
+            localStorage.setItem("token", user.ra);
+            axios.get(`/api/users/login/${user.email}`, {headers: {"authorization":user.ra}} ).
+            then(response => {
+                console.log(response);
             })
-    
         })
         .catch(err => console.error(err))
-    };
+        this.props.history.push('/users')
+    }
     
     render() {
-        const { classes } = this.props;    
+        const { classes } = this.props;  
         return(
 
-        <div className='login-wrapper'>
-            <header className='login-header'>
+        <div ClassName="login-wrapper">
+ <header className='login-header'>
                 {/* <div > */}
                 <img src={wellnessLogo} alt='Wellness Logo' className='wellness-logo'/>
                 {/* </div> */}
@@ -247,21 +135,27 @@ class Login extends Component {
                 <span className='top'>Wellness Bet </span><br />
                 <span className='bottom'>Sleep</span>
             </header>
-            <form className='login-form'>
-             <FontAwesomeIcon icon={faUserCircle} size='lg' className='fa-users'/>
+           {/* <div className="login-message">
+            {this.state.loginMessage}
+            </div>
+
+        <h2>Login</h2> */}
+
+        <form className='login-form'>
+        <FontAwesomeIcon icon={faUserCircle} size='lg' className='fa-users'/>
             <TextField
                 autoFocus
                 type="email"
                 fullWidth
                 required
-                inputRef={this.usrEmail}
+                onChange={(e) => this.handleChanges(e)}
                 placeholder='Email'
                 InputProps={{
                     className: classes.input,
                     disableUnderline: true ,
                 }}
               />
-            <br />
+
             <FontAwesomeIcon icon={faLock}  className='fa-lock'/>
             <TextField
                 fullWidth
@@ -274,27 +168,32 @@ class Login extends Component {
                     disableUnderline: true ,
                 }}
               />
-              <br />
-                <Button 
+            {/* <b>email:</b> */}
+            {/* <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input> */}
+
+            {/* <b>Password:</b>
+            <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input> */}
+            <Button 
                     fullWidth
-                    className={classes.button}>
+                    className={classes.button}
+                    onClick={this.loginWithEmail}>
                     Get Started             
                 </Button>
-        </form>
-        <div className='log-reg-links'>
+            {/* <button onClick={this.loginWithEmail}>Login</button>  */}
+            <div className='log-reg-links'>
             <Link to="/register" className='register-link' activeClassName='active'>Create Account</Link>
             <div onClick={this.loginWithGoogle}><Link className='register-link' activeClassName='active'>Login With Google</Link></div>
         </div>
-    </div>
+            {/* <button onClick={this.loginWithGoogle}>Login With Google</button>
+            <button onClick={this.loginWithGoogle}>SignUp with Google</button> */}
+
+        </form>
+        
+        </div>
         )
     }
 
 }
 
-Login.propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
-  
-  export default withStyles(styles)(Login);
-
+export default withStyles(styles)(Login);
 // export default Login;

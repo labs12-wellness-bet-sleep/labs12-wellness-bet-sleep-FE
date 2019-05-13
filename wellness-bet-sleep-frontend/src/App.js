@@ -66,6 +66,8 @@ class App extends Component {
       <Route exact path='/groups' component={GroupPage}/>
       
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
+
+      <Route path={'/groupDashboard'} component={GroupDashboard}/>
     </div>
   )
 }
