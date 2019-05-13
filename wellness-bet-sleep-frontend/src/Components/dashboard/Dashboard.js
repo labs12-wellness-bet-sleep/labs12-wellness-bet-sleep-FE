@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/';
+import { Route } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -85,6 +86,8 @@ class Dashboard extends Component {
                   />
                  )}
                  /> */}
+  
+                 {/* <JoinWithCode /> */}
             </div>
             )
         }       

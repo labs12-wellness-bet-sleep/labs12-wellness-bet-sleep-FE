@@ -19,6 +19,8 @@ import { Route }from 'react-router-dom';
 import toRenderProps from 'recompose/toRenderProps';
 import withState from 'recompose/withState';
 
+import JoinWithCode from './JoinWithCode';
+
 
 
 
@@ -190,7 +192,6 @@ function GroupsNav(props) {
               </Card>
             </div> : null
             }
-          {/* <Route path="/join-by-code" component={JoinByGroup} /> */}
           </div>
         )
       }}
