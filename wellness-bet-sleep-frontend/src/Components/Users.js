@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { auth } from '../FirebaseConfig';
+import { connect } from 'react-redux';
+import actions from './../Store/Actions';
 import User from "./User.js";
 import axios from '../axios-sleep';
 
@@ -17,12 +19,13 @@ class Users extends Component {
     componentDidMount(){
         const token = localStorage.getItem('token');
         console.log('User token:', token);
-        axios.get("/api/users", {headers: {"authorization":token}})
-            .then(result => {
-                this.setState({users: result.data})
+        this.props.getUsers(token)
+        // axios.get("/api/users", {headers: {"authorization":token}})
+        //     .then(result => {
+        //         this.setState({users: result.data})
                 
-            })
-            .catch(error => console.log(error));
+        //     })
+        //     .catch(error => console.log(error));
     }
 
     logout = () => {
@@ -32,15 +35,15 @@ class Users extends Component {
         console.log('log out')
     }
     render() {
-        console.log(this.state.users)
+        console.log(this.props.users, 'users')
         return(
             <div className="Users">
             <button onClick={this.logout}>Logout</button>
 
             
             <h2>List Of Users:</h2>
-            {!!this.state.users[0] && this.state.users.map(user =>{ return (
-                <User user={user}/>
+            { Object.keys(this.props.users).map(key  =>{ return (
+                <User user={this.props.users[key]}/>
             )})}
             </div>
 
@@ -48,4 +51,17 @@ class Users extends Component {
     }
 }
 
-export default Users;
+const mapStateToProps = state => {
+    return {
+        users: state.auth.user,
+        
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return{
+        getUsers: user => dispatch(actions.auth.initOAuth(user))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users);

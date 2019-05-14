@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Route, NavLink } from "react-router-dom";
+import { connect } from 'react-redux'
+import actions from './Store/Actions';
 import { auth } from './FirebaseConfig';
 
 import './App.css';
@@ -16,33 +18,37 @@ import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
 
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: {}
-    }
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     users: {}
+  //   }
+  // }
 
   componentDidMount = () => {
-    this.authListener()
+    
+      auth.onAuthStateChanged((user) => {
+        console.log(user, 'in auth listener')
+        if(user) {
+         const { uid, ra } = user;
+          if (user.email) {
+            const { email } = user;
+            this.props.oAuth({id: uid, email, token: ra})
+          }
+        } 
+        // else {
+        //   this.setState({
+        //     users: null
+        //   })
+        // }
+      })
+    
   }
 
-  authListener = () => {
-    auth.onAuthStateChanged((users) => {
-      console.log(users, 'in auth listener')
-      if(users) {
-        this.setState({
-          users
-        })
-      } else {
-        this.setState({
-          users: null
-        })
-      }
-    })
-  }
+
 
   render () {
+    console.log(this.props.users, 'users')
   return (
     <div className="App">
 
@@ -85,4 +91,18 @@ class App extends Component {
 }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    users: state.user
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    oAuth: user  => dispatch(actions.auth.initOAuth(user))
+  }
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps )(App);
