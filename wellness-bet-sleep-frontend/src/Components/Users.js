@@ -20,6 +20,7 @@ class Users extends Component {
         axios.get("/api/users", {headers: {"authorization":token}})
             .then(result => {
                 this.setState({users: result.data})
+                
             })
             .catch(error => console.log(error));
     }

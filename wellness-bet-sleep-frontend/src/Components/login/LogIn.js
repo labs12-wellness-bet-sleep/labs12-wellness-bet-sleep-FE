@@ -17,6 +17,7 @@ import './login-styles.css'
 import wellnessLogo from './../../assets/images/wellness-logo.png';
 
 
+
 const styles = theme => ({
     container: {
       display: 'flex',
@@ -146,6 +147,7 @@ class Login extends Component {
             <TextField
                 autoFocus
                 type="email"
+                name='email'
                 fullWidth
                 required
                 onChange={(e) => this.handleChanges(e)}
@@ -156,23 +158,23 @@ class Login extends Component {
                 }}
               />
 
-            <FontAwesomeIcon icon={faLock}  className='fa-lock'/>
-            <TextField
+             <FontAwesomeIcon icon={faLock}  className='fa-lock'/>
+             <TextField
                 fullWidth
                 type="password"
+                name='password'
                 required
-                inputRef={this.usrPassword}
                 placeholder='Password'
                 InputProps={{
-                    className: classes.input,
-                    disableUnderline: true ,
+                     className: classes.input,
+                     disableUnderline: true ,
                 }}
-              />
+             />
             {/* <b>email:</b> */}
-            {/* <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input> */}
+            {/* <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input> */} */}
 
-            {/* <b>Password:</b>
-            <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input> */}
+            {/* <b>Password:</b> */}
+            {/* <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input> */}
             <Button 
                     fullWidth
                     className={classes.button}

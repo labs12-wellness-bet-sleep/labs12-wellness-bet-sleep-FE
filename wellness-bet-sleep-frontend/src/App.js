@@ -6,7 +6,7 @@ import './App.css';
 
 import Home from './Components/home/Home';
 import Login from "./Components/login/LogIn";
-import Register from "./Components/Register.js";
+import Register from './Components/register/Register';
 import Users from "./Components/Users.js";
 
 class App extends Component {
