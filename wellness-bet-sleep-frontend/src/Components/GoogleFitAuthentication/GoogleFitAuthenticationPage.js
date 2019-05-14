@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
-import axios from "../axios-sleep";
+import { Button } from '@material-ui/core';
 
 export default class GoogleFitAuthenticationPage extends Component {
     constructor(props){
         super(props)
-
-        gapi.load('client:auth2', initClient);
-
+        // let gapi = window.gapi; 
         // send GoogleAuth to global state
         this.state = {
             userAuthorizationCode: "",
             GoogleAuth: "",
+            loginStatus: "",
+            logInButtonName: "",
+            hideRevokeButton: true
         }
     }
+
+    componentDidMount() {
+        console.log("GAPI: ", window.gapi);
+        window.gapi.load('client:auth2', this.initClient);
+    }
+
+    // loadGoogleAPI() {
+    //     console.log(window.gapi);
+    // }
 
     // 1) oAuth get request 
     
@@ -20,68 +30,57 @@ export default class GoogleFitAuthenticationPage extends Component {
     // https://developers.google.com/identity/protocols/OAuth2UserAgent
 
     // for scope: https://developers.google.com/identity/protocols/googlescopes
-    connectGoogleAPIWithWellnessBetApp() {
-        gapi.client.init({
-            'apiKey': process.env.google_api_key,
-            'clientId': process.env.google_fitness_app_client_id,
+    initClient() {
+        window.gapi.client.setApiKey("AIzaSyC0dy42dXDZ6VsUrO_0qkiy2qVYVQBG20c");
+        window.gapi.client.init({
+            'apiKey': "AIzaSyC0dy42dXDZ6VsUrO_0qkiy2qVYVQBG20c",
+            'clientId': "831105844655-ocpq1i5u6clfco7k7291i142qdrrejgp.apps.googleusercontent.com",
             'scope': 'https://www.googleapis.com/auth/fitness.activity.read',
             'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/fit/2.12.49/rest']
         }).then(function () {
-            let G_Auth = gapi.auth2.getAuthInstance();
-            this.setState({GoogleAuth: G_Auth});
-            
-            // Listen for sign-in state changes.
-            this.state.GoogleAuth.isSignedIn.listen(updateSigninStatus);
+            window.gapi.auth2.getAuthInstance();
+
+            // Listen for sign-in state changes. Event listener
+            window.gapi.isSignedIn.listen(this.updateSigninStatus);
 
             // Handle initial sign-in state. (Determine if user is already signed in.)
-            var user = this.state.GoogleAuth.currentUser.get();
-            setSigninStatus();
-
-            // Call handleAuthClick function when user clicks on
-            //      "Sign In/Authorize" button.
-            $('#sign-in-or-out-button').click(function() {
-                handleAuthClick();
-            }); 
-            $('#revoke-access-button').click(function() {
-                revokeAccess();
-
-            });
+            var user = window.gapi.currentUser.get();
+            this.setSigninStatus();
         })
 
     }
 
     handleAuthClick() {
-        if (this.state.GoogleAuth.isSignedIn.get()) {
+        if (window.gapi.isSignedIn.get()) {
             // User is authorized and has clicked 'Sign out' button.
-            this.state.GoogleAuth.signOut();
+            window.gapi.signOut();
         } else {
             // User is not signed in. Start Google auth flow.
-            this.state.GoogleAuth.signIn();
+            window.gapi.signIn();
         }
     }
 
     revokeAccess() {
-       this.state.GoogleAuth.disconnect();
+       window.gapi.disconnect();
     }
 
     setSigninStatus(isSignedIn) {
-        var user = this.state.GoogleAuth.currentUser.get();
-        var isAuthorized = user.hasGrantedScopes(SCOPE);
+        var user = window.gapi.currentUser.get();
+        var isAuthorized = user.hasGrantedScopes('https://www.googleapis.com/auth/fitness.activity.read');
         if (isAuthorized) {
-          $('#sign-in-or-out-button').html('Sign out');
-          $('#revoke-access-button').css('display', 'inline-block');
-          $('#auth-status').html('You are currently signed in and have granted ' +
-              'access to this app.');
+            this.setState({logInButtonName: "Sign Out", 
+            loginStatus: "You have offically connected your Google Fitness app to our Wellness Bet App",
+            hideRevokeButton: false});
         } else {
-          $('#sign-in-or-out-button').html('Sign In/Authorize');
-          $('#revoke-access-button').css('display', 'none');
-          $('#auth-status').html('You have not authorized this app or you are ' +
-              'signed out.');
+            this.setState({logInButtonName: "Sign In", 
+            loginStatus: "You have officialy disconnected your Google Fitness app from our Wellness Bet App",
+            hideRevokeButton: true});
+            
         }
       }
 
       updateSigninStatus(isSignedIn) {
-        this.setSigninStatus();
+        this.setSigninStatus(isSignedIn);
       }
 
 
@@ -92,9 +91,25 @@ export default class GoogleFitAuthenticationPage extends Component {
     // 3) store that sleep data on the React site, and
     // aggregate it among the team 
 
-    render() {
-        return{
+    // https://agilewarrior.wordpress.com/2017/10/10/how-to-hide-elements-the-reactjs-way/
 
-        }
+    render() {
+
+        const ButtonStyle = this.state.hideRevokeButton ? {display: 'none'} : {}
+
+        return(
+            <div className="Google Fit OAuth">
+            
+            {this.state.loginStatus}
+
+            <div className="description">
+            This connects/disconnects your Google Fitness sleep data to your Wellness Bet App. 
+            </div>
+
+            <button onClick={this.handleAuthClick()}>{this.state.logInButtonName}</button>
+            <button onClick={this.handleAuthClick()} style={ButtonStyle}>Revoke Access To App</button>
+
+            </div>
+        )
     }
 }
