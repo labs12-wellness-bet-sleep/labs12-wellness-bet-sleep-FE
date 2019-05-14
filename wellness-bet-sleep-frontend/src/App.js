@@ -4,10 +4,16 @@ import { auth } from './FirebaseConfig';
 
 import './App.css';
 
+import Dashboard from './Components/dashboard/Dashboard';
+import JoinWithCode from './Components/dashboard/JoinWithCode';
+import CreateForm from './Components/dashboard/CreateForm';
+
 import Home from './Components/home/Home';
 import Login from "./Components/login/LogIn";
 import Register from './Components/register/Register';
 import Users from "./Components/Users.js";
+import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
+
 
 class App extends Component {
   constructor(props) {
@@ -62,6 +68,18 @@ class App extends Component {
       <Route exact path={'/register'} component={Register}/>
       
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
+
+      <Route path={'/groupDashboard'} component={GroupDashboard}/>
+      <Route
+       path="/dashboard"
+       render={(props)=>(
+        <Dashboard
+        {...props}
+         />
+      )}
+      />
+      <Route path="/dashboard/join" component={JoinWithCode}/>
+      <Route path="/dashboard/create" component={CreateForm} />
     </div>
   )
 }
