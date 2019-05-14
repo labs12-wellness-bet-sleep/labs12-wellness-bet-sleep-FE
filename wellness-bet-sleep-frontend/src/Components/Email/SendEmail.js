@@ -56,7 +56,7 @@ class SendEmail extends Component {
           <input value={email.subject}
             onChange={e => this.setState({ email: { ...email, subject: e.target.value } })} />
             <div style={spacer} />
-          <label> Message </label>
+          <label> Join code: </label>
           <br />
           <textarea
             rows={3}
@@ -68,17 +68,9 @@ class SendEmail extends Component {
           />
           <div style={spacer} />
 
-          <label> html </label>
-          <br />
-          <textarea
-            rows={3}
-            value={email.html}
-            style={textArea}
-            onChange={e =>
-              this.setState({ email: { ...email, html: e.target.value } })
-            }
-          />
-          <div style={spacer} />           
+         
+        
+                   
 
           <button onClick={this.sendEmail}> Send Email </button>
         </div>

@@ -50,6 +50,7 @@ class App extends Component {
       <NavLink to="/register"> Register</NavLink>      
       </nav> */}
       <NavLink to="/groups"> Group Page </NavLink>
+      <NavLink to="/email"> Email </NavLink>
       <Route
           exact path ='/login'
           render={props =>
@@ -65,6 +66,7 @@ class App extends Component {
       {/* <Route exact path={'/login'} component={Login}/> */}
       <Route exact path={'/register'} component={Register}/>
       <Route exact path='/groups' component={GroupPage}/>
+      <Route exact path='/email' component={SendEmail}/>
       
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
