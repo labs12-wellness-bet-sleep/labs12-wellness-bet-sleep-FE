@@ -120,7 +120,7 @@ class Login extends Component {
             })
         })
         .catch(err => console.error(err))
-        this.props.history.push('/users')
+        // this.props.history.push('/users')
     }
     
     render() {

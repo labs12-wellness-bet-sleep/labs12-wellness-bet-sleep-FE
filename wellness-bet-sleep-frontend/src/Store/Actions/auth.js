@@ -52,3 +52,35 @@ export const register = (user) => dispatch => {
             })
         })
 }
+
+
+export const googleLogin= email => dispatch =>  {
+    dispatch({
+        type: authTypes.LOGIN_START
+    })
+    console.log(email, 'top of google login')
+    // change axios custom config. sets headers to uid in App.js
+    // axios.defaults.headers.common['Authorization'] = user.token
+    axios
+        .get(`/api/users/login/${email}`)
+        .then(res => {
+            console.log(email, 'inside google login')
+            const payload = {
+                usersData: {
+                    ...email,
+                    ...res.data
+                }
+            }
+            dispatch({
+                type: authTypes.LOGIN_SUCCESS,
+                payload: payload
+              });
+        })
+        .catch(err => {
+            console.log(err)
+            dispatch({
+                type: authTypes.LOGIN_FAIL,
+                payload: err 
+            })
+        })
+}
