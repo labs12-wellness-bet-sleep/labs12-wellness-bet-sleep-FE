@@ -13,6 +13,7 @@ import Login from "./Components/login/LogIn";
 import Register from "./Components/Register.js";
 import Users from "./Components/Users.js";
 import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
+import GoogleFitAuthenticationPage from "./Components/GoogleFitAuthentication/GoogleFitAuthenticationPage.js";
 
 
 class App extends Component {
@@ -80,6 +81,7 @@ class App extends Component {
       />
       <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} />
+      <Route path="/dashboard/GoogleFitAuthentication" component={GoogleFitAuthenticationPage} />
     </div>
   )
 }
