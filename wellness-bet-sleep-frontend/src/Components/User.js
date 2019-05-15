@@ -8,7 +8,7 @@ class User extends Component {
     render () {
     // const email = props.user.find( email => { return this.props.match.params.id === `${email.email}`})
 
-    console.log(this.props)
+    // console.log(this.props)
     return(
 
         <div className="user" onClick={ () => 
