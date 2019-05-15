@@ -82,7 +82,7 @@ export default class GroupDashboard extends Component {
     getGroupID() {
     }
 
-    getGroupInfo() {
+    getGroupInfo = () => {
 
         let amountOfDays = "";
 
@@ -106,8 +106,21 @@ export default class GroupDashboard extends Component {
 
             this.setUpDummySleepData(response.data.participant.length, response.data.participant, amountOfDays);
 
-        })
-        .catch(err => console.log(err));
+            axios.get(`https://sleep-bet.herokuapp.com/api/groups/${this.state.groupID}/participant`)
+            .then(response => {
+            let participants = response.data;
+                console.log("Look at this response", response);
+             participants.map(participant => {
+    
+                        axios.get("https://www.googleapis.com/fitness/v1/users/me/sessions/", {headers: `Bearer  ${participant.GoogleFitAuthCode}`})
+                        .then(session => {
+                                console.log("Check out this session!",  session);
+                        })
+                        .catch(err => console.log("Check out this error!", err));
+            
+                })
+            }).catch(err => console.log(err));
+        }).catch(err => console.log(err));
     }
 
     // https://www.tutorialspoint.com/How-to-subtract-days-from-a-date-in-JavaScript

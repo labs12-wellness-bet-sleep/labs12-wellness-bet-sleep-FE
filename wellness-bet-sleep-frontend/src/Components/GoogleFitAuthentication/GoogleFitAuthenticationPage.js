@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from '@material-ui/core';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
-var GoogleAuth;
-
-export default class GoogleFitAuthenticationPage extends Component {
+class GoogleFitAuthenticationPage extends Component {
     constructor(props){
         super(props)
         // let gapi = window.gapi; 
@@ -64,7 +63,7 @@ export default class GoogleFitAuthenticationPage extends Component {
     }
 
     revokeAccess() {
-       GoogleAuth.disconnect();
+       this.state.GoogleAuth.disconnect();
     }
 
     setSigninStatus(isSignedIn) {
@@ -80,6 +79,12 @@ export default class GoogleFitAuthenticationPage extends Component {
                 this.setState({logInButtonName: "Sign Out", 
                 loginStatus: "You have offically connected your Google Fitness app to our Wellness Bet App",
                 hideRevokeButton: false});
+                
+                axios.put(`/api/participant/${this.props.user.id}`, {"GoogleFitAuthCode": this.state.GoogleAuth.j8.currentUser.Zi.access_token})
+                .then(response => console.log(response))
+                .catch(err => console.log(err));
+
+                this.props.history.push(`/groupDashboard`);
             } else {
                 this.setState({logInButtonName: "Sign In", 
                 loginStatus: "You have officialy disconnected your Google Fitness app from our Wellness Bet App",
@@ -94,7 +99,7 @@ export default class GoogleFitAuthenticationPage extends Component {
             return null;
         }
         else{
-            console.log("Check GoogleAuth for handle auth click:", GoogleAuth);
+            console.log("Check GoogleAuth for handle auth click:", this.state.GoogleAuth);
             if (this.state.GoogleAuth.isSignedIn.get()) {
                 // User is authorized and has clicked 'Sign out' button.
                 this.state.GoogleAuth.signOut();
@@ -148,3 +153,17 @@ export default class GoogleFitAuthenticationPage extends Component {
         }
     }
 }
+
+const mapStateToProps = state => {
+    return {
+      users: state.auth.user
+    }
+  }
+  
+//   const mapDispatchToProps = dispatch => {
+//     return {
+//       oAuth: user  => dispatch(actions.auth.initOAuth(user))
+//     }
+//   }
+  
+  export default connect(mapStateToProps)(GoogleFitAuthenticationPage);
