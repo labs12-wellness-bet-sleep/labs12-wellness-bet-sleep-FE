@@ -9,7 +9,7 @@ import './App.css';
 import Dashboard from './Components/dashboard/Dashboard';
 import JoinWithCode from './Components/dashboard/JoinWithCode';
 import CreateForm from './Components/dashboard/CreateForm';
-
+import Profile from './Components/profile/Profile';
 import Home from './Components/home/Home';
 import Login from "./Components/login/LogIn";
 import Register from './Components/register/Register';
@@ -81,6 +81,15 @@ class App extends Component {
        render={(props)=>(
         <Dashboard
         {...props}
+         />
+      )}
+      />
+       <Route
+       exact path="/login/:id"
+       render={(props)=>(
+        <Profile
+        {...props}
+        // users={this.props.users}
          />
       )}
       />

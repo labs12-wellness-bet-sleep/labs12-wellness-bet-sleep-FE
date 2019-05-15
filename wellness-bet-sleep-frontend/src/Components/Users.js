@@ -29,7 +29,7 @@ class Users extends Component {
     }
 
     logout = () => {
-        localStorage.removeItem('token');
+        // localStorage.removeItem('token');
         auth.signOut()
         this.props.history.push('/')
         console.log('log out')
@@ -43,7 +43,7 @@ class Users extends Component {
             
             <h2>List Of Users:</h2>
             { Object.keys(this.props.users).map(key  =>{ return (
-                <User user={this.props.users[key]}/>
+                <User history={this.props} user={this.props.users[key] }/>
             )})}
             </div>
 

@@ -38,22 +38,22 @@ export default (state = initialState, actions) => {
                 ...state,
                 error: actions.payload
             }
-        case authTypes.GOOGLE_START:
+        case authTypes.LOGIN__START:
             return {
                 ...state,
                 loadin: true
             }
-        case authTypes.GOOGLE_SUCCESS: 
+        case authTypes.LOGIN__SUCCESS: 
             return {
                 ...state,
                 loading: false,
                 user: {
                     ...actions.payload.usersData,
-                    ...actions.payload.usersData.email
+                    ...actions.payload.usersData.user.email
                 }
             
             }
-        case authTypes.GOOGLE_FAIL: 
+        case authTypes.LOGIN_FAIL: 
             return {
                 error: actions.payload
             

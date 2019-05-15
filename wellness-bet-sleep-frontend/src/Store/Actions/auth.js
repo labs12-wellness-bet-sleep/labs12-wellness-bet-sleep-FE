@@ -5,7 +5,7 @@ export const initOAuth = user => dispatch =>  {
     dispatch({
         type: authTypes.OAUTH_START
     })
-    console.log(user, 'init user')
+    console.log(user, 'init user token')
     // change axios custom config. sets headers to uid in App.js
     axios.defaults.headers.common['Authorization'] = user.token
     axios
@@ -54,20 +54,21 @@ export const register = (user) => dispatch => {
 }
 
 
-export const googleLogin= email => dispatch =>  {
+export const login = user => dispatch =>  {
+    
     dispatch({
         type: authTypes.LOGIN_START
     })
-    console.log(email, 'top of google login')
+    console.log(user, 'top of google login')
     // change axios custom config. sets headers to uid in App.js
-    // axios.defaults.headers.common['Authorization'] = user.token
+    axios.defaults.headers.common['Authorization'] = user.ra
     axios
-        .get(`/api/users/login/${email}`)
+        .get(`/api/users/login/${user.email}`)
         .then(res => {
-            console.log(email, 'inside google login')
+            console.log(user.email, 'inside google login')
             const payload = {
                 usersData: {
-                    ...email,
+                    ...user.email,
                     ...res.data
                 }
             }

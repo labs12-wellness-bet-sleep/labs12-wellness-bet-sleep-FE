@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from '../../axios-sleep';
+import { connect } from 'react-redux';
+import { login } from './../../Store/Actions/auth';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider } from '../../FirebaseConfig';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
@@ -83,43 +85,65 @@ class Login extends Component {
     loginWithEmail = e => {
         e.preventDefault();
         auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(({user}) => {
+             .then(({user}) => {
+                console.log(user,'email login')
                 const { uid, email, ra} = user;
-                console.log(user)
+                // console.log(user,'email login')
                 localStorage.setItem("token", ra);
-                axios
-                .get(`/api/users/login/${email}`, {headers: {"authorization": ra}})
-                .then(result => {
-                  console.log(result);
-                  this.setState({
-                    loggedIn: true,
-                    loginMessage: `Congratulations for logging in, ${
-                      result.data.username
-                    }`
-                  })
-                
-                }).catch(error => console.log(error))
 
-            })
-            .catch(
-                error => {
-                console.log(error)
-        })
-        this.props.history.push('/users')
+                // const data = {
+                //     email: email,
+                //     fullName: this.state.fullName,
+                    
+                //   };
+
+                this.props.emailLogin(user)
+                // axios
+                // .get(`/api/users/login/${email}`, {headers: {"authorization": ra}})
+                // .then(result => {
+                //   console.log(result);
+                //   this.setState({
+                //     loggedIn: true,
+                //     loginMessage: `Congratulations for logging in, ${
+                //       result.data.username
+                //     }`
+                //   })
+                
+                // }).catch(error => console.log(error))
+
+             })
+        //     .catch(
+        //         error => {
+        //         console.log(error)
+        // })
+        this.props.history.push(`/login/${this.state.email}`)
     }
 
     loginWithGoogle = event => {
         event.preventDefault()
+        // let email = this.state.email
+        // let password = this.state.password
+
         auth.signInWithPopup(googleProvider)
         .then(({user}) => {
             console.log(user, 'google signin')
-            localStorage.setItem("token", user.ra);
-            axios.get(`/api/users/login/${user.email}`, {headers: {"authorization":user.ra}} ).
-            then(response => {
-                console.log(response);
-            })
+            
+            const {uid, email, ra} = user; 
+            localStorage.setItem("token", ra);
+
+            // const data = {
+            //     email: email,
+            //     fullName: this.state.fullName,
+                
+            //   };
+
+              this.props.emailLogin(user)
+            // axios.get(`/api/users/login/${user.email}`, {headers: {"Authorization":user.ra}} )
+            // .then(response => {
+            //     console.log(response);
+            // })
         })
-        .catch(err => console.error(err))
+        // .catch(err => console.error(err))
         // this.props.history.push('/users')
     }
     
@@ -143,7 +167,7 @@ class Login extends Component {
         <h2>Login</h2> */}
 
         <form className='login-form'>
-        <FontAwesomeIcon icon={faUserCircle} size='lg' className='fa-users'/>
+        {/* <FontAwesomeIcon icon={faUserCircle} size='lg' className='fa-users'/>
             <TextField
                 autoFocus
                 type="email"
@@ -169,19 +193,20 @@ class Login extends Component {
                      className: classes.input,
                      disableUnderline: true ,
                 }}
-             />
-            {/* <b>email:</b> */}
-            {/* <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input> */} */}
+             /> */}
+            <b>email:</b> 
+            <input name="email" type="email" onChange={(e) => this.handleChanges(e)}></input> 
 
-            {/* <b>Password:</b> */}
-            {/* <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input> */}
-            <Button 
+            <b>Password:</b> 
+             <input name="password" type="password" onChange={(e) => this.handleChanges(e)}></input> 
+            {/* <Button 
                     fullWidth
                     className={classes.button}
                     onClick={this.loginWithEmail}>
                     Get Started             
-                </Button>
-            {/* <button onClick={this.loginWithEmail}>Login</button>  */}
+                </Button> */}
+            <button onClick={this.loginWithEmail}>Login with email</button>  
+            <button onClick={this.loginWithGoogle}>Google Login</button> 
             <div className='log-reg-links'>
             <Link to="/register" className='register-link' activeClassName='active'>Create Account</Link>
             <div onClick={this.loginWithGoogle}><Link className='register-link' activeClassName='active'>Login With Google</Link></div>
@@ -197,5 +222,16 @@ class Login extends Component {
 
 }
 
-export default withStyles(styles)(Login);
-// export default Login;
+const mapStateToProps = state => {
+    return {
+        loggedInUser: state.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+      emailLogin: (user) => dispatch(login(user))
+    }
+  }
+// export default withStyles(styles)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
