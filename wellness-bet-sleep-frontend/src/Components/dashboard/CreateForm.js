@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles, Typography, TextField, Button } from '@material-ui/core';
+import axios from 'axios';
 
 
 
@@ -50,7 +51,7 @@ class CreateForm extends React.Component {
         joinCode: '',
         startDate: '',
         endDate: '',
-        buyIn: null,
+        buyInAmt: null,
         photoFile: '',
         groupMessage: ''
     }
@@ -61,6 +62,26 @@ class CreateForm extends React.Component {
             [event.target.name]: event.target.value,
         });
     };
+
+    createGroup = () => {
+        const addGroup = {
+            userId: 1,
+            groupName: this.state.groupName,
+            joinCode: this.state.joinCode,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+            buyInAmt: this.state.buyIn,
+            groupMessage: this.state.groupMessage
+        }
+        console.log(addGroup)
+        axios.post(`http://localhost:8080/api/groups/create`, addGroup)
+             .then(res => {
+                 console.log("res", res)
+             })
+             .catch(err => {
+                 console.log("err", err)
+             })
+    }
 
 
     render() {
@@ -255,7 +276,7 @@ class CreateForm extends React.Component {
                             >
                             </TextField>
                             <div>
-                                <Button variant="outlined" color="primary" style={{ fontSize: '12px', marginTop: '25px' }}>
+                                <Button onClick={this.createGroup} variant="outlined" color="primary" style={{ fontSize: '12px', marginTop: '25px' }}>
                                     Create
                                     </Button>
                             </div>
