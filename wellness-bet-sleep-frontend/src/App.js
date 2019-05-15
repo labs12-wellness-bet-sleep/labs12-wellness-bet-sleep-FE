@@ -78,8 +78,6 @@ class App extends Component {
          />
       )}
       />
-      <Route path="/dashboard/join" component={JoinWithCode}/>
-      <Route path="/dashboard/create" component={CreateForm} />
     </div>
   )
 }
