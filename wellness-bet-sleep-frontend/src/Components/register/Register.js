@@ -10,6 +10,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import './register-styles.css';
 
 const styles = theme => ({
@@ -38,6 +39,22 @@ const styles = theme => ({
       height: '70px',
       width: '80%',
   }, 
+
+  button: {
+    border: '1px solid white',
+    backgroundColor: 'none', 
+    // border: 'none',
+    borderRadius: '2rem',
+    // backgroundColor:'#004CA8',
+    color: 'white',
+    fontSize: '1rem',
+    height: '70px',
+    marginTop: '2rem',
+    width: '20%',
+    // '&:hover': {
+    //     backgroundColor:'#004CA8',
+    // }
+}
  
 });
 
@@ -302,7 +319,7 @@ class Register extends Component {
         <div className="registerMessage">{this.state.welcomeMessage}</div>
 
         <form onSubmit={this.signUp}>
-        {/* <TextField
+        <TextField
                 autoFocus
                 type="text"
                 name='fullName'
@@ -314,10 +331,10 @@ class Register extends Component {
                     className: classes.input,
                     disableUnderline: true ,
                 }}
-              /> */}
-              {/* <div className='img-upload'>
-              <img src={this.state.profilePhotoImg} className='profile-img '/> */}
-             {/* <Card className={classes.card}>
+              />
+             {/* <div className='img-upload'>
+              <img src={this.state.profilePhotoImg} className='profile-img '/> 
+             <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
@@ -325,9 +342,9 @@ class Register extends Component {
           title="Contemplative Reptile"
         />
          </CardActionArea>
-         </Card> */}
-         {/* </div> */}
-               {/* <TextField
+         </Card> 
+          </div>  */}
+               <TextField
                 autoFocus
                 type="email"
                 name='email'
@@ -339,9 +356,9 @@ class Register extends Component {
                     className: classes.input,
                     disableUnderline: true ,
                 }}
-              /> */}
+              />
 
-             {/* <TextField
+             <TextField
                 fullWidth
                 type="password"
                 name='password'
@@ -352,36 +369,16 @@ class Register extends Component {
                      className: classes.input,
                      disableUnderline: true ,
                 }}
-             /> */}
-          <b>Full Name:</b>
-          <input
-            name="fullName"
-            type="text"
-            onChange={e => this.handleChanges(e)}
-          /> 
-         
-
-          <b>Email:</b>
-          <input
-            name="email"
-            type="text"
-            onChange={e => this.handleChanges(e)}
-          />
-
-          <b>Password:</b>
-          <input
-            name="password"
-            type="password"
-            onChange={e => this.handleChanges(e)}
-          />
+             />
+        
 
           <b>Profile Photo:</b>
 
-          {/* <input type="file" onChange={e => this.handleUploadChange(e)} /> */}
+        
           <input type="file" accept="image/*" onChange={e => this.fileHandler(e)} />
-          <div className='img-upload'>
+          {/* <div className='img-upload'>
               <img src={this.state.profilePhotoImg} className='profile-img '/>
-             {/* <Card className={classes.card}>
+              <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
@@ -389,9 +386,15 @@ class Register extends Component {
           title="Contemplative Reptile"
         />
          </CardActionArea>
-         </Card> */}
-         </div>
-          <button>Submit</button>
+         </Card> 
+         </div> */}
+          <Button 
+            // fullWidth
+            className={classes.button}
+          >
+            Continue            
+          </Button>
+          {/* <button>Submit</button> */}
           <button type="button" onClick={this.loginWithGoogle}>SignUp with Google</button>
         </form>
         </div>
@@ -412,4 +415,4 @@ const mapDispatchToProps = dispatch => {
     signUp: (user) => dispatch(register(user))
   }
 }
-export default  connect(mapStateToProps, mapDispatchToProps)(Register);
+export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Register));

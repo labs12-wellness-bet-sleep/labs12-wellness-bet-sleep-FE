@@ -4,7 +4,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
-
+import { MultiThemeProvider } from '@material-ui/core/styles/MuiThemeProvider';
+// import theme from './material-ui-theme'
 import {createStore, applyMiddleware, compose} from "redux";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
@@ -18,8 +19,13 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(RootReducer, composeEnhancers(applyMiddleware(thunk, logger)));
 
 const app = (
+    
     <Provider store={store}>
-        <Router><App /></Router>
+        <Router>
+        {/* <MultiThemeProvider > */}
+            <App />
+        {/* </MultiThemeProvider> */}
+        </Router>
     </Provider>
 )
 
