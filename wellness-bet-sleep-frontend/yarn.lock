@@ -2959,6 +2959,13 @@ component-emitter@^1.2.1:
   resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
   integrity sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
 
+compose@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/compose/-/compose-0.1.2.tgz#d556f55d0a91399df4227945c1bd96030310fe7c"
+  integrity sha1-1Vb1XQqROZ30InlFwb2WAwMQ/nw=
+  dependencies:
+    patr "0.2.5"
+
 compressible@~2.0.16:
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/compressible/-/compressible-2.0.17.tgz#6e8c108a16ad58384a977f3a482ca20bff2f38c1"
@@ -6799,6 +6806,11 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
+logger@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/logger/-/logger-0.0.1.tgz#cb08171f8a6f6f674b8499dadf50bed4befb72c4"
+  integrity sha1-ywgXH4pvb2dLhJna31C+1L77csQ=
+
 loglevel@^1.4.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
@@ -7804,6 +7816,13 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
+patr@0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/patr/-/patr-0.2.5.tgz#4231e87f0dac5b766b0475cd4ac94bd9c3563de7"
+  integrity sha1-QjHofw2sW3ZrBHXNSslL2cNWPec=
+  dependencies:
+    promised-io "0.2.3"
+
 pbkdf2@^3.0.3:
   version "3.0.17"
   resolved "https://registry.yarnpkg.com/pbkdf2/-/pbkdf2-3.0.17.tgz#976c206530617b14ebb32114239f7b09336e93a6"
@@ -8645,6 +8664,11 @@ promise@^7.1.1:
   integrity sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==
   dependencies:
     asap "~2.0.3"
+
+promised-io@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/promised-io/-/promised-io-0.2.3.tgz#65b9219cc60c1dda64d3e60f86335368c2e56c96"
+  integrity sha1-ZbkhnMYMHdpk0+YPhjNTaMLlbJY=
 
 prompts@^2.0.1:
   version "2.0.4"

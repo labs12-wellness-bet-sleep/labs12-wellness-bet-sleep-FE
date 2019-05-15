@@ -17,6 +17,8 @@ import RootReducer from "./Store/Reducers/index.js";
 
 // const store = createStore(RootReducer, composeEnhancers(applyMiddleware(thunk)));
 
+
+
 const app = (
     // <Provider store={store}>
     <Router><App /></Router>
