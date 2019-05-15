@@ -1,7 +1,7 @@
 import { authTypes } from '../Actions/actionTypes.js';
 
 const initialState = {
-    user: {},
+    user: [],
     loading: false,
     error: null
 };

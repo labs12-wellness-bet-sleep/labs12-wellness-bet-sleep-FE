@@ -48,10 +48,10 @@ class App extends Component {
 
 
   render () {
-    console.log(this.props.users, 'users')
+    console.log( this.props.users)
   return (
     <div className="App">
-
+        
       {/* <nav>
       <NavLink to="/" activeclass="selected" >Home </NavLink>
       <NavLink to="/users"> List of Users </NavLink>
@@ -102,7 +102,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    users: state.user
+    users: state.auth.user
   }
 }
 

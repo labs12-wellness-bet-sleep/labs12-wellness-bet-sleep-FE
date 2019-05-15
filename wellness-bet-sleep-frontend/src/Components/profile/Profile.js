@@ -15,7 +15,8 @@ class Profile extends Component {
         console.log(this.props.users)
     return (
         <div> 
-            user profile
+           
+           <p> Full Name {this.props.users.email}</p>
         <button onClick={this.logout}>Log Out</button>
         </div>
     )}
