@@ -8,6 +8,12 @@
     height: 100vh;
   }
   
+  .title {
+      color: white;
+      font-size: 3rem;
+  }
+
+ 
   .overlay {
     background-color: #5787c19d;
     position: absolute;
@@ -18,6 +24,26 @@
      z-index: 2;
   }
 
+  .form-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+
+}
+  .register-form {
+      /* margin: 2rem auto 0 auto; */
+      width: 60%;
+    border: 1px solid orange;
+  }
+
+  .upload-input {
+      position: relative;
+      bottom: 100px;
+      left: 150px;
+      border: 1px solid green;
+  }
   .img-upload {
       position: relative;
       left: 50px;

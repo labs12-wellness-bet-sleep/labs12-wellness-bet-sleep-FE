@@ -26,6 +26,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
+
   },
   input: {
     
@@ -34,10 +35,10 @@ const styles = theme => ({
       backgroundColor: '#b0b4b969',
       color: 'white',
       fontSize: '1.2rem',
-      // marginTop: '2rem',
+      marginBottom: '2rem',
       paddingLeft: '4rem',
-      height: '70px',
-      width: '80%',
+      height: '60px',
+      width: '40%',
   }, 
 
   button: {
@@ -137,21 +138,6 @@ class Register extends Component {
                 };
                 console.log(user, 'in signup')
                 this.props.signUp(user)
-                // axios
-                //   .post("/api/users/register", user, {headers: {"authorization":ra}})
-                //   .then(result => {
-                //     console.log(result);
-                //     this.setState({
-                //       registered: true,
-                //       welcomeMessage: `Congratulations for registering, ${
-                //         result.data.username
-                //       }`
-                //     });
-                //     console.log("Congratulations on registering!");
-                //     console.log(result);
-                //   })
-                //   .catch(error => console.log(error));
-    
                 this.props.history.push(`/login/${user.email}`);
               });
           }
@@ -161,79 +147,6 @@ class Register extends Component {
     })
     
   }
-  register = e => {
-    e.preventDefault();
-
-    let currentImageName = "firebase-image-" + Date.now();
-
-
-    let email = this.state.email; 
-    let password = this.state.password;
-
-    auth.createUserWithEmailAndPassword(email, password)
-    .then(({user}) => {
-      console.log("OAuth User:", user);
-      const {uid, email, ra} = user; 
-
-      
-      localStorage.setItem("token", ra);
-
-      let uploadImage = storage
-        .ref(`images/${currentImageName}`)
-        .put(this.state.file);
-
-        uploadImage.on(
-          "state_changed",
-          snapshot => {},
-          error => {
-            alert(error);
-          },
-          () => {
-            storage
-              .ref("images")
-              .child(currentImageName)
-              .getDownloadURL()
-              .then(url => {
-                console.log(url)
-                this.setState({
-                  profilePhoto: url
-                });
-               
-                // store image object in the database
-                const user = {
-                  // username: this.state.username,
-                  email: this.state.email,
-                  fullName: this.state.fullName,
-                  profilePhoto: url
-                };
-                
-                axios
-                  .post("/api/users/register", user, {headers: {"authorization":ra}})
-                  .then(result => {
-                    console.log(result);
-                    this.setState({
-                      registered: true,
-                      welcomeMessage: `Congratulations for registering, ${
-                        result.data.username
-                      }`
-                    });
-                    console.log("Congratulations on registering!");
-                    console.log(result);
-                  })
-                  .catch(error => console.log(error));
-    
-                this.props.history.push("/users");
-              });
-          }
-        );
-
-
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  };
-
 
   fileHandler =(e)=> {
     this.setState({
@@ -283,20 +196,6 @@ class Register extends Component {
                 };
                 
                 this.props.signUp(user)
-                // axios
-                //   .post("/api/users/register", user, {headers: {"authorization":ra}})
-                //   .then(result => {
-                //     console.log(result);
-                //     this.setState({
-                //       registered: true,
-                //       welcomeMessage: `Congratulations for registering, ${
-                //         result.data.username
-                //       }`
-                //     });
-                //     console.log("Congratulations on registering!");
-                //     console.log(result);
-                //   })
-                //   .catch(error => console.log(error));
     
                 this.props.history.push("/users");
               });
@@ -314,11 +213,13 @@ class Register extends Component {
     return (
       <div className="register">
         <div className='overlay'>
-        <h2>Create Account</h2>
+       
 
-        <div className="registerMessage">{this.state.welcomeMessage}</div>
+        {/* <div className="registerMessage">{this.state.welcomeMessage}</div> */}
 
-        <form onSubmit={this.signUp}>
+<div className='form-wrapper'>
+<h2 className='title'>Create Account</h2>
+        <form onSubmit={this.signUp} className='register-form'>
         <TextField
                 autoFocus
                 type="text"
@@ -375,10 +276,10 @@ class Register extends Component {
           <b>Profile Photo:</b>
 
         
-          <input type="file" accept="image/*" onChange={e => this.fileHandler(e)} />
-          {/* <div className='img-upload'>
-              <img src={this.state.profilePhotoImg} className='profile-img '/>
-              <Card className={classes.card}>
+          <input type="file" className='upload-input' accept="image/*" onChange={e => this.fileHandler(e)} />
+          <div className='img-upload'>
+              <img src={this.state.profilePhoto} className='profile-img '/>
+              {/* <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
@@ -386,17 +287,19 @@ class Register extends Component {
           title="Contemplative Reptile"
         />
          </CardActionArea>
-         </Card> 
-         </div> */}
+         </Card>  */}
+         </div>
           <Button 
             // fullWidth
             className={classes.button}
+            onClick={this.signUp}
           >
             Continue            
           </Button>
-          {/* <button>Submit</button> */}
+          {/* <button >Submit</button> */}
           <button type="button" onClick={this.loginWithGoogle}>SignUp with Google</button>
         </form>
+        </div>
         </div>
       </div>
     );
