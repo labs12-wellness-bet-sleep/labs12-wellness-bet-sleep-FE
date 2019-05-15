@@ -131,20 +131,23 @@ class Login extends Component {
             const {uid, email, ra} = user; 
             localStorage.setItem("token", ra);
 
+            this.props.history.push('/users')
+            // this.props.emailLogin(user)
+           
             // const data = {
             //     email: email,
             //     fullName: this.state.fullName,
                 
             //   };
 
-              this.props.emailLogin(user)
+            
             // axios.get(`/api/users/login/${user.email}`, {headers: {"Authorization":user.ra}} )
             // .then(response => {
             //     console.log(response);
             // })
         })
         // .catch(err => console.error(err))
-        // this.props.history.push('/users')
+        
     }
     
     render() {
