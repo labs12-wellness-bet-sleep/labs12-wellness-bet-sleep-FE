@@ -78,7 +78,6 @@ class Dashboard extends Component {
         return (
             <div className={classes.root}>
             <Navbar history={this.props.history} groups={this.state.groups}/>
-         
                 {/* <Route
                  path="/dashboard/nav"
                  render={props => (
@@ -87,8 +86,8 @@ class Dashboard extends Component {
                   groups={this.state.groups}
                   />
                  )}
-                 /> */}
-  
+                 />
+   */}
                  {/* <JoinWithCode /> */}
             </div>
             )

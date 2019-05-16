@@ -8,6 +8,7 @@ import "./App.css";
 
 
 import Dashboard from "./Components/dashboard/Dashboard";
+import NavBar from "./Components/dashboard/NavBar"
 import JoinWithCode from "./Components/dashboard/JoinWithCode";
 import CreateForm from "./Components/dashboard/CreateForm";
 import Profile from "./Components/profile/Profile";
@@ -85,9 +86,9 @@ class App extends Component {
         <Route exact path={'/register'} component={Register}/>
         <Route exact path='/email' component={SendEmail}/>
 
-      {/* <Route exact path={'/'} component={Home}/>  */}
-      {/* <Route exact path ='/' render={props => <Home {...props} /> } />
-      <Route exact path={'/users'} render={ props => <Users {...props}/>}/>  */}
+      {/* <Route exact path={'/'} component={Home}/> 
+      <Route exact path ='/' render={props => <Home {...props} /> } />
+      <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
       {/* <Route exact path='/login'/> */}
       {/* <Route exact path={'/login'} component={Login}/> */}
       {/* <Route exact path={'/register'} component={Register}/>
@@ -97,23 +98,8 @@ class App extends Component {
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
       {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
-      {/* <Route
-       path="/dashboard"
-       render={(props)=>(
-        <Dashboard
-        {...props}
-         />
-      )}
-      /> */}
-       {/* <Route
-       exact path="/login/:id"
-       render={(props)=>(
-        <Profile
-        {...props}
-        // users={this.props.users}
-         />
-      )}
-      /> */}
+
+  
 
 <Route
        exact path="/user/:id"
