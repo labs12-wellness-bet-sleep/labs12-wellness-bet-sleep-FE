@@ -154,7 +154,7 @@ class Login extends Component {
         const { classes } = this.props;  
         return(
 
-        <div ClassName="login-wrapper">
+        <div className="login-wrapper">
  <header className='login-header'>
                 {/* <div > */}
                 <img src={wellnessLogo} alt='Wellness Logo' className='wellness-logo'/>
