@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/';
 import { Route } from 'react-router-dom';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 
 import Navbar from './NavBar';
@@ -76,8 +77,9 @@ class Dashboard extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
+            <Navbar history={this.props.history} groups={this.state.groups}/>
          
-                <Route
+                {/* <Route
                  path="/dashboard/nav"
                  render={props => (
                   <Navbar
@@ -85,7 +87,7 @@ class Dashboard extends Component {
                   groups={this.state.groups}
                   />
                  )}
-                 />
+                 /> */}
   
                  {/* <JoinWithCode /> */}
             </div>
@@ -95,3 +97,15 @@ class Dashboard extends Component {
 
       
 export default withStyles(styles)(Dashboard);
+// const mapStateToProps = state => {
+//     return {
+//         users: state.auth.user
+//     }
+// }
+
+// const mapDispatchToProps = dispatch  => {
+//     return {
+//         profilePage: user =>  dispatch(getProfile(user))
+//     }
+// }
+// export default connect(null, mapDispatchToProps)(Dashboard);
