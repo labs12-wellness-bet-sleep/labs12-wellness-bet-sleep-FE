@@ -6,11 +6,13 @@ import { auth } from "./FirebaseConfig";
 
 import "./App.css";
 
+
 import Dashboard from "./Components/dashboard/Dashboard";
 import JoinWithCode from "./Components/dashboard/JoinWithCode";
 import CreateForm from "./Components/dashboard/CreateForm";
 import Profile from "./Components/profile/Profile";
 import Home from "./Components/home/Home";
+
 import Login from "./Components/login/LogIn";
 import Register from "./Components/register/Register";
 import Users from "./Components/Users.js";
@@ -93,19 +95,13 @@ class App extends Component {
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
       <Route path={'/groupDashboard'} component={GroupDashboard}/>
-      <Route
-       path="/dashboard"
+
+  
+
+<Route
+       exact path="/user/:id"
        render={(props)=>(
         <Dashboard
-        {...props}
-         />
-      )}
-      />
-
-       <Route
-       exact path="/login/:id"
-       render={(props)=>(
-        <Profile
         {...props}
         // users={this.props.users}
          />
