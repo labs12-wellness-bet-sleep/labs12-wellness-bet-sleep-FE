@@ -1,6 +1,8 @@
 import React from 'react';
 import { withStyles, Typography, TextField, Button } from '@material-ui/core';
 import axios from 'axios';
+import { connect } from 'react-redux';
+ 
 
 
 
@@ -47,6 +49,7 @@ const styles = theme => ({
 
 class CreateForm extends React.Component {
     state = {
+        userId: null,
         groupName: '',
         joinCode: '',
         startDate: '',
@@ -65,7 +68,7 @@ class CreateForm extends React.Component {
 
     createGroup = () => {
         const addGroup = {
-            userId: 1,
+            userId: this.props.userId.id,
             groupName: this.state.groupName,
             joinCode: this.state.joinCode,
             startDate: this.state.startDate,
@@ -292,4 +295,16 @@ class CreateForm extends React.Component {
 }
 
 
-export default withStyles(styles)(CreateForm);
+
+const mapStateToProps = state => {
+    console.log(state)
+    return {
+        userId: state.auth.user
+    }
+}
+    
+
+
+
+
+export default  connect(mapStateToProps, {})(withStyles(styles)(CreateForm));
