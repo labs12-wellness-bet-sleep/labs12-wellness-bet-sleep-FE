@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import { auth } from '../../FirebaseConfig';
+=======
+
+>>>>>>> ff05dc734dbbf43cf03d0a40afaa712ec5c6f961
 import {
   withStyles,
   Menu,
@@ -65,8 +69,7 @@ const styles = theme => ({
     fontWeight: '500'
   },
   fitgirl: {
-    marginLeft: '450px',
-    marginTop: '440px'
+    marginTop: '350px'
   },
   welcome: {
     width: '200px',
@@ -194,7 +197,7 @@ function GroupsNav(props) {
               )}
 
             </Drawer>
-             {props.groups.length < 0 ?
+             {!props.groups ?
               <div className={classes.fitgirl}>
                 <Typography className={classes.welcome}>
                   Welcome To Wellness Tracker
