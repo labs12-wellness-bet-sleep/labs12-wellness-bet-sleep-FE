@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from '../../axios-sleep';
 import { connect } from 'react-redux';
-import { login } from './../../Store/Actions/auth';
+import { login, getProfile } from './../../Store/Actions/auth';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider } from '../../FirebaseConfig';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
@@ -90,12 +90,12 @@ class Login extends Component {
                 const { uid, email, ra} = user;
                 // console.log(user,'email login')
                 localStorage.setItem("token", ra);
-
-                // const data = {
-                //     email: email,
-                //     fullName: this.state.fullName,
+                let id = uid
+                const data = {
+                    email: email,
+                    fullName: this.state.fullName,
                     
-                //   };
+                  };
 
                 this.props.emailLogin(user)
                 // axios
@@ -110,13 +110,13 @@ class Login extends Component {
                 //   })
                 
                 // }).catch(error => console.log(error))
-
+                this.props.history.push(`/user/${id}`)
              })
         //     .catch(
         //         error => {
         //         console.log(error)
         // })
-        this.props.history.push(`/login/${this.state.email}`)
+       
     }
 
     loginWithGoogle = event => {
@@ -233,8 +233,16 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-      emailLogin: (user) => dispatch(login(user))
+      emailLogin: (user) => dispatch(login(user)),
+      profilePage: user =>  dispatch(getProfile(user))
     }
   }
+
+//   const mapDispatchToProps = dispatch => {
+//     return{
+//         getUsers: user => dispatch(actions.auth.initOAuth(user)),
+//         profilePage: () =>  dispatch(getProfile(user))
+//     }
+// }
 // export default withStyles(styles)(Login);
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
