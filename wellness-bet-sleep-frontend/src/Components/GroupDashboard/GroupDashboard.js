@@ -113,14 +113,35 @@ export default class GroupDashboard extends Component {
              participants.map(participant => {
     
                         axios.get("https://www.googleapis.com/fitness/v1/users/me/sessions/", {headers: `Bearer  ${participant.GoogleFitAuthCode}`})
-                        .then(session => {
-                                console.log("Check out this session!",  session);
+                        .then(response => {
+                                console.log("Response from google API", response);
+                                console.log("Check out this set of sessions!",  response.data.session);
+
+                                let sessions = response.data.sessions;
+
+                                sessions.map(session => {
+
+                                    // set up graph and leaderboard data here; 
+                                    this.calculateSleepCoordinatesPerDay(session.startTimeMillis, session.endTimeMillis);
+                                    this.mapSleepDataToUserOnLeaderDashboard(participant.id, session.activeTimeMillis);
+
+                                })
+
                         })
                         .catch(err => console.log("Check out this error!", err));
             
                 })
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
+    }
+
+
+    calculateSleepCoordinatesPerDay = (startTime, endTime) => {
+        
+    }
+
+    mapSleepDataToUserOnLeaderDashboard = (id, sleepAmount) => {
+
     }
 
     // https://www.tutorialspoint.com/How-to-subtract-days-from-a-date-in-JavaScript
