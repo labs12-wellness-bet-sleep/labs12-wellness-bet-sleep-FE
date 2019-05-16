@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import actions from '../../Store/Actions';
 
 class GoogleFitAuthenticationPage extends Component {
     constructor(props){
@@ -80,7 +81,7 @@ class GoogleFitAuthenticationPage extends Component {
                 loginStatus: "You have offically connected your Google Fitness app to our Wellness Bet App",
                 hideRevokeButton: false});
                 
-                axios.put(`/api/participant/${this.props.user.id}`, {"GoogleFitAuthCode": this.state.GoogleAuth.j8.currentUser.Zi.access_token})
+                axios.put(`/api/participant/${this.props.users.id}`, {"GoogleFitAuthCode": this.state.GoogleAuth.j8.currentUser.Zi.access_token})
                 .then(response => console.log(response))
                 .catch(err => console.log(err));
 
@@ -160,10 +161,10 @@ const mapStateToProps = state => {
     }
   }
   
-//   const mapDispatchToProps = dispatch => {
-//     return {
-//       oAuth: user  => dispatch(actions.auth.initOAuth(user))
-//     }
-//   }
+  const mapDispatchToProps = dispatch => {
+    return {
+      oAuth: user  => dispatch(actions.auth.initOAuth(user))
+    }
+  }
   
   export default connect(mapStateToProps)(GoogleFitAuthenticationPage);

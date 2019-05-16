@@ -103,7 +103,7 @@ class App extends Component {
       />
       <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} />
-      <Route path="/dashboard/GoogleFitAuthentication" component={GoogleFitAuthenticationPage} />
+      <Route path="/dashboard/GoogleFitAuthentication" render={props => <GoogleFitAuthenticationPage {...props}/>} />
     </div>
   )
 }
