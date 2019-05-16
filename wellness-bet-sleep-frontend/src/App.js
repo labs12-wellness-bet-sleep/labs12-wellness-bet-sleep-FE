@@ -16,7 +16,6 @@ import Home from "./Components/home/Home";
 import Login from "./Components/login/LogIn";
 import Register from "./Components/register/Register";
 import Users from "./Components/Users.js";
-import Profile from './Components/profile/Profile'
 import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
 import SendEmail from "./Components/Email/SendEmail.js";
 import GroupPage from "./Components/group/GroupPage";
