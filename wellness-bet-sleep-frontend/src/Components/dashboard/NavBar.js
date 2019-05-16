@@ -16,11 +16,12 @@ import {
   Button, Card, CardActionArea, CardMedia
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
-import { Route }from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import toRenderProps from 'recompose/toRenderProps';
 import withState from 'recompose/withState';
 
 import JoinWithCode from './JoinWithCode';
+import CreateForm from './CreateForm';
 
 
 
@@ -30,6 +31,8 @@ const drawerWidth = 240;
 const styles = theme => ({
   root: {
     display: 'flex',
+    margin: '0 auto',
+    marginLeft:'400px'
   },
   appBar: {
     marginLeft: drawerWidth,
@@ -89,11 +92,11 @@ const styles = theme => ({
 
   card: {
     maxWidth: "100%",
-    height: 440, 
+    height: 440,
     margin: '0 auto',
     boxShadow: 'none'
   }
-    
+
 });
 
 
@@ -120,6 +123,11 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 function GroupsNav(props) {
   const { classes } = props;
+<<<<<<< HEAD
+=======
+  console.log(props.groups)
+
+>>>>>>> 26103204d4731020700c09e6be6892414a49e7d3
 
 
 
@@ -127,7 +135,12 @@ function GroupsNav(props) {
     <WithState>
       {({ anchorEl, updateAnchorEl }) => {
         const open = Boolean(anchorEl);
+        const routeHandler = () => {
+          props.history.push('/dashboard/nav/create')
+          updateAnchorEl(null)
+        }
         const handleClose = () => {
+<<<<<<< HEAD
           updateAnchorEl(null);
         };
 
@@ -136,6 +149,14 @@ function GroupsNav(props) {
         //   auth.signOut()
         //   props.history.push('/')
         //   console.log('log out') }
+=======
+          updateAnchorEl(null)
+        }
+        const routeHandlerJoin = () => {
+          props.history.push('/dashboard/nav/join')
+          updateAnchorEl(null)
+        }
+>>>>>>> 26103204d4731020700c09e6be6892414a49e7d3
         return (
           <div className={classes.root}>
             <CssBaseline />
@@ -173,8 +194,8 @@ function GroupsNav(props) {
                     <AddIcon style={addicon} />
                   </Button>
                   <Menu style={{ borderRadius: '10px', marginLeft: 15, marginTop: 35 }} id="render-props-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
-                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold', borderBottom: 'solid', borderWidth: 'thin', borderColor: '#70BEE1' }} onClick={handleClose}>Create Group</MenuItem>
-                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold' }} onClick={handleClose}>Join Group</MenuItem>
+                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold', borderBottom: 'solid', borderWidth: 'thin', borderColor: '#70BEE1' }} onClick={routeHandler}>Create Group</MenuItem>
+                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold' }} onClick={routeHandlerJoin}>Join Group</MenuItem>
                   </Menu>
                 </ListItemText>
               </ListItem>
@@ -187,24 +208,27 @@ function GroupsNav(props) {
               )}
 
             </Drawer>
-            {!props.groups ?
+             {props.groups.length < 0 ?
               <div className={classes.fitgirl}>
-            <Typography className={classes.welcome}>
-              Welcome To Wellness Tracker
+                <Typography className={classes.welcome}>
+                  Welcome To Wellness Tracker
             </Typography>
-            <Typography className={classes.createMess}>
-              Create a new group or join an existing one with a join code
+                <Typography className={classes.createMess}>
+                  Create a new group or join an existing one with a join code
             </Typography>
-              <Card className={classes.card}>
+                <Card className={classes.card}>
                   <CardMedia
-                    style={{  paddingTop: '56.25%', width: '600px', height: 440 }}
+                    style={{ paddingTop: '56.25%', width: '600px', height: 440 }}
                     image={require('../../assets/images/fitgirl.png')}
                     title="Contemplative Reptile"
                   />
-              </Card>
-            </div> : null
-            }
+                </Card>
+              </div> : null
+             }
+            <Route path="/dashboard/nav/join" component={JoinWithCode}/>
+            <Route path="/dashboard/nav/create" component={CreateForm} />
           </div>
+          
         )
       }}
     </WithState>

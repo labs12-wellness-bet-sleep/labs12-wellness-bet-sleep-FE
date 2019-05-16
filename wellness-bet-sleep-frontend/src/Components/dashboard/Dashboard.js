@@ -76,16 +76,16 @@ class Dashboard extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-              <Navbar groups={this.state.groups}/>
-                {/* <Route
-                 path="/nav-bar"
+         
+                <Route
+                 path="/dashboard/nav"
                  render={props => (
                   <Navbar
                   {...props}
                   groups={this.state.groups}
                   />
                  )}
-                 /> */}
+                 />
   
                  {/* <JoinWithCode /> */}
             </div>

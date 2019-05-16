@@ -18,7 +18,7 @@ const styles = theme => ({
         letterSpacing: '4px'
     },
     form: {
-        width: '38%',
+        width: '110%',
         height: '850px',
         margin: '0 auto',
         marginTop: '-240px',
@@ -51,7 +51,8 @@ class CreateForm extends React.Component {
         startDate: '',
         endDate: '',
         buyIn: null,
-        photoFile: ''
+        photoFile: '',
+        groupMessage: ''
     }
 
 
@@ -225,6 +226,38 @@ class CreateForm extends React.Component {
                                     }}
                                 >
                                 </TextField>
+                            </div>
+                            <TextField
+                                id="outlined-name"
+                                label="Message to Group"
+                                type="search"
+                                name="groupMessage"
+                                style={{ width: '684px' }}
+                                multiline={true}
+                                rows={4}
+                                rowsMax={4}
+                                className={classes.textField}
+                                onChange={this.handleChange}
+                                value={this.state.groupMessage}
+                                margin="normal"
+                                variant="outlined"
+                                InputProps={{
+                                    classes: {
+                                        notchedOutline: classes.notchedOutline,
+                                        input: classes.input,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    style: {
+                                        color: '#008BC9'
+                                    }
+                                }}
+                            >
+                            </TextField>
+                            <div>
+                                <Button variant="outlined" color="primary" style={{ fontSize: '12px', marginTop: '25px' }}>
+                                    Create
+                                    </Button>
                             </div>
                             <div>
                             </div>
