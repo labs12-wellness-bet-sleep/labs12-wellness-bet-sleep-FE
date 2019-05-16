@@ -80,12 +80,28 @@ class GoogleFitAuthenticationPage extends Component {
                 this.setState({logInButtonName: "Sign Out", 
                 loginStatus: "You have offically connected your Google Fitness app to our Wellness Bet App",
                 hideRevokeButton: false});
-                
-                axios.put(`/api/participant/${this.props.user.id}`, {"GoogleFitAuthCode": this.state.GoogleAuth.j8.currentUser.Zi.access_token})
-                .then(response => console.log(response))
-                .catch(err => console.log(err));
 
-                this.props.history.push(`/groupDashboard`);
+                axios.get("https://www.googleapis.com/fitness/v1/users/me/sessions/", {headers: `Bearer  ${participant.GoogleFitAuthCode}`})
+                .then(response => {
+                        console.log("Response from google API", response);
+                        console.log("Check out this set of sessions!",  response.data.session);
+
+                        let sleep_sessions = response.data.sessions;
+                        sleep_sessions = JSON.stringify(sleep_sessions);
+
+                        axios.put(`/api/participant/${this.props.user.id}`, {"SleepData": sleep_sessions})
+                                        .then(response => console.log(response))
+                                        .catch(err => console.log(err));
+                                        
+                        this.props.history.push(`/groupDashboard`);
+
+                })
+                .catch(err => console.log("Check out this error!", err));
+
+                
+               
+
+                
             } else {
                 this.setState({logInButtonName: "Sign In", 
                 loginStatus: "You have officialy disconnected your Google Fitness app from our Wellness Bet App",

@@ -108,35 +108,33 @@ export default class GroupDashboard extends Component {
 
             axios.get(`https://sleep-bet.herokuapp.com/api/groups/${this.state.groupID}/participant`)
             .then(response => {
-            let participants = response.data;
-                console.log("Look at this response", response);
-             participants.map(participant => {
-    
-                        axios.get("https://www.googleapis.com/fitness/v1/users/me/sessions/", {headers: `Bearer  ${participant.GoogleFitAuthCode}`})
-                        .then(response => {
-                                console.log("Response from google API", response);
-                                console.log("Check out this set of sessions!",  response.data.session);
+                    let participants = response.data;
+                    console.log("Look at this response", response);
+             
+                    participants.map(participant => {
 
-                                let sessions = response.data.sessions;
+                    let userSleepData = JSON.parse(participant.SleepData); 
 
-                                sessions.map(session => {
+                    let totalSleepInHoursPerDay = this.convertMillisecondsToHours(userSleepData.activeTimeMillis);
+                    
+                    // see: https://stackoverflow.com/questions/4673527/converting-milliseconds-to-a-date-jquery-javascript
+                    let StartDate = new Date(userSleepData.startTimeMillis);
+                    let EndDate = new Date(usersSleepData.endTimeMillis);
 
-                                    // set up graph and leaderboard data here; 
-                                    this.calculateSleepCoordinatesPerDay(session.startTimeMillis, session.endTimeMillis);
-                                    this.mapSleepDataToUserOnLeaderDashboard(participant.id, session.activeTimeMillis);
+                    this.calculateSleepCoordinatesPerDay(StartDate,EndDate, totalSleepInHoursPerDay);
+                    this.mapSleepDataToUserOnLeaderDashboard(participant.id, totalSleepInHoursPerDay);
 
-                                })
-
-                        })
-                        .catch(err => console.log("Check out this error!", err));
-            
                 })
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }
 
+    convertMillisecondsToHours = (millseconds) => {
+        let hours = millseconds/3600000;
+        return hours; 
+    }
 
-    calculateSleepCoordinatesPerDay = (startTime, endTime) => {
+    calculateSleepCoordinatesPerDay = (startTime, endTime, sleepAmount) => {
         
     }
 
