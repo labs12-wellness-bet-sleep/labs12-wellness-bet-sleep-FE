@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "../../axios-sleep";
 import { connect } from 'react-redux';
-import { register } from './../../Store/Actions/auth';
+import { register, getProfile } from './../../Store/Actions/auth';
 import { storage, auth, googleProvider } from "../../FirebaseConfig";
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -104,8 +104,8 @@ class Register extends Component {
     .then(({user}) => {
       console.log("OAuth User:", user);
       const {uid, email, ra} = user; 
-
-      
+        
+      const id = uid
       localStorage.setItem("token", ra);
 
       let uploadImage = storage
@@ -128,21 +128,21 @@ class Register extends Component {
                 this.setState({
                   profilePhoto: url
                 });
-               
-                // store image object in the database
                 const user = {
-                  // username: this.state.username,
                   email: this.state.email,
                   fullName: this.state.fullName,
-                  profilePhoto: url
+                  profilePhoto: url,
+                  // id: this.props.user.id
                 };
                 console.log(user, 'in signup')
                 this.props.signUp(user)
-                this.props.history.push(`/login/${user.email}`);
+                this.props.history.push(`/user/${id}`);
+                // this.props.history.push('/users')
               });
           }
         );
-
+       
+       
 
     })
     
@@ -163,9 +163,9 @@ class Register extends Component {
         let currentImageName = "firebase-image-" + Date.now();
 
 
-      console.log("OAuth User:", user);
+      console.log("OAuth User google popup:", user);
       const {uid, email, ra} = user; 
-      
+      const id = uid
       localStorage.setItem("token", ra);
         let uploadImage = storage
         .ref(`images/${currentImageName}`)
@@ -186,18 +186,16 @@ class Register extends Component {
                 this.setState({
                   profilePhoto: url
                 });
-               
-                // store image object in the database
                 const user = {
-                  // username: this.state.username,
-                  email: email,
+                  email: this.state.email,
                   fullName: this.state.fullName,
-                  profilePhoto: url
+                  profilePhoto: url,
+                  // id: this.props.user.id
                 };
-                
+                console.log(user, 'in signup')
                 this.props.signUp(user)
-    
-                this.props.history.push("/users");
+                this.props.history.push(`/user/${id}`);
+                
               });
           }
         );
@@ -209,7 +207,7 @@ class Register extends Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.state)
+    console.log(this.props.user, 'register props')
     return (
       <div className="register">
         <div className='overlay'>
@@ -217,9 +215,9 @@ class Register extends Component {
 
         {/* <div className="registerMessage">{this.state.welcomeMessage}</div> */}
 
-<div className='form-wrapper'>
+{/* <div className='form-wrapper'> */}
 <h2 className='title'>Create Account</h2>
-        <form onSubmit={this.signUp} className='register-form'>
+        <form  onSubmit={this.signUp} className='register-form'>
         <TextField
                 autoFocus
                 type="text"
@@ -277,8 +275,8 @@ class Register extends Component {
 
         
           <input type="file" className='upload-input' accept="image/*" onChange={e => this.fileHandler(e)} />
-          <div className='img-upload'>
-              <img src={this.state.profilePhoto} className='profile-img '/>
+          {/* <div className='img-upload'>
+              <img src={this.state.profilePhoto} className='profile-img '/> */}
               {/* <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
@@ -288,7 +286,7 @@ class Register extends Component {
         />
          </CardActionArea>
          </Card>  */}
-         </div>
+         {/* </div> */}
           <Button 
             // fullWidth
             className={classes.button}
@@ -299,7 +297,7 @@ class Register extends Component {
           {/* <button >Submit</button> */}
           <button type="button" onClick={this.loginWithGoogle}>SignUp with Google</button>
         </form>
-        </div>
+        {/* </div> */}
         </div>
       </div>
     );
@@ -308,6 +306,7 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state, 'mstp')
   return {
     user: state.user
   }
@@ -315,7 +314,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    signUp: (user) => dispatch(register(user))
+    signUp: (user) => dispatch(register(user)),
+    profilePage: id =>  dispatch(getProfile(id))
   }
 }
 export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Register));

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { auth } from '../FirebaseConfig';
 import { connect } from 'react-redux';
-import actions from './../Store/Actions';
+// import actions from './../Store/Actions';
+
+import { getProfile } from './../Store/Actions/auth';
 import User from "./User.js";
 import axios from "../axios-sleep";
 
@@ -34,7 +36,7 @@ class Users extends Component {
         console.log('log out')
     }
     render() {
-        console.log(this.props.users, 'users')
+        // console.log(this.props.users[0], 'users')
         return(
             <div className="Users">
             <button onClick={this.logout}>Logout</button>
@@ -52,15 +54,16 @@ class Users extends Component {
 
 const mapStateToProps = state => {
     return {
-        users: state.auth.user,
+        users: state.user,
         
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return{
-        getUsers: user => dispatch(actions.auth.initOAuth(user))
-    }
-}
+// const mapDispatchToProps = dispatch => {
+//     return{
+//         getUsers: user => dispatch(actions.auth.initOAuth(user)),
+//         profilePage: () =>  dispatch(getProfile(user))
+//     }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
+export default connect(mapStateToProps, )(Users);
