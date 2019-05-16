@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   withStyles,
   Menu,
@@ -64,8 +65,7 @@ const styles = theme => ({
     fontWeight: '500'
   },
   fitgirl: {
-    marginLeft: '450px',
-    marginTop: '440px'
+    marginTop: '350px'
   },
   welcome: {
     width: '200px',
@@ -191,7 +191,7 @@ function GroupsNav(props) {
               )}
 
             </Drawer>
-             {props.groups.length < 0 ?
+             {!props.groups ?
               <div className={classes.fitgirl}>
                 <Typography className={classes.welcome}>
                   Welcome To Wellness Tracker
