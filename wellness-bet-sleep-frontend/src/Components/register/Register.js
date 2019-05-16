@@ -132,11 +132,12 @@ class Register extends Component {
                   email: this.state.email,
                   fullName: this.state.fullName,
                   profilePhoto: url,
-                  id: this.props.user.id
+                  // id: this.props.user.id
                 };
                 console.log(user, 'in signup')
                 this.props.signUp(user)
-                this.props.history.push(`/user/${user.id}`);
+                this.props.history.push(`/user/${id}`);
+                // this.props.history.push('/users')
               });
           }
         );
@@ -164,7 +165,7 @@ class Register extends Component {
 
       console.log("OAuth User google popup:", user);
       const {uid, email, ra} = user; 
-      
+      const id = uid
       localStorage.setItem("token", ra);
         let uploadImage = storage
         .ref(`images/${currentImageName}`)
@@ -189,11 +190,12 @@ class Register extends Component {
                   email: this.state.email,
                   fullName: this.state.fullName,
                   profilePhoto: url,
-                  id: this.props.user.id
+                  // id: this.props.user.id
                 };
                 console.log(user, 'in signup')
                 this.props.signUp(user)
-                this.props.history.push(`/user/${user.id}`);
+                this.props.history.push(`/user/${id}`);
+                
               });
           }
         );

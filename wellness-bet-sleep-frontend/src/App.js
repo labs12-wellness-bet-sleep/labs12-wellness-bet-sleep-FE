@@ -83,14 +83,14 @@ class App extends Component {
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
       <Route path={'/groupDashboard'} component={GroupDashboard}/>
-      <Route
+      {/* <Route
        path="/dashboard"
        render={(props)=>(
         <Dashboard
         {...props}
          />
       )}
-      />
+      /> */}
        {/* <Route
        exact path="/login/:id"
        render={(props)=>(
@@ -104,7 +104,7 @@ class App extends Component {
 <Route
        exact path="/user/:id"
        render={(props)=>(
-        <Profile
+        <Dashboard
         {...props}
         // users={this.props.users}
          />
