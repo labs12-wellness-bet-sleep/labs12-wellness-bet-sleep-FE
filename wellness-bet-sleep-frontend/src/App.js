@@ -95,23 +95,8 @@ class App extends Component {
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
       <Route path={'/groupDashboard'} component={GroupDashboard}/>
-      {/* <Route
-       path="/dashboard"
-       render={(props)=>(
-        <Dashboard
-        {...props}
-         />
-      )}
-      /> */}
-       {/* <Route
-       exact path="/login/:id"
-       render={(props)=>(
-        <Profile
-        {...props}
-        // users={this.props.users}
-         />
-      )}
-      /> */}
+
+  
 
 <Route
        exact path="/user/:id"
@@ -124,6 +109,7 @@ class App extends Component {
       />
       <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} />
+
     </div>
   )
 }
