@@ -49,7 +49,11 @@ class App extends Component {
   }
 
 
-
+   logout = () => {
+    // localStorage.removeItem('token');
+    auth.signOut()
+    this.props.history.push('/')
+    console.log('log out') }
   render () {
     console.log( this.props.users)
   return (
@@ -106,7 +110,7 @@ class App extends Component {
        render={(props)=>(
         <Dashboard
         {...props}
-        // users={this.props.users}
+        logout={this.logout}
          />
       )}
       />

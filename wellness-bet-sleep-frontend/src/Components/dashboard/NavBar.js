@@ -1,4 +1,5 @@
 import React from 'react';
+import { auth } from '../../FirebaseConfig';
 import {
   withStyles,
   Menu,
@@ -119,6 +120,9 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 function GroupsNav(props) {
   const { classes } = props;
+
+
+
   return (
     <WithState>
       {({ anchorEl, updateAnchorEl }) => {
@@ -126,10 +130,18 @@ function GroupsNav(props) {
         const handleClose = () => {
           updateAnchorEl(null);
         };
+
+        // const logout = () => {
+        //   // localStorage.removeItem('token');
+        //   auth.signOut()
+        //   props.history.push('/')
+        //   console.log('log out') }
         return (
           <div className={classes.root}>
             <CssBaseline />
             <AppBar position="fixed" className={classes.appBar}>
+            {/* <button onClick={logout}>Logout</button> */}
+    
               <Toolbar>
                 <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
 
