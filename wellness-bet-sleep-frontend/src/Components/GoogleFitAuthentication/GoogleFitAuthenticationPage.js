@@ -81,7 +81,7 @@ class GoogleFitAuthenticationPage extends Component {
                 loginStatus: "You have offically connected your Google Fitness app to our Wellness Bet App",
                 hideRevokeButton: false});
                 
-                axios.put(`/api/participant/${this.props.users.id}`, {"GoogleFitAuthCode": this.state.GoogleAuth.j8.currentUser.Zi.access_token})
+                axios.put(`/api/participant/${this.props.user.id}`, {"GoogleFitAuthCode": this.state.GoogleAuth.j8.currentUser.Zi.access_token})
                 .then(response => console.log(response))
                 .catch(err => console.log(err));
 
@@ -157,7 +157,7 @@ class GoogleFitAuthenticationPage extends Component {
 
 const mapStateToProps = state => {
     return {
-      users: state.auth.user
+      user: state.auth.user
     }
   }
   
