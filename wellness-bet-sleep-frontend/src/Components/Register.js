@@ -8,7 +8,7 @@ class Register extends Component {
     super(props);
 
     this.state = {
-      username: "",
+      
       email: "",
       password: "",
       fullName: "",
@@ -80,7 +80,7 @@ class Register extends Component {
                
                 // store image object in the database
                 const user = {
-                  username: this.state.username,
+                  // username: this.state.username,
                   email: this.state.email,
                   fullName: this.state.fullName,
                   profilePhoto: url
@@ -93,7 +93,7 @@ class Register extends Component {
                     this.setState({
                       registered: true,
                       welcomeMessage: `Congratulations for registering, ${
-                        result.data.username
+                        result.data.fullName
                       }`
                     });
                     console.log("Congratulations on registering!");
@@ -155,7 +155,7 @@ class Register extends Component {
                
                 // store image object in the database
                 const user = {
-                  username: this.state.username,
+                  // username: this.state.username,
                   email: email,
                   fullName: this.state.fullName,
                   profilePhoto: url
@@ -168,7 +168,7 @@ class Register extends Component {
                     this.setState({
                       registered: true,
                       welcomeMessage: `Congratulations for registering, ${
-                        result.data.username
+                        result.data.fullName
                       }`
                     });
                     console.log("Congratulations on registering!");
@@ -200,12 +200,12 @@ class Register extends Component {
             type="text"
             onChange={e => this.handleChanges(e)}
           />
-          <b>User Name:</b>
+          {/* <b>User Name:</b>
           <input
             name="username"
             type="text"
             onChange={e => this.handleChanges(e)}
-          />
+          /> */}
 
           <b>Email:</b>
           <input

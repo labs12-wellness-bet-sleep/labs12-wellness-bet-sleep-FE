@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "../../axios-sleep.js";
 
 import { connect } from "react-redux";
-import { addGroup } from "../../Store/Actions/group";
+import { addGroup } from "../../Store/Actions/group-actions";
 
 // import Groups from "./Groups";
 
