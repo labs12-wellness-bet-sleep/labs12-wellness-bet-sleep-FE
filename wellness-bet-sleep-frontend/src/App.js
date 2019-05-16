@@ -101,7 +101,7 @@ class App extends Component {
 <Route
        exact path="/user/:id"
        render={(props)=>(
-        <Dashboard
+        <Profile
         {...props}
         // users={this.props.users}
          />
