@@ -1,9 +1,5 @@
 import React from 'react';
-<<<<<<< HEAD
-import { auth } from '../../FirebaseConfig';
-=======
 
->>>>>>> ff05dc734dbbf43cf03d0a40afaa712ec5c6f961
 import {
   withStyles,
   Menu,
@@ -26,6 +22,10 @@ import withState from 'recompose/withState';
 
 import JoinWithCode from './JoinWithCode';
 import CreateForm from './CreateForm';
+import { renderComponent } from 'recompose';
+
+import { connect } from 'react-redux';
+import { getGroups } from '../../Store/Actions/group-actions';
 
 
 
@@ -124,104 +124,107 @@ const button = {
 const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 
-function GroupsNav(props) {
-  const { classes } = props;
-  console.log(props.groups)
+class GroupsNav extends React.Component {
+  
+ 
+ 
 
 
-
-
-  return (
-    <WithState>
-      {({ anchorEl, updateAnchorEl }) => {
-        const open = Boolean(anchorEl);
-        const routeHandler = () => {
-          props.history.push('/dashboard/nav/create')
-          updateAnchorEl(null)
-        }
-        const handleClose = () => {
-          updateAnchorEl(null)
-        }
-        const routeHandlerJoin = () => {
-          props.history.push('/dashboard/nav/join')
-          updateAnchorEl(null)
-        }
-        return (
-          <div className={classes.root}>
-            <CssBaseline />
-            <AppBar position="fixed" className={classes.appBar}>
-            {/* <button onClick={logout}>Logout</button> */}
+  render() {
     
-              <Toolbar>
-                <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
-
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              className={classes.drawer}
-              variant="permanent"
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              anchor="left"
-            >
-              <ListItem button style={{ backgroundColor: '#CEE8F3' }}>
-                <ListItemText style={{ display: 'flex', color: '#229BD0', marginTop: '65px' }}>
-                  <Typography variant="h6" style={{ display: 'inline', fontWeight: 'bold', color: '#229BD0', textAlign: 'center', alignContent: 'flex-end' }} noWrap>
-                    My Groups
-                </Typography>
-                  <Button
-                    aria-owns={open ? 'render-props-menu' : undefined}
-                    aria-haspopup="true"
-                    onClick={event => {
-                      updateAnchorEl(event.currentTarget);
-                    }}
-                    variant="fab"
-                    style={button}
-                    mini>
-                    <AddIcon style={addicon} />
-                  </Button>
-                  <Menu style={{ borderRadius: '10px', marginLeft: 15, marginTop: 35 }} id="render-props-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
-                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold', borderBottom: 'solid', borderWidth: 'thin', borderColor: '#70BEE1' }} onClick={routeHandler}>Create Group</MenuItem>
-                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold' }} onClick={routeHandlerJoin}>Join Group</MenuItem>
-                  </Menu>
-                </ListItemText>
-              </ListItem>
-              <div className={classes.toolbar} />
-              {props.groups.map((group) =>
-                <ListItem key={group.id} className={classes.listitem} button >
-                  <ListItemText key={group.id} classes={{ primary: props.classes.text }} primary={group.groupName} />
-
+    const { classes } = this.props;
+    console.log(this.props.groups)
+    return (
+      <WithState>
+        {({ anchorEl, updateAnchorEl }) => {
+          const open = Boolean(anchorEl);
+          const routeHandler = () => {
+            this.props.history.push('/dashboard/nav/create')
+            updateAnchorEl(null)
+          }
+          const handleClose = () => {
+            updateAnchorEl(null)
+          }
+          const routeHandlerJoin = () => {
+            this.props.history.push('/dashboard/nav/join')
+            updateAnchorEl(null)
+          }
+          return (
+            <div className={classes.root}>
+              <CssBaseline />
+              <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar>
+                  <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
+  
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+              <Drawer
+                className={classes.drawer}
+                variant="permanent"
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                anchor="left"
+              >
+                <ListItem button style={{ backgroundColor: '#CEE8F3' }}>
+                  <ListItemText style={{ display: 'flex', color: '#229BD0', marginTop: '65px' }}>
+                    <Typography variant="h6" style={{ display: 'inline', fontWeight: 'bold', color: '#229BD0', textAlign: 'center', alignContent: 'flex-end' }} noWrap>
+                      My Groups
+                  </Typography>
+                    <Button
+                      aria-owns={open ? 'render-props-menu' : undefined}
+                      aria-haspopup="true"
+                      onClick={event => {
+                        updateAnchorEl(event.currentTarget);
+                      }}
+                      variant="fab"
+                      style={button}
+                      mini>
+                      <AddIcon style={addicon} />
+                    </Button>
+                    <Menu style={{ borderRadius: '10px', marginLeft: 15, marginTop: 35 }} id="render-props-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+                      <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold', borderBottom: 'solid', borderWidth: 'thin', borderColor: '#70BEE1' }} onClick={routeHandler}>Create Group</MenuItem>
+                      <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold' }} onClick={routeHandlerJoin}>Join Group</MenuItem>
+                    </Menu>
+                  </ListItemText>
                 </ListItem>
-              )}
-
-            </Drawer>
-             {!props.groups ?
-              <div className={classes.fitgirl}>
-                <Typography className={classes.welcome}>
-                  Welcome To Wellness Tracker
-            </Typography>
-                <Typography className={classes.createMess}>
-                  Create a new group or join an existing one with a join code
-            </Typography>
-                <Card className={classes.card}>
-                  <CardMedia
-                    style={{ paddingTop: '56.25%', width: '600px', height: 440 }}
-                    image={require('../../assets/images/fitgirl.png')}
-                    title="Contemplative Reptile"
-                  />
-                </Card>
-              </div> : null
-             }
-            <Route path="/dashboard/nav/join" component={JoinWithCode}/>
-            <Route path="/dashboard/nav/create" component={CreateForm} />
-          </div>
-          
-        )
-      }}
-    </WithState>
-  )
+                <div className={classes.toolbar} />
+                {this.props.groups.map((group) =>
+                  <ListItem key={group.id} className={classes.listitem} button >
+                    <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
+  
+                  </ListItem>
+                )}
+  
+              </Drawer>
+               {!this.props.groups ?
+                <div className={classes.fitgirl}>
+                  <Typography className={classes.welcome}>
+                    Welcome To Wellness Tracker
+              </Typography>
+                  <Typography className={classes.createMess}>
+                    Create a new group or join an existing one with a join code
+              </Typography>
+                  <Card className={classes.card}>
+                    <CardMedia
+                      style={{ paddingTop: '56.25%', width: '600px', height: 440 }}
+                      image={require('../../assets/images/fitgirl.png')}
+                      title="Contemplative Reptile"
+                    />
+                  </Card>
+                </div> : null
+               }
+              <Route path="/dashboard/nav/join" component={JoinWithCode}/>
+              <Route path="/dashboard/nav/create" component={CreateForm} />
+            </div>
+            
+          )
+        }}
+      </WithState>
+    )
+  }
+  
 }
 
 

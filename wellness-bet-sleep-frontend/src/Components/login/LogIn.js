@@ -98,18 +98,7 @@ class Login extends Component {
                   };
 
                 this.props.emailLogin(user)
-                // axios
-                // .get(`/api/users/login/${email}`, {headers: {"authorization": ra}})
-                // .then(result => {
-                //   console.log(result);
-                //   this.setState({
-                //     loggedIn: true,
-                //     loginMessage: `Congratulations for logging in, ${
-                //       result.data.username
-                //     }`
-                //   })
-                
-                // }).catch(error => console.log(error))
+              
                 this.props.history.push(`/user/${id}`)
              })
         //     .catch(

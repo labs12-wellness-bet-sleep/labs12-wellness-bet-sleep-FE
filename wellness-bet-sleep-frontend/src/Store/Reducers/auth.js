@@ -15,7 +15,7 @@ export default (state = initialState, actions) => {
                 loading: true
             }
         case authTypes.OAUTH_SUCCESS:
-        console.log(actions.payload.usersData.res.data, 'res data')
+        console.log(actions.payload, 'res data')
             return {
                 ...state,
                 loading: false,
@@ -30,11 +30,11 @@ export default (state = initialState, actions) => {
                 loading: true
             }
         case authTypes.REGISTER_SUCCESS:
-        console.log(actions.payload.user, 'register success data')
+        console.log(actions.payload, 'register success data')
             return {
                 ...state,
                 loading: false,
-                user: actions.payload.user
+                user: actions.payload
             }
         case authTypes.REGISTER_FAIL:
             return {
@@ -51,10 +51,7 @@ export default (state = initialState, actions) => {
             return {
                 ...state,
                 loading: false,
-                user: {
-                    ...actions.payload.usersData,
-                    ...actions.payload.usersData.user.email
-                }
+                user: actions.payload
             
             }
         case authTypes.LOGIN_FAIL: 
