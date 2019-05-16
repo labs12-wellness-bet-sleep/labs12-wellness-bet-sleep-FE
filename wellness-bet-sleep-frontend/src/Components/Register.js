@@ -8,7 +8,6 @@ class Register extends Component {
     super(props);
 
     this.state = {
-
       username: "",
       email: "",
       password: "",
@@ -24,7 +23,6 @@ class Register extends Component {
   componentDidMount() {
     if (this.state.registered == false) {
       this.setState({ welcomeMessage: "Please register before logging in." });
-
     }
   }
 
@@ -234,7 +232,6 @@ class Register extends Component {
       </div>
     );
   }
-
 }
 
 export default Register;
