@@ -123,11 +123,8 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 function GroupsNav(props) {
   const { classes } = props;
-<<<<<<< HEAD
-=======
   console.log(props.groups)
 
->>>>>>> 26103204d4731020700c09e6be6892414a49e7d3
 
 
 
@@ -140,23 +137,12 @@ function GroupsNav(props) {
           updateAnchorEl(null)
         }
         const handleClose = () => {
-<<<<<<< HEAD
-          updateAnchorEl(null);
-        };
-
-        // const logout = () => {
-        //   // localStorage.removeItem('token');
-        //   auth.signOut()
-        //   props.history.push('/')
-        //   console.log('log out') }
-=======
           updateAnchorEl(null)
         }
         const routeHandlerJoin = () => {
           props.history.push('/dashboard/nav/join')
           updateAnchorEl(null)
         }
->>>>>>> 26103204d4731020700c09e6be6892414a49e7d3
         return (
           <div className={classes.root}>
             <CssBaseline />

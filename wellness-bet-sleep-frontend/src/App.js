@@ -80,17 +80,12 @@ class App extends Component {
       {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
       <Route path={'/groupDashboard'} component={GroupDashboard}/>
-<<<<<<< HEAD
-    
-=======
 
-  
->>>>>>> 26103204d4731020700c09e6be6892414a49e7d3
 
 <Route
        exact path="/user/:id"
        render={(props)=>(
-        <Dashboard
+        <Profile
         {...props}
         logout={this.logout}
          />
