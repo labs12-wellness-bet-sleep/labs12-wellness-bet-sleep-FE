@@ -1,29 +1,91 @@
 import { authTypes } from '../Actions/actionTypes.js';
 
 const initialState = {
-    user: {},
+    user: [],
     loading: false,
     error: null
 };
 
 export default (state = initialState, actions) => {
-    console.log(actions)
+   
     switch (actions.type) {
-       
         case authTypes.OAUTH_START:
             return {
                 ...state,
                 loading: true
             }
         case authTypes.OAUTH_SUCCESS:
+        console.log(actions.payload.usersData.res.data, 'res data')
             return {
                 ...state,
                 loading: false,
                 user: {
-                    ...actions.payload.usersData
+                    ...actions.payload.usersData.user
                 }
+                
             }
+        case authTypes.REGISTER_START:
+            return {
+                ...state,
+                loading: true
+            }
+        case authTypes.REGISTER_SUCCESS:
+        console.log(actions.payload.user, 'register success data')
+            return {
+                ...state,
+                loading: false,
+                user: actions.payload.user
+            }
+        case authTypes.REGISTER_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: actions.payload
+            }
+        case authTypes.LOGIN_START:
+            return {
+                ...state,
+                loadin: true
+            }
+        case authTypes.LOGIN_SUCCESS: 
+            return {
+                ...state,
+                loading: false,
+                user: {
+                    ...actions.payload.usersData,
+                    ...actions.payload.usersData.user.email
+                }
+            
+            }
+        case authTypes.LOGIN_FAIL: 
+            return {
+                ...state,
+              loading: false,
+              error: actions.payload
+            
+        }
+        case authTypes.PROFILE_START:
+          return {
+              ...state,
+              loading: true
+          }
+        case authTypes.PROFILE_SUCCESS:
+          return {
+              ...state,
+              user: {
+                  ...actions.payload
+              }
+          }
+        case authTypes.PROFILE_FAIL: 
+          return {
+              ...state,
+              loading: false,
+              error: actions.payload
+          }
             default:
             return state;
     };
+
+  
+
 }
