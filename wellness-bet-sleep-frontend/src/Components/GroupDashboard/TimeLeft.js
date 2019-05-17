@@ -26,7 +26,7 @@ export default class TimeLeft extends Component {
 
     render(){
 
-        let data = [{angle: 5, label:"14 hours left"}, {angle: 2}]; 
+        let data = [{angle: 5, label:"14 days left"}, {angle: 2}]; 
 
         return(
 

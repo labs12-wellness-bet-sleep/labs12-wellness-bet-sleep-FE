@@ -89,11 +89,16 @@ class GoogleFitAuthenticationPage extends Component {
                         let sleep_sessions = response.data.sessions;
                         sleep_sessions = JSON.stringify(sleep_sessions);
 
-                        axios.put(`/api/participant/${this.props.user.id}`, {"SleepData": sleep_sessions})
-                                        .then(response => console.log(response))
-                                        .catch(err => console.log(err));
+                        // axios.put(`/api/participant/${this.props.user.id}`, {"SleepData": sleep_sessions})
+                        //                 .then(response => console.log(response))
+                        //                 .catch(err => console.log(err));
+
+                        axios.put(`/api/users/${this.props.user.id}`, {"SleepData": sleep_sessions})
+                            .then(response => console.log(response))
+                            .catch(err => console.log(err));
                                         
-                        this.props.history.push(`/groupDashboard`);
+                                        
+                        this.props.history.push(`/dashboard/TestUserDashboard`);
 
                 })
                 .catch(err => console.log("Check out this error!", err));

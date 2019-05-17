@@ -15,6 +15,7 @@ import Login from "./Components/login/LogIn";
 import Register from './Components/register/Register';
 import Users from "./Components/Users.js";
 import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
+import TestUserDashboard from "./Components/GroupDashboard/TestUserDashboard.js";
 import GoogleFitAuthenticationPage from "./Components/GoogleFitAuthentication/GoogleFitAuthenticationPage.js";
 
 import SendEmail from './Components/Email/SendEmail.js';
@@ -104,6 +105,7 @@ class App extends Component {
       <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} />
       <Route path="/dashboard/GoogleFitAuthentication" render={props => <GoogleFitAuthenticationPage {...props}/>} />
+      <Route path="/dashboard/TestUserDashboard" render={props => <TestUserDashboard {...props}/>}/>
     </div>
   )
 }
