@@ -103,12 +103,6 @@ export const login = user => dispatch =>  {
         .get(`/api/users/${user_id}`)
         .then(res => {
             console.log(res, 'inside google login')
-            // const payload = {
-            //     usersData: {
-            //         // ...user.email,
-            //         ...res.data
-            //     }
-            // }
             dispatch({
                 type: authTypes.LOGIN_SUCCESS,
                 payload: res.data

@@ -136,7 +136,7 @@ class Register extends Component {
                 };
                 console.log(user, 'in signup')
                 this.props.signUp(user)
-                this.props.history.push(`/user/${id}`);
+                this.props.history.push(`/user/${user.firebase_id}`);
                 // this.props.history.push('/users')
               });
           }
