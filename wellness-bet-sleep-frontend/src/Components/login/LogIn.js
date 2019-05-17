@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from '../../axios-sleep';
 import { connect } from 'react-redux';
-import { login, getProfile } from './../../Store/Actions/auth';
+import { login, getProfile, register } from './../../Store/Actions/auth';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider } from '../../FirebaseConfig';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
@@ -86,15 +86,16 @@ class Login extends Component {
         e.preventDefault();
         auth.signInWithEmailAndPassword(this.state.email, this.state.password)
              .then(({user}) => {
-                console.log(user,'email login')
+                // console.log(user,'email login')
                 const { uid, email, ra} = user;
                 // console.log(user,'email login')
                 localStorage.setItem("token", ra);
                 let id = uid
                 const data = {
-                    email: email,
+                    email: this.state.email,
                     fullName: this.state.fullName,
-                    
+                    // profilePhoto: url,
+                    firebase_id: uid
                   };
 
                 this.props.emailLogin(user)
@@ -223,7 +224,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
       emailLogin: (user) => dispatch(login(user)),
-      profilePage: user =>  dispatch(getProfile(user))
+      profilePage: user =>  dispatch(getProfile(user)),
+      signUp: (user) => dispatch(register(user)),
     }
   }
 

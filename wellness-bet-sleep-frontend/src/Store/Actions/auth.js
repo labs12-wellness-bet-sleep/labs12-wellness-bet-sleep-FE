@@ -11,7 +11,7 @@ export const initOAuth = user => dispatch =>  {
     axios
         .get(`/api/users`)
         .then(res => {
-            console.log(res.data, 'inside fetch')
+            // console.log(res.data, 'inside fetch')
             const payload = {
                 usersData: {
                     ...user,
@@ -103,12 +103,6 @@ export const login = user => dispatch =>  {
         .get(`/api/users/${user_id}`)
         .then(res => {
             console.log(res, 'inside google login')
-            // const payload = {
-            //     usersData: {
-            //         // ...user.email,
-            //         ...res.data
-            //     }
-            // }
             dispatch({
                 type: authTypes.LOGIN_SUCCESS,
                 payload: res.data

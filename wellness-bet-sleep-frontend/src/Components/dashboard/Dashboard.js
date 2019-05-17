@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/';
+
 import { Route } from 'react-router-dom';
 import axios from 'axios';
 
@@ -65,7 +66,7 @@ class Dashboard extends Component {
                 console.log(error)
             })
     }
-
+   
     // fetchDate = () => {
     //     axios.get('http://localhost:8080/api/groups')
     // }
@@ -76,7 +77,9 @@ class Dashboard extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
+                nav bar
          <Navbar history={this.props.history}  groups={this.state.groups}/>
+         
                 {/* <Route
                  path="/dashboard/nav"
                  render={props => (
