@@ -6,7 +6,7 @@ import { auth } from './FirebaseConfig';
 
 import './App.css';
 
-import Dashboard from './Components/dashboard/Dashboard';
+
 import JoinWithCode from './Components/dashboard/JoinWithCode';
 import CreateForm from './Components/dashboard/CreateForm';
 
