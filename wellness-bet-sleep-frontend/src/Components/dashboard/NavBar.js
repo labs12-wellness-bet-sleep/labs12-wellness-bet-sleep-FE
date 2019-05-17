@@ -1,5 +1,5 @@
-import React from "react";
-
+import React from 'react';
+import { auth } from '../../FirebaseConfig';
 import {
   withStyles,
   Menu,
@@ -120,6 +120,16 @@ const button = {
 const WithState = toRenderProps(withState("anchorEl", "updateAnchorEl", null));
 
 class GroupsNav extends React.Component {
+  
+ 
+  logout = () => {
+    // localStorage.removeItem('token');
+    auth.signOut()
+    this.props.history.push('/')
+    console.log('log out')
+}
+
+
   render() {
     const { classes } = this.props;
     console.log(this.props.groups);
@@ -142,6 +152,7 @@ class GroupsNav extends React.Component {
             <div className={classes.root}>
               <CssBaseline />
               <AppBar position="fixed" className={classes.appBar}>
+              <button onClick={this.logout}>Logout</button>
                 <Toolbar>
                   <Typography
                     variant="h6"

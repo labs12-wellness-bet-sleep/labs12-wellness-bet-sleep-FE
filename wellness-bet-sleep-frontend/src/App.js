@@ -38,7 +38,7 @@ class App extends Component {
             this.props.oAuth({firebase_id: uid, email, token: ra})
           }
 
-          // this.props.emailLogin(user);
+          // this.props.emailLogin(user)
         } 
         else {
           this.setState({

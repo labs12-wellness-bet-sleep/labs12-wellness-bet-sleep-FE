@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/';
+
 import { Route } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -66,7 +67,7 @@ class Dashboard extends Component {
                 console.log(error)
             })
     }
-
+   
     // fetchDate = () => {
     //     axios.get('http://localhost:8080/api/groups')
     // }
@@ -100,15 +101,3 @@ class Dashboard extends Component {
 
       
 export default withStyles(styles)(Dashboard);
-// const mapStateToProps = state => {
-//     return {
-//         users: state.auth.user
-//     }
-// }
-
-// const mapDispatchToProps = dispatch  => {
-//     return {
-//         profilePage: user =>  dispatch(getProfile(user))
-//     }
-// }
-// export default connect(null, mapDispatchToProps)(Dashboard);
