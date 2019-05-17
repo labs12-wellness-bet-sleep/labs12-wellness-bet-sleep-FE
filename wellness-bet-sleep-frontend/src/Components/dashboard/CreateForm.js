@@ -146,7 +146,7 @@ class CreateForm extends React.Component {
                                     name="joinCode"
                                     className={classes.textField}
                                     onChange={this.handleChange}
-                                    value={this.state.joinCode}
+                                    value={this.props.joinCode}
                                     margin="normal"
                                     variant="outlined"
                                     InputProps={{

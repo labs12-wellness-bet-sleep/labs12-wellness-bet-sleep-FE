@@ -25,7 +25,9 @@ import CreateForm from './CreateForm';
 import { renderComponent } from 'recompose';
 
 import { connect } from 'react-redux';
-import { getGroups } from '../../Store/Actions/group-actions';
+import { createJoinCode } from '../../Store/Actions/group-actions';
+import continuousSizeLegend from 'react-vis/dist/legends/continuous-size-legend';
+import axios from 'axios';
 
 
 
@@ -36,7 +38,7 @@ const styles = theme => ({
   root: {
     display: 'flex',
     margin: '0 auto',
-    marginLeft:'400px'
+    marginLeft: '400px'
   },
   appBar: {
     marginLeft: drawerWidth,
@@ -125,14 +127,14 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 
 class GroupsNav extends React.Component {
-  
-  
- 
- 
+  state = {
+    joinCode: ''
+  }
+
 
 
   render() {
-    
+
     const { classes } = this.props;
     console.log(this.props.groups)
     return (
@@ -140,8 +142,27 @@ class GroupsNav extends React.Component {
         {({ anchorEl, updateAnchorEl }) => {
           const open = Boolean(anchorEl);
           const routeHandler = () => {
-            const userId = localStorage.getItem('userId')
-            console.log('from nav user id localstorage', userId)
+            const userfirebase_id = localStorage.getItem('fb_id')
+            const token = localStorage.getItem('token')
+            console.log('token fb', token)
+            console.log('fb_id inside nav', userfirebase_id)
+            const id = {
+              userfirebase_id: userfirebase_id
+            }
+            const config = {
+              headers: { 'Authorization': "bearer " + localStorage.getItem('token') }
+            };
+            {/* this.props.createJoinCode(fb_id); */ }
+            axios.post(`http://localhost:8080/api/groups/invite`, {...id}, {
+              "Content-Type": "application/json",
+              headers: { 'Authorization': token }
+            })
+              .then(res => {
+                console.log('res', res)
+                this.setState({
+                  joinCode: res.data.newGroup.joinCode
+                })
+              })
             this.props.history.push("/user/:id/create")
             updateAnchorEl(null)
           }
@@ -158,7 +179,7 @@ class GroupsNav extends React.Component {
               <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                   <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
-  
+
                   </Typography>
                 </Toolbar>
               </AppBar>
@@ -196,12 +217,12 @@ class GroupsNav extends React.Component {
                 {this.props.groups.map((group) =>
                   <ListItem key={group.id} className={classes.listitem} button >
                     <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
-  
+
                   </ListItem>
                 )}
-  
+
               </Drawer>
-               {!this.props.groups ?
+              {!this.props.groups ?
                 <div className={classes.fitgirl}>
                   <Typography className={classes.welcome}>
                     Welcome To Wellness Tracker
@@ -217,17 +238,25 @@ class GroupsNav extends React.Component {
                     />
                   </Card>
                 </div> : null
-               }
-              <Route path="/user/:id/join" component={JoinWithCode}/>
-              <Route path="/user/:id/create" component={CreateForm} />
+              }
+              <Route path="/user/:id/join" component={JoinWithCode} />
+              <Route
+              path="/user/:id/create"
+              render={(props)=>(
+              <CreateForm
+              {...props}
+              joinCode={this.state.joinCode}
+              />
+              )}
+              />
             </div>
-            
+
           )
         }}
       </WithState>
     )
   }
-  
+
 }
 
 const mapStateToProps = state => {
@@ -238,4 +267,6 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps)(withStyles(styles)(GroupsNav));
+export default connect(mapStateToProps, {
+  createJoinCode,
+})(withStyles(styles)(GroupsNav));
