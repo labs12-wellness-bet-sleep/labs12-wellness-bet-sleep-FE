@@ -3,7 +3,8 @@ import { authTypes } from '../Actions/actionTypes.js';
 const initialState = {
     user: [],
     loading: false,
-    error: null
+    error: null,
+    user_id: "",
 };
 
 export default (state = initialState, actions) => {
@@ -21,7 +22,8 @@ export default (state = initialState, actions) => {
                 loading: false,
                 user: {
                     ...actions.payload.usersData.user
-                }
+                },
+                user_id: actions.payload.user_id 
                 
             }
         case authTypes.REGISTER_START:
@@ -34,7 +36,8 @@ export default (state = initialState, actions) => {
             return {
                 ...state,
                 loading: false,
-                user: actions.payload
+                user: actions.payload,
+                user_id: actions.payload.user_id
             }
         case authTypes.REGISTER_FAIL:
             return {

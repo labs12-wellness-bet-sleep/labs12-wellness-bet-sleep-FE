@@ -12,11 +12,21 @@ export const initOAuth = user => dispatch =>  {
         .get(`/api/users`)
         .then(res => {
             console.log(res.data, 'inside fetch')
+
+            let selectedEmail = user.email; 
+            let listOfUsers = res.data;
+
+            let fetchedUser = listOfUsers.filter(user => user.email == selectedEmail);
+            fetchedUser = fetchedUser[0];
+
+            console.log(fetchedUser, "fetched user from email");
+
             const payload = {
                 usersData: {
                     ...user,
-                    // ...res.data
-                }
+                    //...res.data
+                },
+                user_id: fetchedUser.id  
             }
             dispatch({
                 type: authTypes.OAUTH_SUCCESS,
@@ -72,9 +82,11 @@ export const register = (user) => dispatch => {
         .post(`/api/users/register`, user )
         .then(res => {
             // console.log(res.data.user.id, 'in register action')
+            console.log(res.data,  " Res Data in action");
             const payload = {
                 ...res.data,
-                ...user
+                ...user,
+                user_id: res.data.user.id
             }
             dispatch({
                 type: authTypes.REGISTER_SUCCESS,

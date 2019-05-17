@@ -132,7 +132,7 @@ class Register extends Component {
                   email: this.state.email,
                   fullName: this.state.fullName,
                   profilePhoto: url,
-                  firebase_id: uid
+                  // firebase_id: uid
                 };
                 console.log(user, 'in signup')
                 this.props.signUp(user)

@@ -78,7 +78,7 @@ class App extends Component {
       <Route exact path={'/register'} component={Register}/>
       <Route exact path='/groups' component={GroupPage}/>
       <Route exact path='/email' component={SendEmail}/>
-      <Route path={'/groupDashboard'} component={GroupDashboard}/>
+      {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
 
 
       {/* <Route exact path={'/'} component={Home}/> 
@@ -105,11 +105,9 @@ class App extends Component {
          />
       )}
       />
-<<<<<<< HEAD
       {/* <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} /> */}
 
-=======
        <Route
        exact path="/login/:id"
        render={(props)=>(
@@ -123,7 +121,6 @@ class App extends Component {
       <Route path="/dashboard/create" component={CreateForm} />
       <Route path="/dashboard/GoogleFitAuthentication" render={props => <GoogleFitAuthenticationPage {...props}/>} />
       <Route path="/dashboard/TestUserDashboard" render={props => <TestUserDashboard {...props}/>}/>
->>>>>>> 13c24ba25f0c64cbab2bdbd7a3de03bef7f790cc
     </div>
   )
 }
@@ -137,8 +134,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    oAuth: user  => dispatch(actions.auth.initOAuth(user)),
-    emailLogin: (user) => dispatch(actions.auth.login(user)),
+    oAuth: user  => dispatch(actions.auth.initOAuth(user))
   }
 }
 
