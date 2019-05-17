@@ -6,11 +6,14 @@ import { auth } from './FirebaseConfig';
 
 import './App.css';
 
-import Dashboard from './Components/dashboard/Dashboard';
-import JoinWithCode from './Components/dashboard/JoinWithCode';
-import CreateForm from './Components/dashboard/CreateForm';
 
-import Home from './Components/home/Home';
+import Dashboard from "./Components/dashboard/Dashboard";
+import NavBar from "./Components/dashboard/NavBar"
+import JoinWithCode from "./Components/dashboard/JoinWithCode";
+import CreateForm from "./Components/dashboard/CreateForm";
+import Home from "./Components/home/Home";
+
+
 import Login from "./Components/login/LogIn";
 import Register from './Components/register/Register';
 import Users from "./Components/Users.js";
@@ -65,6 +68,7 @@ class App extends Component {
             />
           }
         />
+
       <Route path="/dashboard" render={props => <Dashboard {...props} />} />
       <Route exact path ='/' render={props => <Home {...props} /> } />
       <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
@@ -72,6 +76,21 @@ class App extends Component {
       <Route exact path='/groups' component={GroupPage}/>
       <Route exact path='/email' component={SendEmail}/>
       <Route path={'/groupDashboard'} component={GroupDashboard}/>
+
+
+      {/* <Route exact path={'/'} component={Home}/> 
+      <Route exact path ='/' render={props => <Home {...props} /> } />
+      <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
+      {/* <Route exact path='/login'/> */}
+      {/* <Route exact path={'/login'} component={Login}/> */}
+      {/* <Route exact path={'/register'} component={Register}/>
+      <Route exact path='/groups' component={GroupPage}/>
+      <Route exact path='/email' component={SendEmail}/> */}
+      
+      {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
+
+      {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
+
 
 
 <Route
@@ -83,8 +102,8 @@ class App extends Component {
          />
       )}
       />
-      <Route path="/dashboard/join" component={JoinWithCode}/>
-      <Route path="/dashboard/create" component={CreateForm} />
+      {/* <Route path="/dashboard/join" component={JoinWithCode}/>
+      <Route path="/dashboard/create" component={CreateForm} /> */}
 
     </div>
   )
