@@ -97,7 +97,11 @@ class Login extends Component {
                     
                   };
 
+
                 this.props.emailLogin(user)
+              
+
+                // this.props.emailLogin(user)
                 // axios
                 // .get(`/api/users/login/${email}`, {headers: {"authorization": ra}})
                 // .then(result => {
@@ -110,6 +114,7 @@ class Login extends Component {
                 //   })
                 
                 // }).catch(error => console.log(error))
+
                 this.props.history.push(`/user/${id}`)
              })
         //     .catch(
