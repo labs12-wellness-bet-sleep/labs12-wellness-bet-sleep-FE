@@ -2,7 +2,8 @@ import React from 'react';
 import { withStyles, Typography, TextField, Button } from '@material-ui/core';
 import axios from 'axios';
 import { connect } from 'react-redux';
- 
+
+import uuid from 'uuid';
 
 
 
@@ -52,11 +53,12 @@ class CreateForm extends React.Component {
         userId: null,
         groupName: '',
         joinCode: '',
-        startDate: '',
-        endDate: '',
+        startDate: null,
+        endDate: null,
         buyInAmt: null,
-        photoFile: '',
-        groupMessage: ''
+        groupMessage: null,
+        potTotal: null,
+        groupPhoto: null
     }
 
 
@@ -66,17 +68,31 @@ class CreateForm extends React.Component {
         });
     };
 
-    createGroup = () => {
+    onChange = event => {
+        
+        const parsedInt = parseInt(event.target.value)
+        if (parsedInt) {
+            this.setState({
+                [event.target.name]: parsedInt
+            })
+        }
+        return null;
+    }
+
+    createGroup = (e) => {
+        e.preventDefault();
+        console.log("id from createform",this.props.userId.id)
+        
         const addGroup = {
-            userId: this.props.userId.id,
+            id: new Date().getUTCMilliseconds(),
+            userId: '5',
             groupName: this.state.groupName,
-            joinCode: this.state.joinCode,
+            buyInAmt: this.state.buyInAmt,
             startDate: this.state.startDate,
             endDate: this.state.endDate,
-            buyInAmt: this.state.buyIn,
             groupMessage: this.state.groupMessage
         }
-        console.log(addGroup)
+        console.log('addgroup', addGroup)
         axios.post(`http://localhost:8080/api/groups/create`, addGroup)
              .then(res => {
                  console.log("res", res)
@@ -203,11 +219,11 @@ class CreateForm extends React.Component {
                                 <TextField
                                     id="outlined-name"
                                     label="Buy In Amount $"
-                                    name="buyIn"
+                                    name="buyInAmt"
                                     type="number"
                                     className={classes.textField}
-                                    onChange={this.handleChange}
-                                    value={this.state.buyIn}
+                                    onChange={this.onChange}
+                                    value={this.state.buyInAmt}
                                     margin="normal"
                                     variant="outlined"
                                     InputProps={{

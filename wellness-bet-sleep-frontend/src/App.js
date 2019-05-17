@@ -99,8 +99,8 @@ class App extends Component {
 
   
 
-<Route
-       exact path="/user/:id"
+      <Route
+       path="/user/:id"
        render={(props)=>(
         <Dashboard
         {...props}

@@ -139,14 +139,14 @@ class GroupsNav extends React.Component {
         {({ anchorEl, updateAnchorEl }) => {
           const open = Boolean(anchorEl);
           const routeHandler = () => {
-            this.props.history.push('/dashboard/nav/create')
+            this.props.history.push("/user/:id/create")
             updateAnchorEl(null)
           }
           const handleClose = () => {
             updateAnchorEl(null)
           }
           const routeHandlerJoin = () => {
-            this.props.history.push('/dashboard/nav/join')
+            this.props.history.push("/user/:id/join")
             updateAnchorEl(null)
           }
           return (
@@ -215,8 +215,8 @@ class GroupsNav extends React.Component {
                   </Card>
                 </div> : null
                }
-              <Route path="/dashboard/nav/join" component={JoinWithCode}/>
-              <Route path="/dashboard/nav/create" component={CreateForm} />
+              <Route path="/user/:id/join" component={JoinWithCode}/>
+              <Route path="/user/:id/create" component={CreateForm} />
             </div>
             
           )
@@ -227,6 +227,12 @@ class GroupsNav extends React.Component {
   
 }
 
+const mapStateToProps = state => {
+  console.log("user id", state)
+  return {
+    userId: state.user
+  }
+}
 
 
-export default withStyles(styles)(GroupsNav);
+export default connect(mapStateToProps)(withStyles(styles)(GroupsNav));

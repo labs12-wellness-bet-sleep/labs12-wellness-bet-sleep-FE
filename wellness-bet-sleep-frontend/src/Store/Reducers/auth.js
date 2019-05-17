@@ -15,7 +15,7 @@ export default (state = initialState, actions) => {
                 loading: true
             }
         case authTypes.OAUTH_SUCCESS:
-        console.log(actions.payload.usersData.res.data, 'res data')
+        // console.log(actions.payload.usersData.res.data, 'res data')
             return {
                 ...state,
                 loading: false,
