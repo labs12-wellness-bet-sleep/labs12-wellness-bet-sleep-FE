@@ -19,6 +19,9 @@ import Register from './Components/register/Register';
 import Users from "./Components/Users.js";
 import Profile from './Components/profile/Profile'
 import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
+import TestUserDashboard from "./Components/GroupDashboard/TestUserDashboard.js";
+import GoogleFitAuthenticationPage from "./Components/GoogleFitAuthentication/GoogleFitAuthenticationPage.js";
+
 import SendEmail from './Components/Email/SendEmail.js';
 import GroupPage from './Components/group/GroupPage';
 
@@ -102,9 +105,25 @@ class App extends Component {
          />
       )}
       />
+<<<<<<< HEAD
       {/* <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} /> */}
 
+=======
+       <Route
+       exact path="/login/:id"
+       render={(props)=>(
+        <Profile
+        {...props}
+        // users={this.props.users}
+         />
+      )}
+      />
+      <Route path="/dashboard/join" component={JoinWithCode}/>
+      <Route path="/dashboard/create" component={CreateForm} />
+      <Route path="/dashboard/GoogleFitAuthentication" render={props => <GoogleFitAuthenticationPage {...props}/>} />
+      <Route path="/dashboard/TestUserDashboard" render={props => <TestUserDashboard {...props}/>}/>
+>>>>>>> 13c24ba25f0c64cbab2bdbd7a3de03bef7f790cc
     </div>
   )
 }

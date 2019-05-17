@@ -6,6 +6,7 @@ import TimeLeft from "./TimeLeft.js";
 import UserSleepStatus from "./UserSleepStatus.js";
 import UsersRanking from "./UsersRanking.js"
 import styled from 'styled-components'
+import { start } from 'repl';
 
 const HeaderData = styled.div`
     display: flex;
@@ -82,7 +83,7 @@ export default class GroupDashboard extends Component {
     getGroupID() {
     }
 
-    getGroupInfo() {
+    getGroupInfo = () => {
 
         let amountOfDays = "";
 
@@ -104,10 +105,133 @@ export default class GroupDashboard extends Component {
             this.setState({groupUsers: response.data.participant});
             this.setState({amountOfUsers: this.state.groupUsers.length});
 
-            this.setUpDummySleepData(response.data.participant.length, response.data.participant, amountOfDays);
+            // this.setUpDummySleepData(response.data.participant.length, response.data.participant, amountOfDays);
 
-        })
-        .catch(err => console.log(err));
+            let participants = response.data;
+            console.log("Look at this response", response);
+
+            let totalSleepPerGroup = [];
+            let sleepGraphCoordinatesPerGroup = [];
+             
+            participants.map(participant => {
+
+                    let userSleepDataSessions = JSON.parse(participant.SleepData); 
+
+                    let sleepPerUser = { 
+                        username: participant.username,
+                        photo: participant.profilePhoto,
+                        amountOfSleep: ""
+                    }
+
+                    let sleepGraphCoordinatesPerPerson = {
+                        name: participant.username,
+                        coordinates: []
+                    }
+
+                    let dayNumber = 0; 
+
+                    userSleepDataSessions.map((sleepDataSession) => {
+
+                        let totalSleepInHoursPerDay = this.convertMillisecondsToHours(userSleepData.activeTimeMillis);
+                        
+                        let startTime = userSleepData.startTimeMillis;
+                        let endTime = usersSleepData.endTimeMillis;
+
+                        if(isSleepInSameDay(startTime,endTime)){
+
+                            let sleepCoordinate = this.calculateSleepCoordinatesPerDay(startTime,endTime, totalSleepInHoursPerDay,dayNumber);
+                            sleepCoordinatesPerPerson.coordinates.push(sleepCoordinate);
+                            dayNumber += 1; 
+
+                        }
+                        else
+                        {
+                            sleepCoordinatesPerPerson = calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerPerson, dayNumber);
+
+                            let StartDate = new Date(startTime);
+                            let EndDate = new Date(endTime);
+                    
+                            let dayDifference = Math.abs(StartDate.getDate()-EndDate.getDate());
+
+                            daynNumber += dayDifference;
+                        }
+
+                        sleepPerUser.amountOfSleep += totalSleepInHoursPerDay;
+
+                    })
+            })
+
+            this.setState({aggregatedSleepPerUser: totalSleepPerGroup});
+            this.setState({sleepGraphCoordinatesPerPerson: sleepGraphCoordinatesPerGroup});
+
+            }).catch(err => console.log(err));
+        }
+
+    convertMillisecondsToHours = (millseconds) => {
+        let hours = millseconds/3600000;
+        return hours; 
+    }
+
+    isSleepInSameDay = (startTime, endTime) => {
+        
+        let StartDate = new Date(startTime);
+        let EndDate = new Date(endTime);
+
+        let dayDifference = Math.abs(StartDate.getDate()-EndDate.getDate());
+
+        let StartHour = StartDate.getHours();
+        let EndHour = EndDate.getHours();
+
+        // (I count the same day as from 8pm - 10am)
+        // Check if the start time is within this buffer zone. 
+        // see: https://stackoverflow.com/questions/4673527/converting-milliseconds-to-a-date-jquery-javascript
+        if ( (StartHour > 20 || StartHour < 10 ) && (EndHour > 20 || StartHour < 10) && dayDifference <= 1) {
+            return true; 
+        }
+        else {
+            return false; 
+        }
+    }
+
+    // per sleep session;
+    calculateSleepCoordinatesPerDay = (startTime, endTime, sleepAmount, day) => {
+        
+        let sleepCoordinate = {"x": day, "y": sleepAmount}
+        return sleepCoordinate;
+    }
+
+    // per sleep session;
+    calculateSleepCoordinatesPerSeveralDays = (startTime, endTime, sleepAmount, sleepCoordinatesPerPerson, dayNumber) => {
+        let StartDate = new Date(startTime);
+        let EndDate = new Date(endTime);
+
+        let startDay = StartDate.getDate();
+        let endDay = EndDate.getDate();
+
+        let startHour = StartDate.getHours();
+
+        let dayDifference = Math.abs(endDay-startDay);
+
+        // first add the remainder beginning day;
+        let startDaySleepAmount = 24 - startHour; 
+
+        sleepCoordinatesPerPerson.coordinates.push({"x": dayNumber, "y": startDaySleepAmount}); 
+
+        sleepAmount -= startDaySleepAmount;
+
+        for(day = (dayNumber+1) ; day < (dayNumber + dayDifference-1); day++) {
+            sleepCoordinatesPerPerson.coordinates.push({"x": dayNumber, "y": sleepAmount-23});
+        }
+
+        let endHour = EndDate.getHours();
+        dayNumber += dayDifference;
+        
+        sleepCoordinatesPerPerson.coordinates.push({"x": dayNumber, "y": endHour})
+
+        // then add the remainder end day sleep; 
+
+        return sleepCoordinatesPerPerson; 
+
     }
 
     // https://www.tutorialspoint.com/How-to-subtract-days-from-a-date-in-JavaScript
@@ -137,37 +261,37 @@ export default class GroupDashboard extends Component {
     }
 
     // in hours 
-    setUpDummySleepData(sleepDataAmount, participants, amountOfDays) {
-        let amountOfUsers = sleepDataAmount;
-        let totalSleepPerPerson = [];
+    // setUpDummySleepData(sleepDataAmount, participants, amountOfDays) {
+    //     let amountOfUsers = sleepDataAmount;
+    //     let totalSleepPerPerson = [];
 
-        for(let i = 0; i < sleepDataAmount; i++) {
-            totalSleepPerPerson[i] = {
-                username: participants[i].username,
-                photo: participants[i].profilePhoto,
-                amountOfSleep: Math.floor((Math.random()*50) + 1)
-            }
-        }
+    //     for(let i = 0; i < sleepDataAmount; i++) {
+    //         totalSleepPerPerson[i] = {
+    //             username: participants[i].username,
+    //             photo: participants[i].profilePhoto,
+    //             amountOfSleep: Math.floor((Math.random()*50) + 1)
+    //         }
+    //     }
 
-        this.setState({aggregatedSleepPerUser: totalSleepPerPerson});
+    //     this.setState({aggregatedSleepPerUser: totalSleepPerPerson});
 
-       let sleepGraphCoordinatesPerPerson = [];
+    //    let sleepGraphCoordinatesPerPerson = [];
 
-        for(let i = 0; i < amountOfUsers; i++) {
-                sleepGraphCoordinatesPerPerson[i] = {
-                    name: participants[i].username,
-                    coordinates: []
-                }
+    //     for(let i = 0; i < amountOfUsers; i++) {
+    //             sleepGraphCoordinatesPerPerson[i] = {
+    //                 name: participants[i].username,
+    //                 coordinates: []
+    //             }
 
-                for(let days = 0; days < amountOfDays; days++) {
-                    sleepGraphCoordinatesPerPerson[i].coordinates[days] = {"x": days, "y": totalSleepPerPerson[i].amountOfSleep - days}
-                }
-            }
+    //             for(let days = 0; days < amountOfDays; days++) {
+    //                 sleepGraphCoordinatesPerPerson[i].coordinates[days] = {"x": days, "y": totalSleepPerPerson[i].amountOfSleep - days}
+    //             }
+    //         }
 
-        this.setState({sleepGraphCoordinatesPerPerson: sleepGraphCoordinatesPerPerson});
+    //     this.setState({sleepGraphCoordinatesPerPerson: sleepGraphCoordinatesPerPerson});
             
-        console.log("Sleep Coordinates: ", sleepGraphCoordinatesPerPerson);
-        }
+    //     console.log("Sleep Coordinates: ", sleepGraphCoordinatesPerPerson);
+    //     }
 
 
     render(){
