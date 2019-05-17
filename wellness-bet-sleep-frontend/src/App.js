@@ -6,9 +6,8 @@ import { auth } from "./FirebaseConfig";
 
 import "./App.css";
 
-
 import Dashboard from "./Components/dashboard/Dashboard";
-import NavBar from "./Components/dashboard/NavBar"
+import NavBar from "./Components/dashboard/NavBar";
 import JoinWithCode from "./Components/dashboard/JoinWithCode";
 import CreateForm from "./Components/dashboard/CreateForm";
 import Profile from "./Components/profile/Profile";
@@ -65,14 +64,13 @@ class App extends Component {
         <Route exact path={"/users"} render={props => <Users {...props} />} />
         {/* <Route exact path='/login'/> */}
         {/* <Route exact path={'/login'} component={Login}/> */}
-      
+
         <Route exact path="/groups" component={GroupPage} />
-        <Route exact path="/email" component={SendEmail} />
 
         {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
         <Route path={"/groupDashboard"} component={GroupDashboard} />
-        {/* <Route path="/dashboard" render={props => <Dashboard {...props} />} /> */}
+        <Route path="/dashboard" render={props => <Dashboard {...props} />} />
         <Route
           exact
           path="/login/:id"
@@ -83,39 +81,37 @@ class App extends Component {
             />
           )}
         />
-        <Route exact path={'/register'} component={Register}/>
-        <Route exact path='/email' component={SendEmail}/>
+        <Route exact path={"/register"} component={Register} />
+        <Route exact path="/email" component={SendEmail} />
 
-      {/* <Route exact path={'/'} component={Home}/> 
+        {/* <Route exact path={'/'} component={Home}/> 
       <Route exact path ='/' render={props => <Home {...props} /> } />
       <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
       {/* <Route exact path='/login'/> */}
-      {/* <Route exact path={'/login'} component={Login}/> */}
-      {/* <Route exact path={'/register'} component={Register}/>
+        {/* <Route exact path={'/login'} component={Login}/> */}
+        {/* <Route exact path={'/register'} component={Register}/>
       <Route exact path='/groups' component={GroupPage}/>
       <Route exact path='/email' component={SendEmail}/> */}
-      
-      {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
-      {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
+        {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
-  
+        {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
 
-<Route
-       exact path="/user/:id"
-       render={(props)=>(
-        <Dashboard
-        {...props}
-        // users={this.props.users}
-         />
-      )}
-      />
-      {/* <Route path="/dashboard/join" component={JoinWithCode}/>
+        <Route
+          exact
+          path="/user/:id"
+          render={props => (
+            <Dashboard
+              {...props}
+              // users={this.props.users}
+            />
+          )}
+        />
+        {/* <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} /> */}
-    </div>
-  )
-}
-
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = state => {

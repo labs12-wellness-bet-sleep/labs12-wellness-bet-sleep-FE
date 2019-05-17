@@ -51,7 +51,7 @@ class CreateForm extends React.Component {
     state = {
         userId: null,
         groupName: '',
-        joinCode: '',
+        // joinCode: '',
         startDate: '',
         endDate: '',
         buyInAmt: null,
@@ -70,7 +70,7 @@ class CreateForm extends React.Component {
         const addGroup = {
             userId: this.props.userId.id,
             groupName: this.state.groupName,
-            joinCode: this.state.joinCode,
+            // joinCode,
             startDate: this.state.startDate,
             endDate: this.state.endDate,
             buyInAmt: this.state.buyIn,
