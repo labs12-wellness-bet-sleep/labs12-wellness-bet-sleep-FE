@@ -126,6 +126,7 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 class GroupsNav extends React.Component {
   
+  
  
  
 
@@ -139,6 +140,8 @@ class GroupsNav extends React.Component {
         {({ anchorEl, updateAnchorEl }) => {
           const open = Boolean(anchorEl);
           const routeHandler = () => {
+            const userId = localStorage.getItem('userId')
+            console.log('from nav user id localstorage', userId)
             this.props.history.push("/user/:id/create")
             updateAnchorEl(null)
           }
@@ -230,7 +233,7 @@ class GroupsNav extends React.Component {
 const mapStateToProps = state => {
   console.log("user id", state)
   return {
-    userId: state.user
+    userId: state.auth.user
   }
 }
 

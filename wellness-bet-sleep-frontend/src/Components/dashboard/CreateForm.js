@@ -82,10 +82,10 @@ class CreateForm extends React.Component {
     createGroup = (e) => {
         e.preventDefault();
         console.log("id from createform",this.props.userId.id)
-        
+        localStorage.setItem('userId', this.props.userId.id)
         const addGroup = {
             id: new Date().getUTCMilliseconds(),
-            userId: '5',
+            userId: this.props.userId.id,
             groupName: this.state.groupName,
             buyInAmt: this.state.buyInAmt,
             startDate: this.state.startDate,
@@ -323,4 +323,4 @@ const mapStateToProps = state => {
 
 
 
-export default  connect(mapStateToProps, {})(withStyles(styles)(CreateForm));
+export default  connect(mapStateToProps)(withStyles(styles)(CreateForm));

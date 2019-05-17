@@ -11,7 +11,7 @@ export const initOAuth = user => dispatch =>  {
     axios
         .get(`/api/users`)
         .then(res => {
-            console.log(res.data, 'inside fetch')
+            console.log(res, 'inside fetch')
             const payload = {
                 usersData: {
                     ...user,
@@ -42,7 +42,7 @@ export const getProfile = id => dispatch =>  {
     axios
         .get(`/api/users/${id}`)
         .then(res => {
-            console.log(res.data, 'inside fetch')
+            console.log(res, 'inside fetch')
             const payload = {
                 usersData: {
                     
@@ -71,10 +71,9 @@ export const register = (user) => dispatch => {
     axios
         .post(`/api/users/register`, user )
         .then(res => {
-            console.log(res.data.user.id, 'in register action')
+            // console.log(res.data.user.id, 'in register action')
             const payload = {
                 ...res.data,
-                // ...res.data.user.id,
                 ...user
             }
             dispatch({
@@ -96,7 +95,7 @@ export const login = user => dispatch =>  {
     dispatch({
         type: authTypes.LOGIN_START
     })
-    const user_id = user.id
+    const user_id = user.uid
     console.log(user, 'top of google login')
     // change axios custom config. sets headers to uid in App.js
     axios.defaults.headers.common['Authorization'] = user.ra
@@ -104,15 +103,15 @@ export const login = user => dispatch =>  {
         .get(`/api/users/${user_id}`)
         .then(res => {
             console.log(res, 'inside google login')
-            const payload = {
-                usersData: {
-                    ...user.email,
-                    ...res.data
-                }
-            }
+            // const payload = {
+            //     usersData: {
+            //         // ...user.email,
+            //         ...res.data
+            //     }
+            // }
             dispatch({
                 type: authTypes.LOGIN_SUCCESS,
-                payload: payload
+                payload: res.data
               });
         })
         .catch(err => {
