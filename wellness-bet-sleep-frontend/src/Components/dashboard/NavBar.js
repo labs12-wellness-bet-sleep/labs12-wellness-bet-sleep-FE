@@ -128,7 +128,7 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 class GroupsNav extends React.Component {
   state = {
-    joinCode: ''
+    group: []
   }
 
   
@@ -144,7 +144,7 @@ class GroupsNav extends React.Component {
   render() {
 
     const { classes } = this.props;
-    console.log(this.props.groups)
+    console.log('group', this.state.group)
     return (
       <WithState>
         {({ anchorEl, updateAnchorEl }) => {
@@ -152,15 +152,9 @@ class GroupsNav extends React.Component {
           const routeHandler = () => {
             const userfirebase_id = localStorage.getItem('fb_id')
             const token = localStorage.getItem('token')
-            console.log('token fb', token)
-            console.log('fb_id inside nav', userfirebase_id)
             const id = {
               userfirebase_id: userfirebase_id
             }
-            const config = {
-              headers: { 'Authorization': "bearer " + localStorage.getItem('token') }
-            };
-            {/* this.props.createJoinCode(fb_id); */ }
             axios.post(`http://localhost:8080/api/groups/invite`, {...id}, {
               "Content-Type": "application/json",
               headers: { 'Authorization': token }
@@ -168,7 +162,7 @@ class GroupsNav extends React.Component {
               .then(res => {
                 console.log('res', res)
                 this.setState({
-                  joinCode: res.data.newGroup.joinCode
+                  group: res.data.newGroup
                 })
               })
             this.props.history.push("/user/:id/create")
@@ -254,7 +248,7 @@ class GroupsNav extends React.Component {
               render={(props)=>(
               <CreateForm
               {...props}
-              joinCode={this.state.joinCode}
+              group={this.state.group}
               />
               )}
               />

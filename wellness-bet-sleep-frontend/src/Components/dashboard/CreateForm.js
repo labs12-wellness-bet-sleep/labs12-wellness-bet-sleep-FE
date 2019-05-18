@@ -81,25 +81,35 @@ class CreateForm extends React.Component {
 
     createGroup = (e) => {
         e.preventDefault();
-        console.log("id from createform",this.props.userId.id)
-        localStorage.setItem('userId', this.props.userId.id)
+        // console.log("id from createform",this.props.userId.id)
+        // localStorage.setItem('userId', this.props.userId.id)
+        const startDate = this.state.startDate
+        const endDate = this.state.endDate
+        const newStartDate = new Date(startDate)
+        const newEndDate = new Date(endDate)
+        const token = localStorage.getItem('token')
+        const id = this.props.group.id
         const addGroup = {
-            id: new Date().getUTCMilliseconds(),
-            userId: this.props.userId.id,
+            id: id,
             groupName: this.state.groupName,
             buyInAmt: this.state.buyInAmt,
-            startDate: this.state.startDate,
-            endDate: this.state.endDate,
-            groupMessage: this.state.groupMessage
+            startDate: newStartDate,
+            endDate: newEndDate,
+            groupMessage: this.state.groupMessage,
+            userfirebase_id: this.props.group.userfirebase_id
         }
         console.log('addgroup', addGroup)
-        axios.post(`http://localhost:8080/api/groups/create`, addGroup)
+        axios.put(`http://localhost:8080/api/groups/${id}`,(id, addGroup), {
+            "Content-Type": "application/json",
+            headers: { 'Authorization': token }
+            })
              .then(res => {
                  console.log("res", res)
              })
              .catch(err => {
                  console.log("err", err)
              })
+             this.props.history.push("/user/:id")
     }
 
 
@@ -146,7 +156,7 @@ class CreateForm extends React.Component {
                                     name="joinCode"
                                     className={classes.textField}
                                     onChange={this.handleChange}
-                                    value={this.props.joinCode}
+                                    value={this.props.group.joinCode}
                                     margin="normal"
                                     variant="outlined"
                                     InputProps={{
