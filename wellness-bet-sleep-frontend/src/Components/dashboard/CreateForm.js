@@ -302,9 +302,5 @@ const mapStateToProps = state => {
         userId: state.auth.user
     }
 }
-    
-
-
-
 
 export default  connect(mapStateToProps, {})(withStyles(styles)(CreateForm));

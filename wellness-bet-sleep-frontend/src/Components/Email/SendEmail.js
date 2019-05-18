@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "../../axios-sleep";
 
+import { connect } from 'react-redux';
+
 
 class SendEmail extends Component {
   state = {
@@ -9,6 +11,9 @@ class SendEmail extends Component {
       sender: "",
       subject: "",
       text: "",
+      fbGroupId:"",
+      userId: "",
+      groupId: ""
       
     }
   };
@@ -18,7 +23,7 @@ class SendEmail extends Component {
     axios.get(
       `/api/joinLink/?recipient=${email.recipient}&sender=${
         email.sender
-      }&topic=${email.subject}&text=${email.text}`
+      }&topic=${email.subject}&text=${email.text}&fbGroupId=${email.text}`
     ).catch(err => console.log(err));
   };
   render() {
@@ -79,4 +84,16 @@ class SendEmail extends Component {
   }
 }
 
+// 
+
+// const mapStateToProps = state => {  
+//   return {
+//     fbGroupId: state.auth.group,
+//     userId: state.auth.group,
+//     groupId: state.auth.group,
+//   }
+// }
+
 export default SendEmail;
+
+// export default connect(mapStateToProps, {})(SendEmail));
