@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/';
 import { Route } from 'react-router-dom';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
 
 import Navbar from './NavBar';
 
@@ -98,5 +99,12 @@ class Dashboard extends Component {
         }       
       }
 
+      const mapStateToProps = state => {
+        console.log("user iddash", state)
+        return {
+          userId: state.user
+        }
+      }      
+
       
-export default withStyles(styles)(Dashboard);
+export default connect(mapStateToProps)(withStyles(styles)(Dashboard));

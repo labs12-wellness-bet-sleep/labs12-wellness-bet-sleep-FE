@@ -11,7 +11,7 @@ export const initOAuth = user => dispatch =>  {
     axios
         .get(`/api/users`)
         .then(res => {
-            // console.log(res.data, 'inside fetch')
+            console.log(res, 'inside fetch')
             const payload = {
                 usersData: {
                     ...user,
@@ -42,7 +42,7 @@ export const getProfile = id => dispatch =>  {
     axios
         .get(`/api/users/${id}`)
         .then(res => {
-            console.log(res.data, 'inside fetch')
+            console.log(res, 'inside fetch')
             const payload = {
                 usersData: {
                     
