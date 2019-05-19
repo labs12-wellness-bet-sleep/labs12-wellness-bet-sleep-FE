@@ -76,6 +76,7 @@ class Dashboard extends Component {
 
     render() {
         const { classes } = this.props;
+        console.log("groups array dashboard", this.state.groups)
         return (
             <div className={classes.root}>
 
