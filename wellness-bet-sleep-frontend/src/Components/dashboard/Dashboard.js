@@ -3,9 +3,8 @@ import { withStyles } from '@material-ui/core/';
 
 import { Route } from 'react-router-dom';
 import axios from 'axios';
+
 import { connect } from 'react-redux';
-
-
 
 import Navbar from './NavBar';
 
@@ -91,7 +90,6 @@ class Dashboard extends Component {
                   groups={this.state.groups}
                   />
                  )}
-
                  /> */}
   
 

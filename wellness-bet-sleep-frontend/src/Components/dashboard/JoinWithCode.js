@@ -49,7 +49,9 @@ const styles = theme => ({
         color: '#008BC9',
     }
 
-});
+})
+
+
 
 
 class JoinWithCode extends React.Component {

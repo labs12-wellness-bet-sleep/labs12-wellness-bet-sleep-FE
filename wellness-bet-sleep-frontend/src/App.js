@@ -1,4 +1,3 @@
-    
 import React, { Component } from 'react';
 import { Route, NavLink } from "react-router-dom";
 import { connect } from 'react-redux'
@@ -77,7 +76,13 @@ class App extends Component {
         <Route exact path={'/register'} component={Register} />
         <Route exact path='/groups' component={GroupPage} />
         <Route exact path='/email' component={SendEmail} />
-        <Route path={'/groupDashboard'} component={GroupDashboard} />     
+        <Route path={'/groupDashboard'} component={GroupDashboard} />
+
+
+
+
+        
+      
 
 
         {/* <Route exact path={'/'} component={Home}/> 
@@ -92,6 +97,8 @@ class App extends Component {
         {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
         {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
+
+
 
         <Route
           path="/user/:id"
@@ -122,6 +129,7 @@ const mapDispatchToProps = dispatch => {
     emailLogin: (user) => dispatch(actions.auth.login(user)),
   }
 }
+
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
