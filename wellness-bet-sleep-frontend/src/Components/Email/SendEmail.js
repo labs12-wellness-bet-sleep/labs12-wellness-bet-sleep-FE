@@ -11,9 +11,9 @@ class SendEmail extends Component {
       sender: "",
       subject: "",
       text: "",
-      fbGroupId:"",
-      userId: "",
-      groupId: ""
+      // fbGroupId:"",
+      // userId: "",
+      // groupId: ""
       
     }
   };

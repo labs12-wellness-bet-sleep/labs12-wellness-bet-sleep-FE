@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 
 import uuid from 'uuid';
 
-
-
-
 const styles = theme => ({
     newgroup: {
         display: 'flex',
@@ -328,5 +325,9 @@ const mapStateToProps = state => {
         userId: state.auth.user
     }
 }
+    
+
+
+
 
 export default  connect(mapStateToProps)(withStyles(styles)(CreateForm));
