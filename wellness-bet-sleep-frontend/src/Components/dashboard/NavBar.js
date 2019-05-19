@@ -135,6 +135,7 @@ class GroupsNav extends React.Component {
  
   logout = () => {
     // localStorage.removeItem('token');
+    localStorage.clear();
     auth.signOut()
     this.props.history.push('/')
     console.log('log out')
@@ -160,19 +161,19 @@ class GroupsNav extends React.Component {
               headers: { 'Authorization': token }
             })
               .then(res => {
-                console.log('res', res)
+                console.log('res inside navbar', res.data.newGroup.joinCode)
                 this.setState({
                   group: res.data.newGroup
                 })
               })
-            this.props.history.push("/user/:id/create")
+            this.props.history.push(`/user/create/${userfirebase_id}`)
             updateAnchorEl(null)
           }
           const handleClose = () => {
             updateAnchorEl(null)
           }
           const routeHandlerJoin = () => {
-            this.props.history.push("/user/:id/join")
+            this.props.history.push(`/user/join/${localStorage.getItem('fb_id')}`)
             updateAnchorEl(null)
           }
           return (
@@ -242,9 +243,9 @@ class GroupsNav extends React.Component {
                   </Card>
                 </div> : null
               }
-              <Route path="/user/:id/join" component={JoinWithCode} />
+              <Route path="/user/join" component={JoinWithCode} />
               <Route
-              path="/user/:id/create"
+              path="/user/create"
               render={(props)=>(
               <CreateForm
               {...props}

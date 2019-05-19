@@ -46,18 +46,32 @@ const styles = theme => ({
 
 
 class CreateForm extends React.Component {
-    state = {
-        userId: null,
-        groupName: '',
-        joinCode: '',
-        startDate: null,
-        endDate: null,
-        buyInAmt: null,
-        groupMessage: null,
-        potTotal: null,
-        groupPhoto: null
+    constructor(props) {
+        super(props)
+        this.state = {
+            userId: null,
+            groupName: '',
+            joinCode: '',
+            startDate: null,
+            endDate: null,
+            buyInAmt: null,
+            groupMessage: null,
+            potTotal: null,
+            groupPhoto: null
+        }
     }
+    
 
+
+    // componentDidMount() {
+    //    axios.get(`http://localhost:8080/api/groups/${this.props.group.userfirebase_id}`)
+    //         .then(res => {
+    //             console.log("get group", res)
+    //         })
+    //         .catch(err => {
+    //             console.log("err createform", err)
+    //         })
+    // }
 
     handleChange = event => {
         this.setState({
@@ -76,8 +90,7 @@ class CreateForm extends React.Component {
         return null;
     }
 
-    createGroup = (e) => {
-        e.preventDefault();
+    createGroup = () => {
         // console.log("id from createform",this.props.userId.id)
         // localStorage.setItem('userId', this.props.userId.id)
         const startDate = this.state.startDate
@@ -106,12 +119,14 @@ class CreateForm extends React.Component {
              .catch(err => {
                  console.log("err", err)
              })
-             this.props.history.push("/user/:id")
+             this.props.history.push(`/user/${this.props.group.userfirebase_id}`)
     }
 
 
     render() {
         const { classes } = this.props;
+        console.log("user id in createform", this.props.userId)
+        console.log("joincode", this.props.group)
         return (
             <div style={{ maxWidth: '100%', margin: '0 auto' }}>
                 <div style={{ display: 'flex', width: '38%', height: '500px', margin: '0 auto' }}>

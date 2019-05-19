@@ -25,44 +25,45 @@ import GroupPage from './Components/group/GroupPage';
 
 
 class App extends Component {
- 
-  componentDidMount = () => {
-    
-      auth.onAuthStateChanged((user) => {
-        console.log(user, 'in auth listener')
-        if(user) {
-         const { uid, ra, email } = user;
-         localStorage.setItem('token', ra)
-          if (user.email) {
-            const { email } = user;
-            this.props.oAuth({firebase_id: uid, email, token: ra})
-          }
 
-          // this.props.emailLogin(user)
-        } 
-        else {
-          this.setState({
-            users: null
-          })
+  componentDidMount = () => {
+
+    auth.onAuthStateChanged((user) => {
+      console.log(user, 'in auth listener')
+      if (user) {
+        const { uid, ra, email } = user;
+        localStorage.setItem('token', ra)
+        if (user.email) {
+          const { email } = user;
+          this.props.oAuth({ firebase_id: uid, email, token: ra })
         }
-      })
-    
+
+        // this.props.emailLogin(user)
+      }
+      else {
+        this.setState({
+          users: null
+        })
+      }
+    })
+
   }
 
 
-   logout = () => {
+  logout = () => {
     // localStorage.removeItem('token');
     auth.signOut()
     this.props.history.push('/')
-    console.log('log out') }
-  render () {
+    console.log('log out')
+  }
+  render() {
     // console.log( this.props.users)
-  return (
-    <div className="App">
-      <NavLink to="/groups"> Group Page </NavLink>
-      <NavLink to="/email"> Email </NavLink>
-      <Route
-          exact path ='/login'
+    return (
+      <div className="App">
+        <NavLink to="/groups"> Group Page </NavLink>
+        <NavLink to="/email"> Email </NavLink>
+        <Route
+          exact path='/login'
           render={props =>
             <Login
               {...props}
@@ -70,45 +71,43 @@ class App extends Component {
           }
         />
 
-      <Route path="/dashboard" render={props => <Dashboard {...props} />} />
-      <Route exact path ='/' render={props => <Home {...props} /> } />
-      <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
-      <Route exact path={'/register'} component={Register}/>
-      <Route exact path='/groups' component={GroupPage}/>
-      <Route exact path='/email' component={SendEmail}/>
-      <Route path={'/groupDashboard'} component={GroupDashboard}/>
+        <Route path="/dashboard" render={props => <Dashboard {...props} />} />
+        <Route exact path='/' render={props => <Home {...props} />} />
+        <Route exact path={'/users'} render={props => <Users {...props} />} />
+        <Route exact path={'/register'} component={Register} />
+        <Route exact path='/groups' component={GroupPage} />
+        <Route exact path='/email' component={SendEmail} />
+        <Route path={'/groupDashboard'} component={GroupDashboard} />     
 
 
-      {/* <Route exact path={'/'} component={Home}/> 
+        {/* <Route exact path={'/'} component={Home}/> 
       <Route exact path ='/' render={props => <Home {...props} /> } />
       <Route exact path={'/users'} render={ props => <Users {...props}/>}/> 
       {/* <Route exact path='/login'/> */}
-      {/* <Route exact path={'/login'} component={Login}/> */}
-      {/* <Route exact path={'/register'} component={Register}/>
+        {/* <Route exact path={'/login'} component={Login}/> */}
+        {/* <Route exact path={'/register'} component={Register}/>
       <Route exact path='/groups' component={GroupPage}/>
       <Route exact path='/email' component={SendEmail}/> */}
-      
-      {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
-      {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
+        {/* {this.state.users ? (<Users/>) : (<Login/>)} */}
 
+        {/* <Route path={'/groupDashboard'} component={GroupDashboard}/> */}
 
-
-      <Route
-       path="/user/:id"
-       render={(props)=>(
-        <Dashboard
-        {...props}
-        logout={this.logout}
-         />
-      )}
-      />
-      {/* <Route path="/dashboard/join" component={JoinWithCode}/>
+        <Route
+          path="/user/:id"
+          render={(props) => (
+            <Dashboard
+              {...props}
+              logout={this.logout}
+            />
+          )}
+        />
+        {/* <Route path="/dashboard/join" component={JoinWithCode}/>
       <Route path="/dashboard/create" component={CreateForm} /> */}
 
-    </div>
-  )
-}
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = state => {
@@ -119,11 +118,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    oAuth: user  => dispatch(actions.auth.initOAuth(user)),
+    oAuth: user => dispatch(actions.auth.initOAuth(user)),
     emailLogin: (user) => dispatch(actions.auth.login(user)),
   }
 }
 
 
-
-export default connect(mapStateToProps, mapDispatchToProps )(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
