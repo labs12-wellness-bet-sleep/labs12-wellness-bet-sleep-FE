@@ -2,7 +2,8 @@ import React from 'react';
 import { withStyles, Typography, TextField, Button } from '@material-ui/core';
 import axios from 'axios';
 import { connect } from 'react-redux';
- 
+
+import uuid from 'uuid';
 
 
 
@@ -51,12 +52,13 @@ class CreateForm extends React.Component {
     state = {
         userId: null,
         groupName: '',
-        // joinCode: '',
-        startDate: '',
-        endDate: '',
+        joinCode: '',
+        startDate: null,
+        endDate: null,
         buyInAmt: null,
-        photoFile: '',
-        groupMessage: ''
+        groupMessage: null,
+        potTotal: null,
+        groupPhoto: null
     }
 
 
@@ -66,24 +68,48 @@ class CreateForm extends React.Component {
         });
     };
 
-    createGroup = () => {
-        const addGroup = {
-            userId: this.props.userId.id,
-            groupName: this.state.groupName,
-            // joinCode,
-            startDate: this.state.startDate,
-            endDate: this.state.endDate,
-            buyInAmt: this.state.buyIn,
-            groupMessage: this.state.groupMessage
+    onChange = event => {
+        
+        const parsedInt = parseInt(event.target.value)
+        if (parsedInt) {
+            this.setState({
+                [event.target.name]: parsedInt
+            })
         }
-        console.log(addGroup)
-        axios.post(`http://localhost:8080/api/groups/create`, addGroup)
+        return null;
+    }
+
+    createGroup = (e) => {
+        e.preventDefault();
+        // console.log("id from createform",this.props.userId.id)
+        // localStorage.setItem('userId', this.props.userId.id)
+        const startDate = this.state.startDate
+        const endDate = this.state.endDate
+        const newStartDate = new Date(startDate)
+        const newEndDate = new Date(endDate)
+        const token = localStorage.getItem('token')
+        const id = this.props.group.id
+        const addGroup = {
+            id: id,
+            groupName: this.state.groupName,
+            buyInAmt: this.state.buyInAmt,
+            startDate: newStartDate,
+            endDate: newEndDate,
+            groupMessage: this.state.groupMessage,
+            userfirebase_id: this.props.group.userfirebase_id
+        }
+        console.log('addgroup', addGroup)
+        axios.put(`http://localhost:8080/api/groups/${id}`,(id, addGroup), {
+            "Content-Type": "application/json",
+            headers: { 'Authorization': token }
+            })
              .then(res => {
                  console.log("res", res)
              })
              .catch(err => {
                  console.log("err", err)
              })
+             this.props.history.push("/user/:id")
     }
 
 
@@ -130,7 +156,7 @@ class CreateForm extends React.Component {
                                     name="joinCode"
                                     className={classes.textField}
                                     onChange={this.handleChange}
-                                    value={this.state.joinCode}
+                                    value={this.props.group.joinCode}
                                     margin="normal"
                                     variant="outlined"
                                     InputProps={{
@@ -203,11 +229,11 @@ class CreateForm extends React.Component {
                                 <TextField
                                     id="outlined-name"
                                     label="Buy In Amount $"
-                                    name="buyIn"
+                                    name="buyInAmt"
                                     type="number"
                                     className={classes.textField}
-                                    onChange={this.handleChange}
-                                    value={this.state.buyIn}
+                                    onChange={this.onChange}
+                                    value={this.state.buyInAmt}
                                     margin="normal"
                                     variant="outlined"
                                     InputProps={{
@@ -303,4 +329,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default  connect(mapStateToProps, {})(withStyles(styles)(CreateForm));
+export default  connect(mapStateToProps)(withStyles(styles)(CreateForm));

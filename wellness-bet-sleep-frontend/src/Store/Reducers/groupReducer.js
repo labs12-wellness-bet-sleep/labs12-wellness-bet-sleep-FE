@@ -5,6 +5,7 @@ const initialState = {
   addGroup: false,
   groups: [],
   groupId: null,
+  joinCode: null,
   fetching: false,
   errors: null
 };
@@ -53,6 +54,27 @@ export default (state = initialState, action) => {
         fetching: false,
         error: action.payload
       };
+
+    case groupTypes.CREATE_JOIN_CODE_START:
+      return {
+        ...state,
+        fetching: true,
+        errors: null
+      }
+    
+    case groupTypes.CREATE_JOIN_CODE_SUCCESS:
+      return {
+        ...state,
+        fetching: false,
+        joinCode: action.payload
+      }
+    
+      case groupTypes.CREATE_JOIN_CODE_FAIL:
+        return {
+          ...state,
+          fetching: false,
+          errors: action.payload
+        }
 
     default:
       return state;

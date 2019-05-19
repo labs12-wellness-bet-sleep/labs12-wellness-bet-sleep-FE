@@ -7,6 +7,8 @@ import { getProfile } from './../../Store/Actions/auth';
 class Profile extends Component {
     logout = () => {
         // localStorage.removeItem('token');
+        localStorage.removeItem("token");
+        localStorage.removeItem("fb_id");
         auth.signOut()
         this.props.history.push('/')
         console.log('log out')

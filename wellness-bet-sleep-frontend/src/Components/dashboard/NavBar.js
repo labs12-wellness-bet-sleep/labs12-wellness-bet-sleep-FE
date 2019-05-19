@@ -13,48 +13,50 @@ import {
   ListItemText,
   Typography,
   Divider,
-  Button,
-  Card,
-  CardActionArea,
-  CardMedia
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import { Route } from "react-router-dom";
-import toRenderProps from "recompose/toRenderProps";
-import withState from "recompose/withState";
+  Button, Card, CardActionArea, CardMedia
+} from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add';
+import { Route } from 'react-router-dom';
+import toRenderProps from 'recompose/toRenderProps';
+import withState from 'recompose/withState';
 
-import JoinWithCode from "./JoinWithCode";
-import CreateForm from "./CreateForm";
-import { renderComponent } from "recompose";
+import JoinWithCode from './JoinWithCode';
+import CreateForm from './CreateForm';
+import { renderComponent } from 'recompose';
 
-import { connect } from "react-redux";
-import { getGroups } from "../../Store/Actions/group-actions";
+import { connect } from 'react-redux';
+import { createJoinCode } from '../../Store/Actions/group-actions';
+import continuousSizeLegend from 'react-vis/dist/legends/continuous-size-legend';
+import axios from 'axios';
+
+
+
 
 const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
-    display: "flex",
-    margin: "0 auto",
-    marginLeft: "400px"
+    display: 'flex',
+    margin: '0 auto',
+    marginLeft: '400px'
   },
   appBar: {
     marginLeft: drawerWidth,
-    backgroundColor: "#E5F3F9",
-    zIndex: theme.zIndex.drawer + 1
+    backgroundColor: '#E5F3F9',
+    zIndex: theme.zIndex.drawer + 1,
   },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0
+    flexShrink: 0,
   },
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
   },
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing.unit * 3,
   },
   listitem: {
     borderBottom: "solid",
@@ -66,45 +68,48 @@ const styles = theme => ({
   },
   text: {
     color: "#008BC9",
-    fontWeight: "500"
+    fontWeight: '500'
   },
   fitgirl: {
-    marginTop: "350px"
+    marginTop: '350px'
   },
   welcome: {
-    width: "200px",
-    textAlign: "center",
-    flexWrap: "wrap",
-    fontSize: "24px",
-    margin: "0 auto",
-    marginTop: "-100px",
-    marginBottom: "50px",
-    fontWeight: "bold",
-    color: "#249BD1"
+    width: '200px',
+    textAlign: 'center',
+    flexWrap: 'wrap',
+    fontSize: '24px',
+    margin: '0 auto',
+    marginTop: '-100px',
+    marginBottom: '50px',
+    fontWeight: 'bold',
+    color: '#249BD1',
   },
   createMess: {
-    width: "215px",
-    margin: "0 auto",
-    lineHeight: "2",
-    textAlign: "center",
-    marginTop: "-40px",
-    fontSize: "16px",
-    color: "#249BD1",
-    marginBottom: "15px"
+    width: '215px',
+    margin: '0 auto',
+    lineHeight: '2',
+    textAlign: 'center',
+    marginTop: '-40px',
+    fontSize: '16px',
+    color: '#249BD1',
+    marginBottom: '15px'
   },
 
   card: {
     maxWidth: "100%",
     height: 440,
-    margin: "0 auto",
-    boxShadow: "none"
+    margin: '0 auto',
+    boxShadow: 'none'
   }
+
 });
 
+
 const addicon = {
+
   fontSize: "18px",
   flexGrow: 1
-};
+}
 
 const button = {
   color: "#008BC9",
@@ -115,11 +120,17 @@ const button = {
   borderColor: "#008BC9",
   left: "75px",
   marginBottom: "5px"
-};
 
-const WithState = toRenderProps(withState("anchorEl", "updateAnchorEl", null));
+}
+
+const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
+
 
 class GroupsNav extends React.Component {
+  state = {
+    group: []
+  }
+
   
  
   logout = () => {
@@ -131,149 +142,134 @@ class GroupsNav extends React.Component {
 
 
   render() {
+
     const { classes } = this.props;
-    console.log(this.props.groups);
+    console.log('group', this.state.group)
     return (
       <WithState>
         {({ anchorEl, updateAnchorEl }) => {
           const open = Boolean(anchorEl);
           const routeHandler = () => {
-            this.props.history.push("/dashboard/nav/create");
-            updateAnchorEl(null);
-          };
+            const userfirebase_id = localStorage.getItem('fb_id')
+            const token = localStorage.getItem('token')
+            const id = {
+              userfirebase_id: userfirebase_id
+            }
+            axios.post(`http://localhost:8080/api/groups/invite`, {...id}, {
+              "Content-Type": "application/json",
+              headers: { 'Authorization': token }
+            })
+              .then(res => {
+                console.log('res', res)
+                this.setState({
+                  group: res.data.newGroup
+                })
+              })
+            this.props.history.push("/user/:id/create")
+            updateAnchorEl(null)
+          }
           const handleClose = () => {
-            updateAnchorEl(null);
-          };
+            updateAnchorEl(null)
+          }
           const routeHandlerJoin = () => {
-            this.props.history.push("/dashboard/nav/join");
-            updateAnchorEl(null);
-          };
+            this.props.history.push("/user/:id/join")
+            updateAnchorEl(null)
+          }
           return (
             <div className={classes.root}>
               <CssBaseline />
               <AppBar position="fixed" className={classes.appBar}>
               <button onClick={this.logout}>Logout</button>
                 <Toolbar>
-                  <Typography
-                    variant="h6"
-                    style={{ color: "#229BD0" }}
-                    noWrap
-                  />
+                  <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
+
+                  </Typography>
                 </Toolbar>
               </AppBar>
               <Drawer
                 className={classes.drawer}
                 variant="permanent"
                 classes={{
-                  paper: classes.drawerPaper
+                  paper: classes.drawerPaper,
                 }}
                 anchor="left"
               >
-                <ListItem button style={{ backgroundColor: "#CEE8F3" }}>
-                  <ListItemText
-                    style={{
-                      display: "flex",
-                      color: "#229BD0",
-                      marginTop: "65px"
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      style={{
-                        display: "inline",
-                        fontWeight: "bold",
-                        color: "#229BD0",
-                        textAlign: "center",
-                        alignContent: "flex-end"
-                      }}
-                      noWrap
-                    >
+                <ListItem button style={{ backgroundColor: '#CEE8F3' }}>
+                  <ListItemText style={{ display: 'flex', color: '#229BD0', marginTop: '65px' }}>
+                    <Typography variant="h6" style={{ display: 'inline', fontWeight: 'bold', color: '#229BD0', textAlign: 'center', alignContent: 'flex-end' }} noWrap>
                       My Groups
-                    </Typography>
+                  </Typography>
                     <Button
-                      aria-owns={open ? "render-props-menu" : undefined}
+                      aria-owns={open ? 'render-props-menu' : undefined}
                       aria-haspopup="true"
                       onClick={event => {
                         updateAnchorEl(event.currentTarget);
                       }}
                       variant="fab"
                       style={button}
-                      mini
-                    >
+                      mini>
                       <AddIcon style={addicon} />
                     </Button>
-                    <Menu
-                      style={{
-                        borderRadius: "10px",
-                        marginLeft: 15,
-                        marginTop: 35
-                      }}
-                      id="render-props-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem
-                        style={{
-                          color: "#70BEE1",
-                          fontWeight: "bold",
-                          borderBottom: "solid",
-                          borderWidth: "thin",
-                          borderColor: "#70BEE1"
-                        }}
-                        onClick={routeHandler}
-                      >
-                        Create Group
-                      </MenuItem>
-                      <MenuItem
-                        style={{ color: "#70BEE1", fontWeight: "bold" }}
-                        onClick={routeHandlerJoin}
-                      >
-                        Join Group
-                      </MenuItem>
+                    <Menu style={{ borderRadius: '10px', marginLeft: 15, marginTop: 35 }} id="render-props-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+                      <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold', borderBottom: 'solid', borderWidth: 'thin', borderColor: '#70BEE1' }} onClick={routeHandler}>Create Group</MenuItem>
+                      <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold' }} onClick={routeHandlerJoin}>Join Group</MenuItem>
                     </Menu>
                   </ListItemText>
                 </ListItem>
                 <div className={classes.toolbar} />
-                {this.props.groups.map(group => (
-                  <ListItem key={group.id} className={classes.listitem} button>
-                    <ListItemText
-                      key={group.id}
-                      classes={{ primary: this.props.classes.text }}
-                      primary={group.groupName}
-                    />
+                {this.props.groups.map((group) =>
+                  <ListItem key={group.id} className={classes.listitem} button >
+                    <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
+
                   </ListItem>
-                ))}
+                )}
+
               </Drawer>
-              {!this.props.groups ? (
+              {!this.props.groups ?
                 <div className={classes.fitgirl}>
                   <Typography className={classes.welcome}>
                     Welcome To Wellness Tracker
-                  </Typography>
+              </Typography>
                   <Typography className={classes.createMess}>
                     Create a new group or join an existing one with a join code
-                  </Typography>
+              </Typography>
                   <Card className={classes.card}>
                     <CardMedia
-                      style={{
-                        paddingTop: "56.25%",
-                        width: "600px",
-                        height: 440
-                      }}
-                      image={require("../../assets/images/fitgirl.png")}
+                      style={{ paddingTop: '56.25%', width: '600px', height: 440 }}
+                      image={require('../../assets/images/fitgirl.png')}
                       title="Contemplative Reptile"
                     />
                   </Card>
-                </div>
-              ) : null}
-              <Route path="/dashboard/nav/join" component={JoinWithCode} />
-              <Route path="/dashboard/nav/create" component={CreateForm} />
+                </div> : null
+              }
+              <Route path="/user/:id/join" component={JoinWithCode} />
+              <Route
+              path="/user/:id/create"
+              render={(props)=>(
+              <CreateForm
+              {...props}
+              group={this.state.group}
+              />
+              )}
+              />
             </div>
-          );
+
+          )
         }}
       </WithState>
-    );
+    )
+  }
+
+}
+
+const mapStateToProps = state => {
+  console.log("user id", state)
+  return {
+    userId: state.auth.user
   }
 }
 
-export default withStyles(styles)(GroupsNav);
+
+export default connect(mapStateToProps, {
+  createJoinCode,
+})(withStyles(styles)(GroupsNav));

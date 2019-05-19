@@ -1,5 +1,6 @@
 import axios from "../../axios-sleep";
 import { groupTypes } from "./actionTypes";
+import axisUtils from "react-vis/dist/utils/axis-utils";
 
 export const getGroups = () => dispatch => {
   dispatch({ type: groupTypes.FETCH_GROUPS_START });
@@ -86,3 +87,28 @@ export const deleteGroup = id => dispatch => {
       });
     });
 };
+
+export const createJoinCode = id => dispatch => {
+  console.log('id action', id)
+  dispatch({
+    type: groupTypes.CREATE_JOIN_CODE_START
+  });
+  axios
+    .post(`/api/groups/invite`, id, {
+      "Content-Type": "application/json",
+      headers: { authorization: localStorage.getItem("token") }
+    })
+    .then(res => {
+      console.log('res createjoin', res)
+      dispatch({
+        type: groupTypes.CREATE_JOIN_CODE_SUCCESS,
+        payload: res
+      })
+    })
+    .catch(err => {
+      dispatch({
+        type: groupTypes.CREATE_JOIN_CODE_FAIL,
+        payload: err
+      })
+    })
+}
