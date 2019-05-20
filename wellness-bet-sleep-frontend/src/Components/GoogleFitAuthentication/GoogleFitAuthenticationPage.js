@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import axios from '../../axios-sleep.js';
 import actions from '../../Store/Actions';
 
 class GoogleFitAuthenticationPage extends Component {
@@ -16,12 +16,12 @@ class GoogleFitAuthenticationPage extends Component {
             hideRevokeButton: true
         }
 
-        
+       
     }
 
     componentDidMount() {
         console.log("GAPI: ", window.gapi);
-        window.gapi.load('client:auth2', this.initClient);
+         window.gapi.load('client:auth2', this.initClient);
     }
 
     // loadGoogleAPI() {
@@ -81,30 +81,41 @@ class GoogleFitAuthenticationPage extends Component {
                 loginStatus: "You have offically connected your Google Fitness app to our Wellness Bet App",
                 hideRevokeButton: false});
 
-                axios.get("https://www.googleapis.com/fitness/v1/users/me/sessions/", {headers: `Bearer  ${participant.GoogleFitAuthCode}`})
+                console.log("Access Token ", this.state.GoogleAuth.j8.currentUser.Ab.Zi.access_token);
+
+                axios.get("https://www.googleapis.com/fitness/v1/users/me/sessions/", {headers: {'Authorization': `Bearer  ${this.state.GoogleAuth.j8.currentUser.Ab.Zi.access_token}`}})
                 .then(response => {
                         console.log("Response from google API", response);
                         console.log("Check out this set of sessions!",  response.data.session);
 
-                        let sleep_sessions = response.data.sessions;
-                        sleep_sessions = JSON.stringify(sleep_sessions);
+                        let sleep_sessions = response.data.session;
 
                         // axios.put(`/api/participant/${this.props.user.id}`, {"SleepData": sleep_sessions})
                         //                 .then(response => console.log(response))
                         //                 .catch(err => console.log(err));
 
-                        axios.put(`/api/users/${this.props.user.id}`, {"SleepData": sleep_sessions})
+                        let sleep_sessions_json = {};
+                        for (var i = 0; i < sleep_sessions.length; i++) {
+                            sleep_sessions_json[i] = sleep_sessions[i];
+                        }
+
+                         sleep_sessions_json = JSON.stringify(sleep_sessions_json);
+
+                         console.log("Sleep sessions JSON ", sleep_sessions_json);
+                        
+                        console.log("Token ", this.props.user.token);
+                        axios.put(`/api/users/${this.props.user.firebase_id}`, {"SleepData": sleep_sessions_json})
                             .then(response => console.log(response))
                             .catch(err => console.log(err));
                                         
                                         
-                        this.props.history.push(`/dashboard/TestUserDashboard`);
+                        
 
                 })
                 .catch(err => console.log("Check out this error!", err));
 
                 
-               
+               this.props.history.push(`/dashboard/TestUserDashboard`);
 
                 
             } else {
