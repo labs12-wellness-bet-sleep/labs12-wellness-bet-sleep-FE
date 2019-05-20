@@ -73,7 +73,7 @@ class App extends Component {
           }
         />
 
-        <Route path="/dashboard" render={props => <Dashboard {...props} />} />
+    
         <Route exact path='/' render={props => <Home {...props} />} />
         <Route exact path={'/users'} render={props => <Users {...props} />} />
         <Route exact path={'/register'} component={Register} />
@@ -82,9 +82,7 @@ class App extends Component {
         <Route path={'/groupDashboard'} component={GroupDashboard} />
 
 
-
-
-        
+     
       
 
 
@@ -121,7 +119,9 @@ class App extends Component {
       <Route path="/dashboard/create" component={CreateForm} />
       <Route path="/dashboard/GoogleFitAuthentication" render={props => <GoogleFitAuthenticationPage {...props}/>} />
       <Route path="/dashboard/TestUserDashboard" render={props => <TestUserDashboard {...props}/>}/>
-      <Route
+     
+
+        <Route
           path="/user/:id"
           render={(props) => (
             <Dashboard
@@ -138,6 +138,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log('appjs', state)
   return {
     user: state.auth.user
   }

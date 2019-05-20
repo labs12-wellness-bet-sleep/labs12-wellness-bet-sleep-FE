@@ -30,8 +30,6 @@ export default (state = initialState, actions) => {
                 loading: true
             }
         case authTypes.REGISTER_SUCCESS:
-        console.log(actions.payload, 'register success data')
-        console.log("fb id", actions.payload.firebase_id)
         localStorage.setItem('fb_id', actions.payload.firebase_id)
             return {
                 ...state,
@@ -49,7 +47,8 @@ export default (state = initialState, actions) => {
                 ...state,
                 loading: true
             }
-        case authTypes.LOGIN_SUCCESS: 
+        case authTypes.LOGIN_SUCCESS:
+            localStorage.setItem('fb_id', actions.payload.user.firebase_id) 
             return {
                 ...state,
                 loading: false,
