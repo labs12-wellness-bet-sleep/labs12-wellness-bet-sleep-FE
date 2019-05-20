@@ -12,8 +12,10 @@
     "axios": "^0.18.0",
     "babel-jest": "24.7.1",
     "classnames": "^2.2.6",
+    "compose": "^0.1.2",
     "d3": "^5.9.2",
     "firebase": "^5.11.0",
+    "logger": "^0.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -24,8 +26,8 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^4.2.0"
-    
+    "styled-components": "^4.2.0",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

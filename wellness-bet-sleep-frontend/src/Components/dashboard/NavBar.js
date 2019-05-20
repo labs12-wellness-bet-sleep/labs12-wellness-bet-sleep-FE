@@ -1,4 +1,5 @@
 import React from 'react';
+import { auth } from '../../FirebaseConfig';
 import {
   withStyles,
   Menu,
@@ -15,11 +16,18 @@ import {
   Button, Card, CardActionArea, CardMedia
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
-import { Route }from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import toRenderProps from 'recompose/toRenderProps';
 import withState from 'recompose/withState';
 
 import JoinWithCode from './JoinWithCode';
+import CreateForm from './CreateForm';
+import { renderComponent } from 'recompose';
+
+import { connect } from 'react-redux';
+import { createJoinCode } from '../../Store/Actions/group-actions';
+import continuousSizeLegend from 'react-vis/dist/legends/continuous-size-legend';
+import axios from 'axios';
 
 
 
@@ -29,6 +37,8 @@ const drawerWidth = 240;
 const styles = theme => ({
   root: {
     display: 'flex',
+    margin: '0 auto',
+    marginLeft: '400px'
   },
   appBar: {
     marginLeft: drawerWidth,
@@ -61,8 +71,7 @@ const styles = theme => ({
     fontWeight: '500'
   },
   fitgirl: {
-    marginLeft: '450px',
-    marginTop: '440px'
+    marginTop: '350px'
   },
   welcome: {
     width: '200px',
@@ -88,11 +97,11 @@ const styles = theme => ({
 
   card: {
     maxWidth: "100%",
-    height: 440, 
+    height: 440,
     margin: '0 auto',
     boxShadow: 'none'
   }
-    
+
 });
 
 
@@ -117,88 +126,151 @@ const button = {
 const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 
-function GroupsNav(props) {
-  const { classes } = props;
-  return (
-    <WithState>
-      {({ anchorEl, updateAnchorEl }) => {
-        const open = Boolean(anchorEl);
-        const handleClose = () => {
-          updateAnchorEl(null);
-        };
-        return (
-          <div className={classes.root}>
-            <CssBaseline />
-            <AppBar position="fixed" className={classes.appBar}>
-              <Toolbar>
-                <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
+class GroupsNav extends React.Component {
+  state = {
+    group: []
+  }
 
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              className={classes.drawer}
-              variant="permanent"
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              anchor="left"
-            >
-              <ListItem button style={{ backgroundColor: '#CEE8F3' }}>
-                <ListItemText style={{ display: 'flex', color: '#229BD0', marginTop: '65px' }}>
-                  <Typography variant="h6" style={{ display: 'inline', fontWeight: 'bold', color: '#229BD0', textAlign: 'center', alignContent: 'flex-end' }} noWrap>
-                    My Groups
-                </Typography>
-                  <Button
-                    aria-owns={open ? 'render-props-menu' : undefined}
-                    aria-haspopup="true"
-                    onClick={event => {
-                      updateAnchorEl(event.currentTarget);
-                    }}
-                    variant="fab"
-                    style={button}
-                    mini>
-                    <AddIcon style={addicon} />
-                  </Button>
-                  <Menu style={{ borderRadius: '10px', marginLeft: 15, marginTop: 35 }} id="render-props-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
-                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold', borderBottom: 'solid', borderWidth: 'thin', borderColor: '#70BEE1' }} onClick={handleClose}>Create Group</MenuItem>
-                    <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold' }} onClick={handleClose}>Join Group</MenuItem>
-                  </Menu>
-                </ListItemText>
-              </ListItem>
-              <div className={classes.toolbar} />
-              {props.groups.map((group) =>
-                <ListItem key={group.id} className={classes.listitem} button >
-                  <ListItemText key={group.id} classes={{ primary: props.classes.text }} primary={group.groupName} />
-
-                </ListItem>
-              )}
-
-            </Drawer>
-            {!props.groups ?
-              <div className={classes.fitgirl}>
-            <Typography className={classes.welcome}>
-              Welcome To Wellness Tracker
-            </Typography>
-            <Typography className={classes.createMess}>
-              Create a new group or join an existing one with a join code
-            </Typography>
-              <Card className={classes.card}>
-                  <CardMedia
-                    style={{  paddingTop: '56.25%', width: '600px', height: 440 }}
-                    image={require('../../assets/images/fitgirl.png')}
-                    title="Contemplative Reptile"
-                  />
-              </Card>
-            </div> : null
-            }
-          </div>
-        )
-      }}
-    </WithState>
-  )
+  
+ 
+  logout = () => {
+    // localStorage.removeItem('token');
+    localStorage.clear();
+    auth.signOut()
+    this.props.history.push('/')
+    console.log('log out')
 }
 
 
+  render() {
 
-export default withStyles(styles)(GroupsNav);
+    const { classes } = this.props;
+    console.log('group', this.state.group)
+    return (
+      <WithState>
+        {({ anchorEl, updateAnchorEl }) => {
+          const open = Boolean(anchorEl);
+          const routeHandler = () => {
+            const userfirebase_id = localStorage.getItem('fb_id')
+            const token = localStorage.getItem('token')
+            const id = {
+              userfirebase_id: userfirebase_id
+            }
+            axios.post(`http://localhost:8080/api/groups/invite`, {...id}, {
+              "Content-Type": "application/json",
+              headers: { 'Authorization': token }
+            })
+              .then(res => {
+                console.log('res inside navbar', res.data.newGroup.joinCode)
+                this.setState({
+                  group: res.data.newGroup
+                })
+              })
+            this.props.history.push(`/user/create/${userfirebase_id}`)
+            updateAnchorEl(null)
+          }
+          const handleClose = () => {
+            updateAnchorEl(null)
+          }
+          const routeHandlerJoin = () => {
+            this.props.history.push(`/user/join/${localStorage.getItem('fb_id')}`)
+            updateAnchorEl(null)
+          }
+          return (
+            <div className={classes.root}>
+              <CssBaseline />
+              <AppBar position="fixed" className={classes.appBar}>
+              <button onClick={this.logout}>Logout</button>
+                <Toolbar>
+                  <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
+
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+              <Drawer
+                className={classes.drawer}
+                variant="permanent"
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                anchor="left"
+              >
+                <ListItem button style={{ backgroundColor: '#CEE8F3' }}>
+                  <ListItemText style={{ display: 'flex', color: '#229BD0', marginTop: '65px' }}>
+                    <Typography variant="h6" style={{ display: 'inline', fontWeight: 'bold', color: '#229BD0', textAlign: 'center', alignContent: 'flex-end' }} noWrap>
+                      My Groups
+                  </Typography>
+                    <Button
+                      aria-owns={open ? 'render-props-menu' : undefined}
+                      aria-haspopup="true"
+                      onClick={event => {
+                        updateAnchorEl(event.currentTarget);
+                      }}
+                      variant="fab"
+                      style={button}
+                      mini>
+                      <AddIcon style={addicon} />
+                    </Button>
+                    <Menu style={{ borderRadius: '10px', marginLeft: 15, marginTop: 35 }} id="render-props-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+                      <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold', borderBottom: 'solid', borderWidth: 'thin', borderColor: '#70BEE1' }} onClick={routeHandler}>Create Group</MenuItem>
+                      <MenuItem style={{ color: '#70BEE1', fontWeight: 'bold' }} onClick={routeHandlerJoin}>Join Group</MenuItem>
+                    </Menu>
+                  </ListItemText>
+                </ListItem>
+                <div className={classes.toolbar} />
+                {this.props.groups.map((group) =>
+                  <ListItem key={group.id} className={classes.listitem} button >
+                    <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
+
+                  </ListItem>
+                )}
+
+              </Drawer>
+              {!this.props.groups ?
+                <div className={classes.fitgirl}>
+                  <Typography className={classes.welcome}>
+                    Welcome To Wellness Tracker
+              </Typography>
+                  <Typography className={classes.createMess}>
+                    Create a new group or join an existing one with a join code
+              </Typography>
+                  <Card className={classes.card}>
+                    <CardMedia
+                      style={{ paddingTop: '56.25%', width: '600px', height: 440 }}
+                      image={require('../../assets/images/fitgirl.png')}
+                      title="Contemplative Reptile"
+                    />
+                  </Card>
+                </div> : null
+              }
+              <Route path="/user/join" component={JoinWithCode} />
+              <Route
+              path="/user/create"
+              render={(props)=>(
+              <CreateForm
+              {...props}
+              group={this.state.group}
+              />
+              )}
+              />
+            </div>
+
+          )
+        }}
+      </WithState>
+    )
+  }
+
+}
+
+const mapStateToProps = state => {
+  console.log("user id", state)
+  return {
+    userId: state.auth.user
+  }
+}
+
+
+export default connect(mapStateToProps, {
+  createJoinCode,
+})(withStyles(styles)(GroupsNav));

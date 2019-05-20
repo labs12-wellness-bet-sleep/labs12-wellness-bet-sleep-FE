@@ -1,5 +1,9 @@
 import React from 'react';
 import { withStyles, Typography, TextField, Button } from '@material-ui/core';
+import axios from 'axios';
+import { connect } from 'react-redux';
+
+import uuid from 'uuid';
 
 
 
@@ -18,7 +22,7 @@ const styles = theme => ({
         letterSpacing: '4px'
     },
     form: {
-        width: '38%',
+        width: '110%',
         height: '850px',
         margin: '0 auto',
         marginTop: '-240px',
@@ -45,15 +49,32 @@ const styles = theme => ({
 
 
 class CreateForm extends React.Component {
-    state = {
-        groupName: '',
-        joinCode: '',
-        startDate: '',
-        endDate: '',
-        buyIn: null,
-        photoFile: ''
+    constructor(props) {
+        super(props)
+        this.state = {
+            userId: null,
+            groupName: '',
+            joinCode: '',
+            startDate: null,
+            endDate: null,
+            buyInAmt: null,
+            groupMessage: null,
+            potTotal: null,
+            groupPhoto: null
+        }
     }
+    
 
+
+    // componentDidMount() {
+    //    axios.get(`http://localhost:8080/api/groups/${this.props.group.userfirebase_id}`)
+    //         .then(res => {
+    //             console.log("get group", res)
+    //         })
+    //         .catch(err => {
+    //             console.log("err createform", err)
+    //         })
+    // }
 
     handleChange = event => {
         this.setState({
@@ -61,9 +82,54 @@ class CreateForm extends React.Component {
         });
     };
 
+    onChange = event => {
+        
+        const parsedInt = parseInt(event.target.value)
+        if (parsedInt) {
+            this.setState({
+                [event.target.name]: parsedInt
+            })
+        }
+        return null;
+    }
+
+    createGroup = () => {
+        // console.log("id from createform",this.props.userId.id)
+        // localStorage.setItem('userId', this.props.userId.id)
+        const startDate = this.state.startDate
+        const endDate = this.state.endDate
+        const newStartDate = new Date(startDate)
+        const newEndDate = new Date(endDate)
+        const token = localStorage.getItem('token')
+        const id = this.props.group.id
+        const addGroup = {
+            id: id,
+            groupName: this.state.groupName,
+            buyInAmt: this.state.buyInAmt,
+            startDate: newStartDate,
+            endDate: newEndDate,
+            groupMessage: this.state.groupMessage,
+            userfirebase_id: this.props.group.userfirebase_id
+        }
+        console.log('addgroup', addGroup)
+        axios.put(`http://localhost:8080/api/groups/${id}`,(id, addGroup), {
+            "Content-Type": "application/json",
+            headers: { 'Authorization': token }
+            })
+             .then(res => {
+                 console.log("res", res)
+             })
+             .catch(err => {
+                 console.log("err", err)
+             })
+             this.props.history.push(`/user/${this.props.group.userfirebase_id}`)
+    }
+
 
     render() {
         const { classes } = this.props;
+        console.log("user id in createform", this.props.userId)
+        console.log("joincode", this.props.group)
         return (
             <div style={{ maxWidth: '100%', margin: '0 auto' }}>
                 <div style={{ display: 'flex', width: '38%', height: '500px', margin: '0 auto' }}>
@@ -105,7 +171,7 @@ class CreateForm extends React.Component {
                                     name="joinCode"
                                     className={classes.textField}
                                     onChange={this.handleChange}
-                                    value={this.state.joinCode}
+                                    value={this.props.group.joinCode}
                                     margin="normal"
                                     variant="outlined"
                                     InputProps={{
@@ -178,11 +244,11 @@ class CreateForm extends React.Component {
                                 <TextField
                                     id="outlined-name"
                                     label="Buy In Amount $"
-                                    name="buyIn"
+                                    name="buyInAmt"
                                     type="number"
                                     className={classes.textField}
-                                    onChange={this.handleChange}
-                                    value={this.state.buyIn}
+                                    onChange={this.onChange}
+                                    value={this.state.buyInAmt}
                                     margin="normal"
                                     variant="outlined"
                                     InputProps={{
@@ -226,6 +292,38 @@ class CreateForm extends React.Component {
                                 >
                                 </TextField>
                             </div>
+                            <TextField
+                                id="outlined-name"
+                                label="Message to Group"
+                                type="search"
+                                name="groupMessage"
+                                style={{ width: '684px' }}
+                                multiline={true}
+                                rows={4}
+                                rowsMax={4}
+                                className={classes.textField}
+                                onChange={this.handleChange}
+                                value={this.state.groupMessage}
+                                margin="normal"
+                                variant="outlined"
+                                InputProps={{
+                                    classes: {
+                                        notchedOutline: classes.notchedOutline,
+                                        input: classes.input,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    style: {
+                                        color: '#008BC9'
+                                    }
+                                }}
+                            >
+                            </TextField>
+                            <div>
+                                <Button onClick={this.createGroup} variant="outlined" color="primary" style={{ fontSize: '12px', marginTop: '25px' }}>
+                                    Create
+                                    </Button>
+                            </div>
                             <div>
                             </div>
                         </div>
@@ -238,4 +336,16 @@ class CreateForm extends React.Component {
 }
 
 
-export default withStyles(styles)(CreateForm);
+
+const mapStateToProps = state => {
+    console.log(state,"createform state")
+    return {
+        userId: state.auth.user
+    }
+}
+    
+
+
+
+
+export default  connect(mapStateToProps)(withStyles(styles)(CreateForm));

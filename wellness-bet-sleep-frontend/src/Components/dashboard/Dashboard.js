@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/';
+
 import { Route } from 'react-router-dom';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
 
 import Navbar from './NavBar';
 
@@ -65,7 +67,7 @@ class Dashboard extends Component {
                 console.log(error)
             })
     }
-
+   
     // fetchDate = () => {
     //     axios.get('http://localhost:8080/api/groups')
     // }
@@ -74,24 +76,36 @@ class Dashboard extends Component {
 
     render() {
         const { classes } = this.props;
+        console.log("groups array dashboard", this.state.groups)
         return (
             <div className={classes.root}>
-              <Navbar groups={this.state.groups}/>
+
+         <Navbar history={this.props.history}  groups={this.state.groups}/>
+
                 {/* <Route
-                 path="/nav-bar"
+                 path="/dashboard/nav"
                  render={props => (
                   <Navbar
                   {...props}
                   groups={this.state.groups}
                   />
                  )}
+
                  /> */}
   
+
                  {/* <JoinWithCode /> */}
             </div>
             )
         }       
       }
 
+      const mapStateToProps = state => {
+        console.log("user iddash", state)
+        return {
+          userId: state.user
+        }
+      }      
+
       
-export default withStyles(styles)(Dashboard);
+export default connect(mapStateToProps)(withStyles(styles)(Dashboard));

@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export default (state = initialState, actions) => {
-    console.log(actions)
+   
     switch (actions.type) {
         case authTypes.OAUTH_START:
             return {
@@ -15,12 +15,14 @@ export default (state = initialState, actions) => {
                 loading: true
             }
         case authTypes.OAUTH_SUCCESS:
+        console.log(actions.payload, 'res data')
             return {
                 ...state,
                 loading: false,
                 user: {
-                    ...actions.payload.usersData
+                    ...actions.payload.usersData.user
                 }
+                
             }
         case authTypes.REGISTER_START:
             return {
@@ -28,36 +30,58 @@ export default (state = initialState, actions) => {
                 loading: true
             }
         case authTypes.REGISTER_SUCCESS:
+        console.log(actions.payload, 'register success data')
+        console.log("fb id", actions.payload.firebase_id)
+        localStorage.setItem('fb_id', actions.payload.firebase_id)
             return {
                 ...state,
                 loading: false,
-                // user: actions.payload
+                user: actions.payload
             }
         case authTypes.REGISTER_FAIL:
             return {
                 ...state,
+                loading: false,
                 error: actions.payload
             }
-        case authTypes.LOGIN__START:
+        case authTypes.LOGIN_START:
             return {
                 ...state,
                 loadin: true
             }
-        case authTypes.LOGIN__SUCCESS: 
+        case authTypes.LOGIN_SUCCESS: 
             return {
                 ...state,
                 loading: false,
-                user: {
-                    ...actions.payload.usersData,
-                    ...actions.payload.usersData.user.email
-                }
+                user: actions.payload
             
             }
         case authTypes.LOGIN_FAIL: 
+            console.log('err', actions.payload)
             return {
-                error: actions.payload
+                ...state,
+              loading: false,
+              error: actions.payload
             
         }
+        case authTypes.PROFILE_START:
+          return {
+              ...state,
+              loading: true
+          }
+        case authTypes.PROFILE_SUCCESS:
+          return {
+              ...state,
+              user: {
+                  ...actions.payload
+              }
+          }
+        case authTypes.PROFILE_FAIL: 
+          return {
+              ...state,
+              loading: false,
+              error: actions.payload
+          }
             default:
             return state;
     };

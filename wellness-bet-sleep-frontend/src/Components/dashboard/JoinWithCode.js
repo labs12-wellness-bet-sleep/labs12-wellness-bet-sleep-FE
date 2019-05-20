@@ -19,7 +19,7 @@ const styles = theme => ({
     },
     joinbycode: {
         display: 'flex',
-        width: '500px',
+        width: '650px',
         height: '1000px',
         margin: '0 auto',
         textAlign: 'center',

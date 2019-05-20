@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import Group from './Group';
+import Group from "./Group";
+
+import { getGroups } from "../../Store/Actions/group-actions";
 
 class Groups extends Component {
+  componentDidMount() {
+    this.props.getGroups();
+  }
   render() {
     return (
       <div className="groups">
         <h1>List of groups</h1>
-        <div className='GroupsList'>
-        
+        <div className="GroupsList">
           <ul>
             {this.props.groups.map(group => {
-              return (                         
+              return (
                 <Group
                   groupName={group.groupName}
                   id={group.id}
@@ -23,17 +28,24 @@ class Groups extends Component {
                   joinCode={group.joinCode}
                   key={group.id}
                   deleteGroup={this.props.deleteGroup}
-                //   updateGroup={this.props.updateGroup}
-                setUpdateForm={this.setUpdateForm}
+                  //   updateGroup={this.props.updateGroup}
+                  setUpdateForm={this.setUpdateForm}
                 />
               );
             })}
           </ul>
-        </div>        
+        </div>
       </div>
     );
   }
-}
+};
+// export default Groups;
 
+const mapStateToProps = (state) => ({
+  groups: state.groups.groups
+});
 
-export default Groups;
+// const mapDispatchToProps = {}
+export default connect(
+  mapStateToProps, {getGroups}
+)(Groups);
