@@ -56,27 +56,18 @@ class Dashboard extends Component {
         groups: []
     }
 
-    componentDidMount() {
-        axios.get("http://localhost:8080/api/groups")
-            .then(response => {
-                this.setState({
-                    groups: response.data
-                })
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
-   
-    // fetchDate = () => {
-    //     axios.get('http://localhost:8080/api/groups')
-    // }
 
+    componentDidMount(){
+      this.setState({
+        groups: this.props.groups
+      })
+      console.log("group dashboard",this.state.groups)
+    }
 
 
     render() {
         const { classes } = this.props;
-        console.log("groups array dashboard", this.state.groups)
+        
         return (
             <div className={classes.root}>
 
@@ -101,9 +92,11 @@ class Dashboard extends Component {
       }
 
       const mapStateToProps = state => {
-        console.log("user iddash", state)
+        console.log("state dashboard", state.groups.addedGroups)
+        console.log("user iddash", state.auth.user.firebase_id);
         return {
-          userId: state.user
+          userId: state.auth.user.firebase_id,
+          groups: state.groups.addedGroups
         }
       }      
 

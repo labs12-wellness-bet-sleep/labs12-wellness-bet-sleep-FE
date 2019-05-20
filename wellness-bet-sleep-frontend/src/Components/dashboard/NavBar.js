@@ -25,8 +25,8 @@ import CreateForm from './CreateForm';
 import { renderComponent } from 'recompose';
 
 import { connect } from 'react-redux';
-import { createJoinCode } from '../../Store/Actions/group-actions';
-import continuousSizeLegend from 'react-vis/dist/legends/continuous-size-legend';
+import { addGroup } from '../../Store/Actions/group-actions';
+
 import axios from 'axios';
 
 
@@ -151,22 +151,9 @@ class GroupsNav extends React.Component {
         {({ anchorEl, updateAnchorEl }) => {
           const open = Boolean(anchorEl);
           const routeHandler = () => {
-            const userfirebase_id = localStorage.getItem('fb_id')
-            const token = localStorage.getItem('token')
-            const id = {
-              userfirebase_id: userfirebase_id
-            }
-            axios.post(`http://localhost:8080/api/groups/invite`, {...id}, {
-              "Content-Type": "application/json",
-              headers: { 'Authorization': token }
-            })
-              .then(res => {
-                console.log('res inside navbar', res.data.newGroup.joinCode)
-                this.setState({
-                  group: res.data.newGroup
-                })
-              })
-            this.props.history.push(`/user/create/${userfirebase_id}`)
+          
+            this.props.addGroup(this.props.userId)
+            this.props.history.push(`/user/create/${this.props.userId}`)
             updateAnchorEl(null)
           }
           const handleClose = () => {
@@ -243,9 +230,9 @@ class GroupsNav extends React.Component {
                   </Card>
                 </div> : null
               }
-              <Route path="/user/join" component={JoinWithCode} />
+              <Route path="/user/join/:id" component={JoinWithCode} />
               <Route
-              path="/user/create"
+              path="/user/create/:id"
               render={(props)=>(
               <CreateForm
               {...props}
@@ -266,11 +253,11 @@ class GroupsNav extends React.Component {
 const mapStateToProps = state => {
   console.log("user id", state)
   return {
-    userId: state.auth.user
+    userId: state.auth.user.firebase_id
   }
 }
 
 
 export default connect(mapStateToProps, {
-  createJoinCode,
+  addGroup,
 })(withStyles(styles)(GroupsNav));

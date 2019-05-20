@@ -207,7 +207,7 @@ class Register extends Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.props.user, 'register props')
+    console.log('register props',this.props.user)
     return (
       <div className="register">
         <div className='overlay'>
@@ -306,9 +306,9 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state, 'mstp')
+  console.log(state.auth.user, 'mstp')
   return {
-    user: state.user
+    user: state.auth.user
   }
 }
 

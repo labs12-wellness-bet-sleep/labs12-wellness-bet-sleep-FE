@@ -17,17 +17,17 @@ export const getGroups = () => dispatch => {
     );
 };
 
-export const addGroup = (group, userId) => dispatch => {
+export const addGroup = (userfirebase_id) => dispatch => {
+  console.log("inside addgroup", userfirebase_id)
+  console.log("token", localStorage.getItem("token"))
+  const token = localStorage.getItem("token")
   dispatch({ type: groupTypes.ADD_GROUP_START });
 
-  const newGroup = {
-    userId,
-    joinCode: group.joinCode
-  };
+
   axios
-    .post("/api/groups/invite", newGroup, {
+    .post("/api/groups/invite", {userfirebase_id}, {
       "Content-Type": "application/json",
-      headers: { authorization: localStorage.getItem("token") }
+      headers: { 'Authorization': token }
     })
     .then(res =>
       dispatch({ type: groupTypes.ADD_GROUP_SUCCESS, payload: res.data })
@@ -40,7 +40,9 @@ export const addGroup = (group, userId) => dispatch => {
     });
 };
 
-export const updateGroup = (group, id) => dispatch => {
+export const updateGroup = (id, group) => dispatch => {
+  console.log("id:", id)
+  console.log("group:", group)
   dispatch({
     type: groupTypes.UPDATE_GROUP_START
   });
@@ -48,7 +50,7 @@ export const updateGroup = (group, id) => dispatch => {
   axios
     .put(`/api/groups/${id}`, group, {
       "Content-Type": "application/json",
-      headers: { authorization: localStorage.getItem("token") }
+      headers: { Authorization: localStorage.getItem("token") }
     })
     .then(res => {
       dispatch({
@@ -87,28 +89,3 @@ export const deleteGroup = id => dispatch => {
       });
     });
 };
-
-export const createJoinCode = id => dispatch => {
-  console.log('id action', id)
-  dispatch({
-    type: groupTypes.CREATE_JOIN_CODE_START
-  });
-  axios
-    .post(`/api/groups/invite`, id, {
-      "Content-Type": "application/json",
-      headers: { authorization: localStorage.getItem("token") }
-    })
-    .then(res => {
-      console.log('res createjoin', res)
-      dispatch({
-        type: groupTypes.CREATE_JOIN_CODE_SUCCESS,
-        payload: res
-      })
-    })
-    .catch(err => {
-      dispatch({
-        type: groupTypes.CREATE_JOIN_CODE_FAIL,
-        payload: err
-      })
-    })
-}
