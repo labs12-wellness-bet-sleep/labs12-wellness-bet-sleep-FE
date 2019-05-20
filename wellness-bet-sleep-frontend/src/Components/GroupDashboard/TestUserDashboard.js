@@ -25,7 +25,7 @@ const HorizontalInfo = styled.div`
     flex-directon: row; 
 `
 
-class GroupDashboard extends Component {
+class TestUserDashboard extends Component {
 
     constructor(props){
         super(props)
@@ -50,7 +50,7 @@ class GroupDashboard extends Component {
             startDate: "",
             endDate: "",
             daysLeft: "",
-            buyInAmount: ""
+            amountOfDays: ""
 
         }
 
@@ -61,14 +61,14 @@ class GroupDashboard extends Component {
     componentDidMount() {
 
         // this.getData();
-        // this.getDataAfterStateUpdated();
+        this.getDataAfterStateUpdated();
 
         console.log("After component did mount: " , this.state);
     }
 
     getData() {
-        this.getGroupConfiguration();
-        this.getGroupSleepData();
+        this.getGroupID();
+        this.getGroupInfo();
     }
 
     getDataAfterStateUpdated() {
@@ -76,52 +76,53 @@ class GroupDashboard extends Component {
         // this.calculateCurrentUserAggregatedData();
     }
 
-    setDateRange(startDate, endDate) {
-        axios.get(`/api/groups/${this.props.user.joinCode}/participant`)
+    getDateRange(startDate, endDate) {
         this.setState({startDate: startDate, endDate: endDate, amountOfDays: endDate-startDate})
     }
 
-    getGroupConfiguration = () => {
-        axios.get(`/api/groups/join:${this.props.user.joinCode}`)
-        .then(response => {
-
-            let group = response.data; 
-
-            this.setDateRange(group.startDate, group.endDate);
-            this.setState({buyInAmount: group.buyInAmt});
-            this.setState({potTotal: group.potTotal});
-        }
-        )
-        .catch(
-            err => { console.log(err); }
-        )
-        
+    // check firebase restricted 
+    getGroupID() {
     }
 
-    getGroupSleepData = () => {
+    getGroupInfo = () => {
 
-        axios.get(`/api/groups/${this.props.user.joinCode}/participant`)
+        let amountOfDays = "";
+
+        // axios.get(`https://sleep-bet.herokuapp.com/api/users/`)
+        // .then(response => {
+        //     this.getDateRange(response.data.startDate,response.data.endDate);
+        //     this.calculateTimeLeft(response.data.endDate);
+        //     console.log("Group: ", response.data);
+        //     this.setState({group: response.data});
+
+        //     amountOfDays = 30;
+        //     console.log("Amount of days: ", amountOfDays);
+        // })
+        // .catch(err => console.log(err));
+
+        axios.get("/api/users/")
         .then(response => {
             console.log("Participants: ", response.data);
             this.setState({groupUsers: response.data});
-            this.setState({amountOfUsers: response.data.length});
+            this.setState({amountOfUsers: this.state.groupUsers.length});
 
             // this.setUpDummySleepData(response.data.participant.length, response.data.participant, amountOfDays);
 
             let participants = response.data;
+            console.log("Look at this response", response);
 
             let totalSleepPerGroup = [];
             let sleepGraphCoordinatesPerGroup = [];
              
             participants.map(participant => {
 
-                    if(participant.SleepData)   {
-                        let userSleepDataSessions = participant.SleepData; 
+                    if(participant.sleepData)   {
+                        let userSleepDataSessions = JSON.parse(participant.SleepData); 
 
                         let sleepPerUser = { 
                             username: participant.username,
                             photo: participant.profilePhoto,
-                            amountOfSleep: 0
+                            amountOfSleep: ""
                         }
 
                         let sleepGraphCoordinatesPerPerson = {
@@ -136,8 +137,8 @@ class GroupDashboard extends Component {
 
                             let totalSleepInHoursPerDay = this.convertMillisecondsToHours(sleepDataSession.activeTimeMillis);
                             
-                            let startTime = parseFloat(sleepDataSession.startTimeMillis);
-                            let endTime = parseFloat(sleepDataSession.endTimeMillis);
+                            let startTime = sleepDataSession.startTimeMillis;
+                            let endTime = sleepDataSession.endTimeMillis;
 
                             if(this.isSleepInSameDay(startTime,endTime)){
 
@@ -337,7 +338,58 @@ class GroupDashboard extends Component {
             
             })
             .catch(err => console.log(err));
-        }
+
+        // axios.get(`https://api.fitbit.com/1.2/user/${this.state.fitbitUserID}/sleep/date/${this.state.startDate}/${this.state.endDate}.json`)
+        //         .then(data => {
+        //             this.setState({currentUserSleep: data });
+        // })
+    }
+
+    // calculateCurrentUserAggregatedData() {
+
+    //     // alternative b) make up random numbers
+
+    //     this.setState({currentUserAggregatedSleep: 24})
+    //     // this.state.currentUserSleep.map(sleepNight => {
+    //     //     this.setState({currentUserAggregatedSleep: currentUserAggregatedSleep += sleepNight.timeleft})
+    //     // })
+
+    //     // this.setState({currentUserAggregatedSleep: currentUserAggregatedSleep/60});
+    // }
+
+    // in hours 
+    // setUpDummySleepData(sleepDataAmount, participants, amountOfDays) {
+    //     let amountOfUsers = sleepDataAmount;
+    //     let totalSleepPerPerson = [];
+
+    //     for(let i = 0; i < sleepDataAmount; i++) {
+    //         totalSleepPerPerson[i] = {
+    //             username: participants[i].username,
+    //             photo: participants[i].profilePhoto,
+    //             amountOfSleep: Math.floor((Math.random()*50) + 1)
+    //         }
+    //     }
+
+    //     this.setState({aggregatedSleepPerUser: totalSleepPerPerson});
+
+    //    let sleepGraphCoordinatesPerPerson = [];
+
+    //     for(let i = 0; i < amountOfUsers; i++) {
+    //             sleepGraphCoordinatesPerPerson[i] = {
+    //                 name: participants[i].username,
+    //                 coordinates: []
+    //             }
+
+    //             for(let days = 0; days < amountOfDays; days++) {
+    //                 sleepGraphCoordinatesPerPerson[i].coordinates[days] = {"x": days, "y": totalSleepPerPerson[i].amountOfSleep - days}
+    //             }
+    //         }
+
+    //     this.setState({sleepGraphCoordinatesPerPerson: sleepGraphCoordinatesPerPerson});
+            
+    //     console.log("Sleep Coordinates: ", sleepGraphCoordinatesPerPerson);
+    //     }
+
 
     render(){
 
@@ -378,4 +430,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(GroupDashboard);
+export default connect(mapStateToProps)(TestUserDashboard);

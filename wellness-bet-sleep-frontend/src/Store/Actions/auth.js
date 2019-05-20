@@ -32,6 +32,7 @@ export const initOAuth = user => dispatch =>  {
 }
 
 export const getProfile = id => dispatch =>  {
+    console.log("id:", id)
     dispatch({
         type: authTypes.PROFILE_START
     })

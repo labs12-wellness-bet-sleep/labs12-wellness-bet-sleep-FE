@@ -29,6 +29,9 @@ export default class AggregatedSleepGraph extends Component {
     }
 
     render(){
+
+        console.log("Coords to map :", this.props.sleepCoordinatesPerPerson);
+
         return(
             <RoundedItem>
             <div className="AggregatedSleepGraph">
@@ -61,9 +64,11 @@ export default class AggregatedSleepGraph extends Component {
               textAnchor: 'end'
             }}
             />
-            {this.props.sleepCoordinatesPerPerson.map(person => {
-              return <LineSeries data={person.coordinates} style={{strokeWidth: 5}}/>
-            })}
+            {/* {this.props.sleepCoordinatesPerPerson.map(person => {
+              return <LineSeries data={} style={{strokeWidth: 5}}/>
+            })} */}
+
+            <LineSeries data={this.props.sleepCoordinatesPerPerson} style={{strokeWidth: 5}}/>
 
             </XYPlot>
 
