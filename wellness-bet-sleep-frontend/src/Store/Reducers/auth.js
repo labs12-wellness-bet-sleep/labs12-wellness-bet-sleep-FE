@@ -49,7 +49,7 @@ export default (state = initialState, actions) => {
                 ...state,
                 loadin: true
             }
-        case authTypes.LOGIN_SUCCESS: 
+        case authTypes.LOGIN_SUCCESS:      
             return {
                 ...state,
                 loading: false,

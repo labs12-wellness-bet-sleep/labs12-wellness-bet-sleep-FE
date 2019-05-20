@@ -161,7 +161,7 @@ class GroupsNav extends React.Component {
               headers: { 'Authorization': token }
             })
               .then(res => {
-                console.log('res inside navbar', res.data.newGroup.joinCode)
+                console.log('res inside navbar', res.data)
                 this.setState({
                   group: res.data.newGroup
                 })

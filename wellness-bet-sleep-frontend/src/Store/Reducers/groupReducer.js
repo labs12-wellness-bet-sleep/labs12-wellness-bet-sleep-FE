@@ -63,6 +63,9 @@ export default (state = initialState, action) => {
       }
     
     case groupTypes.CREATE_JOIN_CODE_SUCCESS:
+        console.log(action.payload, 'join code success reducer')
+        console.log("new group join code", action.payload.joinCode)
+        localStorage.setItem('joinCode', action.payload.joinCode)
       return {
         ...state,
         fetching: false,
