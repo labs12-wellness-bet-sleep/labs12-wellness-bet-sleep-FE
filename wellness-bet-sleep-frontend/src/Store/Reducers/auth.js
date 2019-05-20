@@ -45,14 +45,14 @@ export default (state = initialState, actions) => {
         case authTypes.LOGIN_START:
             return {
                 ...state,
-                loadin: true
+                loading: true
             }
         case authTypes.LOGIN_SUCCESS:
             localStorage.setItem('fb_id', actions.payload.user.firebase_id) 
             return {
                 ...state,
                 loading: false,
-                user: actions.payload
+                user: actions.payload.user
             
             }
         case authTypes.LOGIN_FAIL: 
