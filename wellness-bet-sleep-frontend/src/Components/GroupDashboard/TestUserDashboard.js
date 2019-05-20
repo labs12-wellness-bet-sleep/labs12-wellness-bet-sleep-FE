@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axios from '../../axios-sleep.js';
 import { connect } from 'react-redux';
 
 
@@ -8,7 +8,6 @@ import TimeLeft from "./TimeLeft.js";
 import UserSleepStatus from "./UserSleepStatus.js";
 import UsersRanking from "./UsersRanking.js"
 import styled from 'styled-components'
-import { start } from 'repl';
 
 const HeaderData = styled.div`
     display: flex;
@@ -26,7 +25,7 @@ const HorizontalInfo = styled.div`
     flex-directon: row; 
 `
 
-export default class TestUserDashboard extends Component {
+class TestUserDashboard extends Component {
 
     constructor(props){
         super(props)
@@ -55,7 +54,7 @@ export default class TestUserDashboard extends Component {
 
         }
 
-        this.getDataAfterStateUpdated();
+        // this.getDataAfterStateUpdated();
 
     }
 
@@ -136,15 +135,15 @@ export default class TestUserDashboard extends Component {
 
                         userSleepDataSessions.map((sleepDataSession) => {
 
-                            let totalSleepInHoursPerDay = this.convertMillisecondsToHours(sleepDataSessions.activeTimeMillis);
+                            let totalSleepInHoursPerDay = this.convertMillisecondsToHours(sleepDataSession.activeTimeMillis);
                             
-                            let startTime = sleepDataSessions.startTimeMillis;
-                            let endTime = sleepDataSessions.endTimeMillis;
+                            let startTime = sleepDataSession.startTimeMillis;
+                            let endTime = sleepDataSession.endTimeMillis;
 
-                            if(isSleepInSameDay(startTime,endTime)){
+                            if(this.isSleepInSameDay(startTime,endTime)){
 
                                 let sleepCoordinate = this.calculateSleepCoordinatesPerDay(startTime,endTime, totalSleepInHoursPerDay,dayNumber);
-                                sleepCoordinatesPerPerson.coordinates.push(sleepCoordinate);
+                                sleepGraphCoordinatesPerPerson.coordinates.push(sleepCoordinate);
 
                                 let sleepDate = new Date(startTime);
 
@@ -154,14 +153,14 @@ export default class TestUserDashboard extends Component {
                             }
                             else
                             {
-                                sleepCoordinatesPerPerson = calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerPerson, dayNumber);
+                                sleepGraphCoordinatesPerPerson = this.calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerPerson, dayNumber);
 
                                 let StartDate = new Date(startTime);
                                 let EndDate = new Date(endTime);
                         
                                 let dayDifference = Math.abs(StartDate.getDate()-EndDate.getDate());
 
-                                daynNumber += dayDifference;
+                                dayNumber += dayDifference;
                             }
 
                             sleepPerUser.amountOfSleep += totalSleepInHoursPerDay;
@@ -193,7 +192,7 @@ export default class TestUserDashboard extends Component {
         // (I count the same day as from 8pm - 10am)
         // Check if the start time is within this buffer zone. 
         // see: https://stackoverflow.com/questions/4673527/converting-milliseconds-to-a-date-jquery-javascript
-        if ( (StartHour > 20 || StartHour < 10 ) && (EndHour > 20 || StartHour < 10) && dayDifference <= 1) {
+        if (dayDifference <= 1) {
             return true; 
         }
         else {
@@ -228,7 +227,7 @@ export default class TestUserDashboard extends Component {
 
         sleepAmount -= startDaySleepAmount;
 
-        for(day = (dayNumber+1) ; day < (dayNumber + dayDifference-1); day++) {
+        for(let day = (dayNumber+1) ; day < (dayNumber + dayDifference-1); day++) {
 
             sleepCoordinatesPerPerson.coordinates.push({"x": dayNumber, "y": sleepAmount-23});
             sleepCoordinatesPerPerson.sleepPerDay.push({});
@@ -253,14 +252,14 @@ export default class TestUserDashboard extends Component {
     getCurrentUserSleepData() {
 
         // this.setState({currentUserSleep: 8})
-
-        axios.get(`/api/users/${this.props.user.id}`)
+        console.log("props user", this.props.user);
+        axios.get(`/api/users/${this.props.user.firebase_id}`)
             .then(response => { 
                 
                 let currentUser = response.data;
-                console.log("Total aggregated sleep for current user session: ", currentUser.sleepData)
+                console.log("Total aggregated sleep for current user session: ", currentUser.SleepData)
 
-                let userSleepDataSessions = JSON.parse(participant.SleepData); 
+                let userSleepDataSessions = JSON.parse(currentUser.SleepData); 
 
                 let sleepPerCurrentUser = { 
                     username: currentUser.username,
@@ -275,7 +274,7 @@ export default class TestUserDashboard extends Component {
                 }
 
 
-                dayNumber = 0; 
+                let dayNumber = 0; 
 
                 currentUser.sleepData.map(session => {
 
@@ -285,7 +284,7 @@ export default class TestUserDashboard extends Component {
                         let startTime = session.startTimeMillis;
                         let endTime = session.endTimeMillis;
 
-                        if(isSleepInSameDay(startTime,endTime)){
+                        if(this.isSleepInSameDay(startTime,endTime)){
 
                             let sleepCoordinate = this.calculateSleepCoordinatesPerDay(startTime,endTime, totalSleepInHoursPerDay,dayNumber);
 
@@ -299,14 +298,14 @@ export default class TestUserDashboard extends Component {
                         }
                         else
                         {
-                            sleepGraphCoordinatesPerCurrentUser = calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerCurrentUser, dayNumber);
+                            sleepGraphCoordinatesPerCurrentUser = this.calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerCurrentUser, dayNumber);
 
                             let StartDate = new Date(startTime);
                             let EndDate = new Date(endTime);
                     
                             let dayDifference = Math.abs(StartDate.getDate()-EndDate.getDate());
 
-                            daynNumber += dayDifference;
+                            dayNumber += dayDifference;
                         }
 
                         sleepPerCurrentUser.amountOfSleep += totalSleepInHoursPerDay;
@@ -317,7 +316,7 @@ export default class TestUserDashboard extends Component {
                 let currentDaySleepAmount = sleepGraphCoordinatesPerCurrentUser.sleepPerDay.filter(day => day.date == new Date());
 
                 this.setState({
-                    sleepCoordinatesPerPerson: this.state.sleepCoordinatesPerPerson.push(sleepGraphCoordinatesPerCurrentUser),
+                    sleepCoordinatesPerPerson: sleepGraphCoordinatesPerCurrentUser.coordinates,
                     currentUserTodaySleep: currentDaySleepAmount.hours,
                     currentUserAggregatedSleep: sleepPerCurrentUser
                 })
@@ -416,4 +415,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(GoogleFitAuthenticationPage);
+export default connect(mapStateToProps)(TestUserDashboard);
