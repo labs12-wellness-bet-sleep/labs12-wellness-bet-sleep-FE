@@ -109,13 +109,13 @@ class GoogleFitAuthenticationPage extends Component {
                             .catch(err => console.log(err));
                                         
                                         
-                        
+                        this.props.history.push(`/dashboard/TestUserDashboard`);
 
                 })
                 .catch(err => console.log("Check out this error!", err));
 
                 
-               this.props.history.push(`/dashboard/TestUserDashboard`);
+               
 
                 
             } else {

@@ -245,11 +245,11 @@ class TestUserDashboard extends Component {
         this.setState({daysLeft: 10}); 
     }
 
-    getCurrentUserSleepData() {
+    async getCurrentUserSleepData() {
 
         // this.setState({currentUserSleep: 8})
         console.log("props user", this.props.user);
-        axios.get(`/api/users/${this.props.user.firebase_id}`)
+        await axios.get(`/api/users/${this.props.user.firebase_id}`)
             .then(response => { 
                 
                 let currentUser = response.data.user;
