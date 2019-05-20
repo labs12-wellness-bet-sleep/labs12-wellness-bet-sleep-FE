@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axios from '../../axios-sleep.js';
+import { connect } from 'react-redux';
+
 
 import AggregatedSleepGraph from "./AggregatedSleepGraph.js";
 import TimeLeft from "./TimeLeft.js";
 import UserSleepStatus from "./UserSleepStatus.js";
 import UsersRanking from "./UsersRanking.js"
 import styled from 'styled-components'
-import { start } from 'repl';
 
 const HeaderData = styled.div`
     display: flex;
@@ -24,7 +25,7 @@ const HorizontalInfo = styled.div`
     flex-directon: row; 
 `
 
-export default class GroupDashboard extends Component {
+class GroupDashboard extends Component {
 
     constructor(props){
         super(props)
@@ -43,127 +44,132 @@ export default class GroupDashboard extends Component {
             fitbitAccessToken: "",
 
             currentUser: {},
-            currentUserSleep: "",
-            currentUserAggregatedSleep: "",
+            currentUserTodaySleep: 0,
+            currentUserAggregatedSleep: 0,
 
             startDate: "",
             endDate: "",
             daysLeft: "",
-            amountOfDays: ""
+            buyInAmount: ""
 
         }
 
-        this.getDataAfterStateUpdated();
+        // this.getDataAfterStateUpdated();
 
     }
 
     componentDidMount() {
 
-        this.getData();
-        this.getDataAfterStateUpdated();
+        // this.getData();
+        // this.getDataAfterStateUpdated();
 
         console.log("After component did mount: " , this.state);
     }
 
     getData() {
-        this.getGroupID();
-        this.getGroupInfo(this.state.groupID);
+        this.getGroupConfiguration();
+        this.getGroupSleepData();
     }
 
     getDataAfterStateUpdated() {
         this.getCurrentUserSleepData();
-        this.calculateCurrentUserAggregatedData();
+        // this.calculateCurrentUserAggregatedData();
     }
 
-    getDateRange(startDate, endDate) {
+    setDateRange(startDate, endDate) {
+        axios.get(`/api/groups/${this.props.user.joinCode}/participant`)
         this.setState({startDate: startDate, endDate: endDate, amountOfDays: endDate-startDate})
     }
 
-    // check firebase restricted 
-    getGroupID() {
+    getGroupConfiguration = () => {
+        axios.get(`/api/groups/join:${this.props.user.joinCode}`)
+        .then(response => {
+
+            let group = response.data; 
+
+            this.setDateRange(group.startDate, group.endDate);
+            this.setState({buyInAmount: group.buyInAmt});
+            this.setState({potTotal: group.potTotal});
+        }
+        )
+        .catch(
+            err => { console.log(err); }
+        )
+        
     }
 
-    getGroupInfo = () => {
+    getGroupSleepData = () => {
 
-        let amountOfDays = "";
-
-        axios.get(`https://sleep-bet.herokuapp.com/api/groups/${this.state.groupID}`)
+        axios.get(`/api/groups/${this.props.user.joinCode}/participant`)
         .then(response => {
-            this.getDateRange(response.data.startDate,response.data.endDate);
-            this.calculateTimeLeft(response.data.endDate);
-            console.log("Group: ", response.data);
-            this.setState({group: response.data});
-
-            amountOfDays = 30;
-            console.log("Amount of days: ", amountOfDays);
-        })
-        .catch(err => console.log(err));
-
-        axios.get(`https://sleep-bet.herokuapp.com/api/groups/${this.state.groupID}/participant`)
-        .then(response => {
-            console.log("Participants: ", response.data.participant);
-            this.setState({groupUsers: response.data.participant});
-            this.setState({amountOfUsers: this.state.groupUsers.length});
+            console.log("Participants: ", response.data);
+            this.setState({groupUsers: response.data});
+            this.setState({amountOfUsers: response.data.length});
 
             // this.setUpDummySleepData(response.data.participant.length, response.data.participant, amountOfDays);
 
             let participants = response.data;
-            console.log("Look at this response", response);
 
             let totalSleepPerGroup = [];
             let sleepGraphCoordinatesPerGroup = [];
              
             participants.map(participant => {
 
-                    let userSleepDataSessions = JSON.parse(participant.SleepData); 
+                    if(participant.SleepData)   {
+                        let userSleepDataSessions = participant.SleepData; 
 
-                    let sleepPerUser = { 
-                        username: participant.username,
-                        photo: participant.profilePhoto,
-                        amountOfSleep: ""
-                    }
+                        let sleepPerUser = { 
+                            username: participant.username,
+                            photo: participant.profilePhoto,
+                            amountOfSleep: 0
+                        }
 
-                    let sleepGraphCoordinatesPerPerson = {
-                        name: participant.username,
-                        coordinates: []
-                    }
+                        let sleepGraphCoordinatesPerPerson = {
+                            name: participant.username,
+                            coordinates: [],
+                            sleepPerDay: []
+                        }
 
-                    let dayNumber = 0; 
+                        let dayNumber = 0; 
 
-                    userSleepDataSessions.map((sleepDataSession) => {
+                        userSleepDataSessions.map((sleepDataSession) => {
 
-                        let totalSleepInHoursPerDay = this.convertMillisecondsToHours(userSleepData.activeTimeMillis);
+                            let totalSleepInHoursPerDay = this.convertMillisecondsToHours(sleepDataSession.activeTimeMillis);
+                            
+                            let startTime = parseFloat(sleepDataSession.startTimeMillis);
+                            let endTime = parseFloat(sleepDataSession.endTimeMillis);
+
+                            if(this.isSleepInSameDay(startTime,endTime)){
+
+                                let sleepCoordinate = this.calculateSleepCoordinatesPerDay(startTime,endTime, totalSleepInHoursPerDay,dayNumber);
+                                sleepGraphCoordinatesPerPerson.coordinates.push(sleepCoordinate);
+
+                                let sleepDate = new Date(startTime);
+
+                                sleepGraphCoordinatesPerPerson.sleepPerDay.push({sleepDate, totalSleepInHoursPerDay});
+                                dayNumber += 1; 
+
+                            }
+                            else
+                            {
+                                sleepGraphCoordinatesPerPerson = this.calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerPerson, dayNumber);
+
+                                let StartDate = new Date(startTime);
+                                let EndDate = new Date(endTime);
                         
-                        let startTime = userSleepData.startTimeMillis;
-                        let endTime = usersSleepData.endTimeMillis;
+                                let dayDifference = Math.abs(StartDate.getDate()-EndDate.getDate());
 
-                        if(isSleepInSameDay(startTime,endTime)){
+                                dayNumber += dayDifference;
+                            }
 
-                            let sleepCoordinate = this.calculateSleepCoordinatesPerDay(startTime,endTime, totalSleepInHoursPerDay,dayNumber);
-                            sleepCoordinatesPerPerson.coordinates.push(sleepCoordinate);
-                            dayNumber += 1; 
+                            sleepPerUser.amountOfSleep += totalSleepInHoursPerDay;
 
-                        }
-                        else
-                        {
-                            sleepCoordinatesPerPerson = calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerPerson, dayNumber);
+                        })
+                    }
+                })
 
-                            let StartDate = new Date(startTime);
-                            let EndDate = new Date(endTime);
-                    
-                            let dayDifference = Math.abs(StartDate.getDate()-EndDate.getDate());
-
-                            daynNumber += dayDifference;
-                        }
-
-                        sleepPerUser.amountOfSleep += totalSleepInHoursPerDay;
-
-                    })
-            })
-
-            this.setState({aggregatedSleepPerUser: totalSleepPerGroup});
-            this.setState({sleepGraphCoordinatesPerPerson: sleepGraphCoordinatesPerGroup});
-
+                this.setState({aggregatedSleepPerUser: totalSleepPerGroup});
+                this.setState({sleepGraphCoordinatesPerPerson: sleepGraphCoordinatesPerGroup});
             }).catch(err => console.log(err));
         }
 
@@ -182,10 +188,7 @@ export default class GroupDashboard extends Component {
         let StartHour = StartDate.getHours();
         let EndHour = EndDate.getHours();
 
-        // (I count the same day as from 8pm - 10am)
-        // Check if the start time is within this buffer zone. 
-        // see: https://stackoverflow.com/questions/4673527/converting-milliseconds-to-a-date-jquery-javascript
-        if ( (StartHour > 20 || StartHour < 10 ) && (EndHour > 20 || StartHour < 10) && dayDifference <= 1) {
+        if (dayDifference <= 1) {
             return true; 
         }
         else {
@@ -219,8 +222,10 @@ export default class GroupDashboard extends Component {
 
         sleepAmount -= startDaySleepAmount;
 
-        for(day = (dayNumber+1) ; day < (dayNumber + dayDifference-1); day++) {
-            sleepCoordinatesPerPerson.coordinates.push({"x": dayNumber, "y": sleepAmount-23});
+        for(let day = (dayNumber+1) ; day < (dayNumber + dayDifference); day++) {
+
+            sleepCoordinatesPerPerson.coordinates.push({"x": day, "y": 23});
+            sleepCoordinatesPerPerson.sleepPerDay.push({});
         }
 
         let endHour = EndDate.getHours();
@@ -241,58 +246,98 @@ export default class GroupDashboard extends Component {
 
     getCurrentUserSleepData() {
 
-        this.setState({currentUserSleep: 8})
-        // axios.get(`https://api.fitbit.com/1.2/user/${this.state.fitbitUserID}/sleep/date/${this.state.startDate}/${this.state.endDate}.json`)
-        //         .then(data => {
-        //             this.setState({currentUserSleep: data });
-        // })
-    }
+        // this.setState({currentUserSleep: 8})
+        console.log("props user", this.props.user);
+        axios.get(`/api/users/${this.props.user.firebase_id}`)
+            .then(response => { 
+                
+                let currentUser = response.data.user;
+                console.log("CurrentUSER", response.data.user);
+                console.log("Total aggregated sleep for current user session: ", currentUser.SleepData)
 
-    calculateCurrentUserAggregatedData() {
+                // let userSleepDataSessions = JSON.parse(currentUser.SleepData);
+                // console.log("userSleepDataSessions ", userSleepDataSessions); 
 
-        // alternative b) make up random numbers
+                let sleepPerCurrentUser = { 
+                    username: currentUser.username,
+                    photo: currentUser.profilePhoto,
+                    amountOfSleep: 0
+                }
 
-        this.setState({currentUserAggregatedSleep: 24})
-        // this.state.currentUserSleep.map(sleepNight => {
-        //     this.setState({currentUserAggregatedSleep: currentUserAggregatedSleep += sleepNight.timeleft})
-        // })
+                let sleepGraphCoordinatesPerCurrentUser = {
+                    name: currentUser.username,
+                    coordinates: [],
+                    sleepPerDay: []
+                }
 
-        // this.setState({currentUserAggregatedSleep: currentUserAggregatedSleep/60});
-    }
 
-    // in hours 
-    // setUpDummySleepData(sleepDataAmount, participants, amountOfDays) {
-    //     let amountOfUsers = sleepDataAmount;
-    //     let totalSleepPerPerson = [];
+                let dayNumber = 0; 
 
-    //     for(let i = 0; i < sleepDataAmount; i++) {
-    //         totalSleepPerPerson[i] = {
-    //             username: participants[i].username,
-    //             photo: participants[i].profilePhoto,
-    //             amountOfSleep: Math.floor((Math.random()*50) + 1)
-    //         }
-    //     }
-
-    //     this.setState({aggregatedSleepPerUser: totalSleepPerPerson});
-
-    //    let sleepGraphCoordinatesPerPerson = [];
-
-    //     for(let i = 0; i < amountOfUsers; i++) {
-    //             sleepGraphCoordinatesPerPerson[i] = {
-    //                 name: participants[i].username,
-    //                 coordinates: []
-    //             }
-
-    //             for(let days = 0; days < amountOfDays; days++) {
-    //                 sleepGraphCoordinatesPerPerson[i].coordinates[days] = {"x": days, "y": totalSleepPerPerson[i].amountOfSleep - days}
-    //             }
-    //         }
-
-    //     this.setState({sleepGraphCoordinatesPerPerson: sleepGraphCoordinatesPerPerson});
+                let sleep_sessions = [];
+                for(var i in currentUser.SleepData)
+                {
+                    sleep_sessions.push(currentUser.SleepData[i]);
+                }
             
-    //     console.log("Sleep Coordinates: ", sleepGraphCoordinatesPerPerson);
-    //     }
+            
 
+                // console.log("Sleep Sessions in Array form:", sleep_sessions);
+
+               sleep_sessions.map(session => {
+
+                    console.log("How much the current each logged in user is getting per session:", session);
+                    let totalSleepInHoursPerDay = parseFloat(this.convertMillisecondsToHours(session.activeTimeMillis),10);
+                        
+                        let startTime = parseFloat(session.startTimeMillis,10);
+                        let endTime = parseFloat(session.endTimeMillis,10);
+
+                        if(this.isSleepInSameDay(startTime,endTime)){
+
+                            let sleepCoordinate = this.calculateSleepCoordinatesPerDay(startTime,endTime, totalSleepInHoursPerDay,dayNumber);
+
+                            let sleepDate = new Date(startTime);
+
+                            sleepGraphCoordinatesPerCurrentUser.sleepPerDay.push({"date": sleepDate, "hours": totalSleepInHoursPerDay});
+                            sleepGraphCoordinatesPerCurrentUser.coordinates.push(sleepCoordinate);
+                            
+                            dayNumber += 1; 
+
+                        }
+                        else
+                        {
+                            sleepGraphCoordinatesPerCurrentUser = this.calculateSleepCoordinatesPerSeveralDays(startTime,endTime,totalSleepInHoursPerDay,sleepGraphCoordinatesPerCurrentUser, dayNumber);
+
+                            let StartDate = new Date(startTime);
+                            let EndDate = new Date(endTime);
+                    
+                            let dayDifference = Math.abs(StartDate.getDate()-EndDate.getDate());
+
+                            dayNumber += dayDifference;
+                        }
+
+                        sleepPerCurrentUser.amountOfSleep += totalSleepInHoursPerDay;
+                        
+
+                })
+
+                // let currentDaySleepAmount = sleepGraphCoordinatesPerCurrentUser.sleepPerDay.filter(day => day.date == new Date());
+
+                this.setState({
+                    sleepCoordinatesPerPerson: sleepGraphCoordinatesPerCurrentUser.coordinates,
+
+                })
+
+                // this.setState({
+                //     currentUserTodaySleep: currentDaySleepAmount.hours
+                // })                    
+
+                this.setState({
+                    currentUserAggregatedSleep: sleepPerCurrentUser.amountOfSleep
+                })
+            
+            })
+            .catch(err => console.log(err));
+        }
 
     render(){
 
@@ -317,12 +362,20 @@ export default class GroupDashboard extends Component {
             <HorizontalInfo>
             <UsersRanking usersSleepData={this.state.aggregatedSleepPerUser}/>
             <TimeLeft timeleft={this.state.daysLeft}/>
-            <UserSleepStatus currentUserSleep={this.state.currentUserSleep} totalSleep={this.state.currentUserAggregatedSleep}/>
+            <UserSleepStatus currentUserSleep={this.state.currentUserTodaySleep} totalSleep={this.state.currentUserAggregatedSleep}/>
             </HorizontalInfo>
 
-            <AggregatedSleepGraph sleepCoordinatesPerPerson={this.state.sleepGraphCoordinatesPerPerson}/>
+            <AggregatedSleepGraph sleepCoordinatesPerPerson={this.state.sleepCoordinatesPerPerson}/>
             </div>
         
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+      user: state.auth.user
+    }
+}
+
+export default connect(mapStateToProps)(GroupDashboard);

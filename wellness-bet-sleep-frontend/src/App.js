@@ -139,7 +139,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    users: state.auth.user
+    user: state.auth.user
   }
 }
 
