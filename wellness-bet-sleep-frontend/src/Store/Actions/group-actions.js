@@ -29,9 +29,13 @@ export const addGroup = (userfirebase_id) => dispatch => {
       "Content-Type": "application/json",
       headers: { 'Authorization': token }
     })
-    .then(res =>
-      dispatch({ type: groupTypes.ADD_GROUP_SUCCESS, payload: res.data })
-    )
+    .then(res => {
+      console.log("res:",res.data.newGroup)
+      return (
+        dispatch({ type: groupTypes.ADD_GROUP_SUCCESS, payload: res.data.newGroup })
+      )
+      
+    })
     .catch(err => {
       dispatch({
         type: groupTypes.ADD_GROUP_FAILURE,
@@ -42,7 +46,7 @@ export const addGroup = (userfirebase_id) => dispatch => {
 
 export const updateGroup = (id, group) => dispatch => {
   console.log("id:", id)
-  console.log("group:", group)
+  console.log("group1:", group)
   dispatch({
     type: groupTypes.UPDATE_GROUP_START
   });
@@ -53,10 +57,11 @@ export const updateGroup = (id, group) => dispatch => {
       headers: { Authorization: localStorage.getItem("token") }
     })
     .then(res => {
-      dispatch({
-        type: groupTypes.UPDATE_GROUP_SUCCESS,
-        payload: res.data
-      });
+      console.log("res::::11", res.data)
+      return (
+        dispatch({type: groupTypes.UPDATE_GROUP_SUCCESS, payload: res.data})
+      )
+      
     })
     .catch(err => {
       dispatch({

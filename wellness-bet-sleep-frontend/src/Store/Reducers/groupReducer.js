@@ -2,11 +2,8 @@ import axios from "../../axios-sleep";
 import { groupTypes } from "../Actions/actionTypes";
 
 const initialState = {
-  addGroup: false,
   groups: [],
   addedGroups: [],
-  groupId: null,
-  joinCode: null,
   fetching: false,
   errors: null
 };
@@ -64,11 +61,11 @@ export default (state = initialState, actions) => {
           }
 
       case groupTypes.ADD_GROUP_SUCCESS:
-          console.log('group reducer', actions.payload.newGroup)
+          console.log('group reducer', actions.payload)
           return {
             ...state,
             fetching: false,
-            groups: actions.payload.newGroup
+            groups: actions.payload
             
           }
 
@@ -88,11 +85,16 @@ export default (state = initialState, actions) => {
             }
           
         case groupTypes.UPDATE_GROUP_SUCCESS:
-          console.log("update reducer", actions.payload) 
+          console.log("updatse reducer", actions.payload)
+          console.log("state::::", [...state.addedGroups])
             return {
-              ...state,
               fetching: false,
-              addedGroups: actions.payload
+              ...state,
+              addedGroups: [
+                ...state.addedGroups,
+                {...actions.payload}
+              ]
+              
             }
 
         case groupTypes.UPDATE_GROUP_FAILURE:

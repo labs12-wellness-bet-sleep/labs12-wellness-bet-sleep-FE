@@ -70,7 +70,7 @@ class App extends Component {
           }
         />
 
-        <Route path="/dashboard" render={props => <Dashboard {...props} />} />
+    
         <Route exact path='/' render={props => <Home {...props} />} />
         <Route exact path={'/users'} render={props => <Users {...props} />} />
         <Route exact path={'/register'} component={Register} />

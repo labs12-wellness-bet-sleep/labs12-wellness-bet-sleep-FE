@@ -316,7 +316,7 @@ class CreateForm extends React.Component {
 
 
 const mapStateToProps = state => {
-    console.log("createform state:", state.groups.groups)
+    console.log("createform state:", state.groups)
     return {
         userId: state.auth.user,
         group: state.groups.groups

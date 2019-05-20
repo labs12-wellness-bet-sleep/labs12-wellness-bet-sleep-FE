@@ -145,7 +145,7 @@ class GroupsNav extends React.Component {
   render() {
 
     const { classes } = this.props;
-    console.log('group', this.state.group)
+    console.log('group', this.props.groups)
     return (
       <WithState>
         {({ anchorEl, updateAnchorEl }) => {
@@ -205,15 +205,19 @@ class GroupsNav extends React.Component {
                   </ListItemText>
                 </ListItem>
                 <div className={classes.toolbar} />
-                {this.props.groups.map((group) =>
-                  <ListItem key={group.id} className={classes.listitem} button >
+                {this.props.groups && this.props.groups.map((group) => {
+                  console.log('group in map', group)
+                  return (
+                    <ListItem key={group.id} className={classes.listitem} button >
                     <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
 
                   </ListItem>
-                )}
+                  )
+                 
+                })}
 
               </Drawer>
-              {!this.props.groups ?
+              {this.props.groups < 0 ?
                 <div className={classes.fitgirl}>
                   <Typography className={classes.welcome}>
                     Welcome To Wellness Tracker
@@ -250,9 +254,11 @@ class GroupsNav extends React.Component {
 
 }
 
-const mapStateToProps = state => {
-  console.log("user id", state)
+const mapStateToProps = (state) => {
+  console.log("user groups", state.groups.addedGroups)
+  
   return {
+    groups: state.groups.addedGroups,
     userId: state.auth.user.firebase_id
   }
 }

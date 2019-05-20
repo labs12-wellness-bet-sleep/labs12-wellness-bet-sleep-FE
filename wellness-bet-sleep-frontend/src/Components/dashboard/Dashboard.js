@@ -57,12 +57,12 @@ class Dashboard extends Component {
     }
 
 
-    componentDidMount(){
-      this.setState({
-        groups: this.props.groups
-      })
-      console.log("group dashboard",this.state.groups)
-    }
+    // componentDidMount(){
+    //   this.setState({
+    //     groups: this.props.groups
+    //   })
+    //   console.log("group dashboard",this.state.groups)
+    // }
 
 
     render() {
