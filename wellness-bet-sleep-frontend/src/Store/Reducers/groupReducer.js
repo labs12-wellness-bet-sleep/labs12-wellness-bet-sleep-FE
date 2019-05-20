@@ -2,16 +2,14 @@ import axios from "../../axios-sleep";
 import { groupTypes } from "../Actions/actionTypes";
 
 const initialState = {
-  addGroup: false,
   groups: [],
-  groupId: null,
-  joinCode: null,
+  addedGroups: [],
   fetching: false,
   errors: null
 };
 
-export default (state = initialState, action) => {
-  switch (action.type) {
+export default (state = initialState, actions) => {
+  switch (actions.type) {
     case groupTypes.FETCH_GROUPS_START:
       return {
         ...state,
@@ -22,7 +20,7 @@ export default (state = initialState, action) => {
     case groupTypes.FETCH_GROUPS_SUCCESS:
       return {
         ...state,
-        groups: action.payload,
+        groups: actions.payload,
         fetching: false,
         errors: null
       };
@@ -30,7 +28,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        errors: action.payload
+        errors: actions.payload
       };
 
     case groupTypes.DELETE_GROUP_START:
@@ -44,7 +42,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        groups: state.groups.filter(group => group.id !== action.payload),
+        groups: state.groups.filter(group => group.id !== actions.payload),
         errors: null
       };
 
@@ -52,29 +50,59 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
-        error: action.payload
+        error: actions.payload
       };
 
-    case groupTypes.CREATE_JOIN_CODE_START:
-      return {
-        ...state,
-        fetching: true,
-        errors: null
-      }
-    
-    case groupTypes.CREATE_JOIN_CODE_SUCCESS:
-      return {
-        ...state,
-        fetching: false,
-        joinCode: action.payload
-      }
-    
-      case groupTypes.CREATE_JOIN_CODE_FAIL:
-        return {
-          ...state,
-          fetching: false,
-          errors: action.payload
-        }
+      case groupTypes.ADD_GROUP_START:
+          return {
+            ...state,
+            fetching: true,
+            errors: null
+          }
+
+      case groupTypes.ADD_GROUP_SUCCESS:
+          console.log('group reducer', actions.payload)
+          return {
+            ...state,
+            fetching: false,
+            groups: actions.payload
+            
+          }
+
+        case groupTypes.ADD_GROUP_FAILURE:
+          console.log('group err:', actions.payload)
+          return {
+            ...state,
+            fetching: false,
+            errors: actions.payload
+          }
+
+        case groupTypes.UPDATE_GROUP_START:
+            return {
+              ...state,
+              fetching: true,
+              errors: null
+            }
+          
+        case groupTypes.UPDATE_GROUP_SUCCESS:
+          console.log("updatse reducer", actions.payload)
+          console.log("state::::", [...state.addedGroups])
+            return {
+              fetching: false,
+              ...state,
+              addedGroups: [
+                ...state.addedGroups,
+                {...actions.payload}
+              ]
+              
+            }
+
+        case groupTypes.UPDATE_GROUP_FAILURE:
+            return {
+              ...state,
+              fetching: false,
+              errors: actions.payload
+            }
 
     default:
       return state;

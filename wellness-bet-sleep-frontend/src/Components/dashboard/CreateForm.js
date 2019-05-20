@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles, Typography, TextField, Button } from '@material-ui/core';
 import axios from 'axios';
 import { connect } from 'react-redux';
-
+import { updateGroup } from '../../Store/Actions/group-actions';
 import uuid from 'uuid';
 
 
@@ -52,15 +52,12 @@ class CreateForm extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            userId: null,
             groupName: '',
-            joinCode: '',
             startDate: null,
             endDate: null,
             buyInAmt: null,
             groupMessage: null,
             potTotal: null,
-            groupPhoto: null
         }
     }
     
@@ -96,39 +93,20 @@ class CreateForm extends React.Component {
     createGroup = () => {
         // console.log("id from createform",this.props.userId.id)
         // localStorage.setItem('userId', this.props.userId.id)
-        const startDate = this.state.startDate
-        const endDate = this.state.endDate
-        const newStartDate = new Date(startDate)
-        const newEndDate = new Date(endDate)
-        const token = localStorage.getItem('token')
         const id = this.props.group.id
-        const addGroup = {
-            id: id,
-            groupName: this.state.groupName,
-            buyInAmt: this.state.buyInAmt,
-            startDate: newStartDate,
-            endDate: newEndDate,
-            groupMessage: this.state.groupMessage,
-            userfirebase_id: this.props.group.userfirebase_id
+        console.log("id in creategroup:",id)
+        const update = {
+            
+            ...this.state
         }
-        console.log('addgroup', addGroup)
-        axios.put(`http://localhost:8080/api/groups/${id}`,(id, addGroup), {
-            "Content-Type": "application/json",
-            headers: { 'Authorization': token }
-            })
-             .then(res => {
-                 console.log("res", res)
-             })
-             .catch(err => {
-                 console.log("err", err)
-             })
-             this.props.history.push(`/user/${this.props.group.userfirebase_id}`)
+        this.props.updateGroup(id, update)
+        this.props.history.push(`/user/${this.props.userId.firebase_id}`)
     }
 
 
     render() {
         const { classes } = this.props;
-        console.log("user id in createform", this.props.userId)
+        console.log("user id in createform", this.props.userId.firebase_id)
         console.log("joincode", this.props.group)
         return (
             <div style={{ maxWidth: '100%', margin: '0 auto' }}>
@@ -338,9 +316,10 @@ class CreateForm extends React.Component {
 
 
 const mapStateToProps = state => {
-    console.log(state,"createform state")
+    console.log("createform state:", state.groups)
     return {
-        userId: state.auth.user
+        userId: state.auth.user,
+        group: state.groups.groups
     }
 }
     
@@ -348,4 +327,6 @@ const mapStateToProps = state => {
 
 
 
-export default  connect(mapStateToProps)(withStyles(styles)(CreateForm));
+export default  connect(mapStateToProps,{
+    updateGroup
+})(withStyles(styles)(CreateForm));
