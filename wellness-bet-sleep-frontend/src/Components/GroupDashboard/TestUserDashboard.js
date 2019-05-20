@@ -44,8 +44,8 @@ class TestUserDashboard extends Component {
             fitbitAccessToken: "",
 
             currentUser: {},
-            currentUserTodaySleep: "",
-            currentUserAggregatedSleep: "",
+            currentUserTodaySleep: 0,
+            currentUserAggregatedSleep: 0,
 
             startDate: "",
             endDate: "",
@@ -189,9 +189,6 @@ class TestUserDashboard extends Component {
         let StartHour = StartDate.getHours();
         let EndHour = EndDate.getHours();
 
-        // (I count the same day as from 8pm - 10am)
-        // Check if the start time is within this buffer zone. 
-        // see: https://stackoverflow.com/questions/4673527/converting-milliseconds-to-a-date-jquery-javascript
         if (dayDifference <= 1) {
             return true; 
         }
@@ -223,13 +220,12 @@ class TestUserDashboard extends Component {
         let startDaySleepAmount = 24 - startHour; 
 
         sleepCoordinatesPerPerson.coordinates.push({"x": dayNumber, "y": startDaySleepAmount}); 
-        sleepCoordinatesPerPerson.coordinates.push({StartDate, startDaySleepAmount});
 
         sleepAmount -= startDaySleepAmount;
 
-        for(let day = (dayNumber+1) ; day < (dayNumber + dayDifference-1); day++) {
+        for(let day = (dayNumber+1) ; day < (dayNumber + dayDifference); day++) {
 
-            sleepCoordinatesPerPerson.coordinates.push({"x": dayNumber, "y": sleepAmount-23});
+            sleepCoordinatesPerPerson.coordinates.push({"x": day, "y": 23});
             sleepCoordinatesPerPerson.sleepPerDay.push({});
         }
 
@@ -256,15 +252,17 @@ class TestUserDashboard extends Component {
         axios.get(`/api/users/${this.props.user.firebase_id}`)
             .then(response => { 
                 
-                let currentUser = response.data;
+                let currentUser = response.data.user;
+                console.log("CurrentUSER", response.data.user);
                 console.log("Total aggregated sleep for current user session: ", currentUser.SleepData)
 
-                let userSleepDataSessions = JSON.parse(currentUser.SleepData); 
+                // let userSleepDataSessions = JSON.parse(currentUser.SleepData);
+                // console.log("userSleepDataSessions ", userSleepDataSessions); 
 
                 let sleepPerCurrentUser = { 
                     username: currentUser.username,
                     photo: currentUser.profilePhoto,
-                    amountOfSleep: ""
+                    amountOfSleep: 0
                 }
 
                 let sleepGraphCoordinatesPerCurrentUser = {
@@ -276,13 +274,23 @@ class TestUserDashboard extends Component {
 
                 let dayNumber = 0; 
 
-                currentUser.sleepData.map(session => {
+                let sleep_sessions = [];
+                for(var i in currentUser.SleepData)
+                {
+                    sleep_sessions.push(currentUser.SleepData[i]);
+                }
+            
+            
+
+                // console.log("Sleep Sessions in Array form:", sleep_sessions);
+
+               sleep_sessions.map(session => {
 
                     console.log("How much the current each logged in user is getting per session:", session);
-                    let totalSleepInHoursPerDay = this.convertMillisecondsToHours(session.activeTimeMillis);
+                    let totalSleepInHoursPerDay = parseFloat(this.convertMillisecondsToHours(session.activeTimeMillis),10);
                         
-                        let startTime = session.startTimeMillis;
-                        let endTime = session.endTimeMillis;
+                        let startTime = parseFloat(session.startTimeMillis,10);
+                        let endTime = parseFloat(session.endTimeMillis,10);
 
                         if(this.isSleepInSameDay(startTime,endTime)){
 
@@ -313,12 +321,19 @@ class TestUserDashboard extends Component {
 
                 })
 
-                let currentDaySleepAmount = sleepGraphCoordinatesPerCurrentUser.sleepPerDay.filter(day => day.date == new Date());
+                // let currentDaySleepAmount = sleepGraphCoordinatesPerCurrentUser.sleepPerDay.filter(day => day.date == new Date());
 
                 this.setState({
                     sleepCoordinatesPerPerson: sleepGraphCoordinatesPerCurrentUser.coordinates,
-                    currentUserTodaySleep: currentDaySleepAmount.hours,
-                    currentUserAggregatedSleep: sleepPerCurrentUser
+
+                })
+
+                // this.setState({
+                //     currentUserTodaySleep: currentDaySleepAmount.hours
+                // })                    
+
+                this.setState({
+                    currentUserAggregatedSleep: sleepPerCurrentUser.amountOfSleep
                 })
             
             })
@@ -402,7 +417,7 @@ class TestUserDashboard extends Component {
             <UserSleepStatus currentUserSleep={this.state.currentUserTodaySleep} totalSleep={this.state.currentUserAggregatedSleep}/>
             </HorizontalInfo>
 
-            <AggregatedSleepGraph sleepCoordinatesPerPerson={this.state.sleepGraphCoordinatesPerPerson}/>
+            <AggregatedSleepGraph sleepCoordinatesPerPerson={this.state.sleepCoordinatesPerPerson}/>
             </div>
         
         );
