@@ -20,7 +20,7 @@ export default (state = initialState, actions) => {
                 ...state,
                 loading: false,
                 user: {
-                    ...actions.payload.usersData.user
+                    ...actions.payload.usersData
                 }
                 
             }
@@ -47,13 +47,13 @@ export default (state = initialState, actions) => {
         case authTypes.LOGIN_START:
             return {
                 ...state,
-                loadin: true
+                loading: true
             }
         case authTypes.LOGIN_SUCCESS: 
             return {
                 ...state,
                 loading: false,
-                user: actions.payload
+                user: actions.payload.user
             
             }
         case authTypes.LOGIN_FAIL: 
