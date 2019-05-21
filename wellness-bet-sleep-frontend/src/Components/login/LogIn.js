@@ -86,6 +86,7 @@ class Login extends Component {
              .then(({user}) => {
                 const { uid, email, ra} = user;
                 localStorage.setItem("token", ra);
+                localStorage.setItem("fb_id", uid);
                 let id = uid
                 const data = {
                     email: this.state.email,
@@ -114,6 +115,7 @@ class Login extends Component {
             
             const {uid, email, ra} = user; 
             localStorage.setItem("token", ra);
+            localStorage.setItem("fb_id", uid);
 
             this.props.history.push(`/user/${uid}`)
             // this.props.emailLogin(user)
