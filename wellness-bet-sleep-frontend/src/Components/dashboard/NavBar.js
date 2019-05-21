@@ -159,6 +159,9 @@ class GroupsNav extends React.Component {
     this.props.history.push('/dashboard/TestUserDashboard');
   }
 
+  toGroupUser = () => {
+    this.props.history.push("/user/groupuser");
+  }
 
   render() {
 
@@ -178,11 +181,7 @@ class GroupsNav extends React.Component {
             updateAnchorEl(null)
           }
           const routeHandlerJoin = () => {
-<<<<<<< HEAD
             this.props.history.push(`/user/join`)
-=======
-            this.props.history.push(`/user/join/`)
->>>>>>> 8de7c5abe215c0f11bd2e9a87491cf9fa713da8e
             updateAnchorEl(null)
           }
           return (
@@ -196,6 +195,9 @@ class GroupsNav extends React.Component {
                   </Button>
                   <Button onClick={this.updateSleepData} variant="contained" color="primary" className={classes.button}>
                     Authenticate GoogleFit/Update SleepData
+                  </Button>
+                  <Button onClick={this.toGroupUser} variant="contained" color="primary" className={classes.button}>
+                    Group User
                   </Button>
                 </Toolbar>
               </AppBar>
