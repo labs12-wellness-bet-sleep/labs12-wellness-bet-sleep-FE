@@ -104,7 +104,13 @@ const styles = theme => ({
   },
   rightIcon: {
     marginLeft: theme.spacing.unit,
-  }
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
 
 });
 
@@ -145,6 +151,13 @@ class GroupsNav extends React.Component {
     console.log('log out')
   }
 
+  updateSleepData = () => {
+    this.props.history.push('/dashboard/GoogleFitAuthentication');
+  }
+
+  checkSleepData = () => {
+    this.props.history.push('/dashboard/TestUserDashboard');
+  }
 
 
   render() {
@@ -174,6 +187,12 @@ class GroupsNav extends React.Component {
               <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar style={{display: 'flex', justifyContent: 'flex-end'}}>
                   <Button onClick={this.logout} color="inherit" style={{backgroundColor:'lightBlue'}}>Log Out</Button>
+                  <Button onClick={this.checkSleepData} variant="contained" color="primary" className={classes.button}>
+                    Check Sleep Data
+                  </Button>
+                  <Button onClick={this.updateSleepData} variant="contained" color="primary" className={classes.button}>
+                    Authenticate GoogleFit/Update SleepData
+                  </Button>
                 </Toolbar>
               </AppBar>
               <Drawer
