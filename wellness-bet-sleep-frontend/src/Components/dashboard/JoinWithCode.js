@@ -2,6 +2,10 @@ import React from "react";
 import { withStyles, Typography, TextField, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 
+import {groupTypes} from '../../Store/Actions/actionTypes';
+
+
+
 import axios from 'axios';
 
 const styles = theme => ({
@@ -68,33 +72,38 @@ class JoinWithCode extends React.Component {
     const groupId = this.state.joincode;
   };
 
+  addParticipantJoinCode = (e) => {
+    e.preventDefault();
+    const joinCode = this.state.joincode;
+    const token = localStorage.getItem("token");
+    // const firebaseId = localStorage.getItem("fb_id");
+    const participantJoinCode = {
+      groupId: joinCode,
+      partUserId: this.props.firebaseId      
+    };
+    axios
+      .post(
+        `http://localhost:8080/api/participant/add`,
+        { ...participantJoinCode},
+        // {
+        //   "Content-Type": "application/json",
+        //   headers: { Authorization: token }
+        // }
+      )
+      .then(res => {
+        console.log("participant join code", res.data);
+        
+        this.props.onJoinGroup(res)
+      }).catch(err => {
+        console.log(err);
+      });
+    // this.props.history.push(`/group/uploadIamge/${joinCode}`);
+    
+  };
+
   render() {
     const { classes } = this.props;
 
-    const addParticipantJoinCode = () => {
-      const joinCode = localStorage.getItem("joinCode");
-      const token = localStorage.getItem("token");
-      const participantJoinCode = {
-        joinCode: joinCode
-      };
-      axios
-        .post(
-          `http://localhost:8080/api/participant/add`,
-          { ...participantJoinCode },
-          {
-            "Content-Type": "application/json",
-            headers: { Authorization: token }
-          }
-        )
-        .then(res => {
-          console.log("participant join code", res.data);
-          this.setState({
-            group: res.data.newGroup
-          });
-        });
-      this.props.history.push(`/group/uploadIamge/${joinCode}`);
-      
-    };
 
     return (
       <div>
@@ -128,7 +137,7 @@ class JoinWithCode extends React.Component {
                 variant="outlined"
                 color="primary"
                 style={{ fontSize: "12px" }}
-                onClick={addParticipantJoinCode}
+                onClick={this.addParticipantJoinCode}
               >
                 Join Group
               </Button>
@@ -140,4 +149,17 @@ class JoinWithCode extends React.Component {
   }
 }
 
-export default withStyles(styles)(JoinWithCode);
+const mapStateToProps = state => {
+  // console.log('state from join code', state.groups.groups);
+  console.log(state.auth, 'state from joincode')
+  return {
+    firebaseId: state.auth.user.firebase_id
+  }
+}
+
+const mapDispatchToProps = dispatch => ({ 
+  onJoinGroup: (res) => dispatch({type: groupTypes.UPDATE_GROUP_SUCCESS, payload: res.data})
+})
+
+// export default withStyles(styles)(JoinWithCode);
+export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(JoinWithCode));
