@@ -160,7 +160,7 @@ class GroupsNav extends React.Component {
             updateAnchorEl(null)
           }
           const routeHandlerJoin = () => {
-            this.props.history.push(`/user/join/${localStorage.getItem('fb_id')}`)
+            this.props.history.push(`/user/join/`)
             updateAnchorEl(null)
           }
           return (
@@ -209,7 +209,7 @@ class GroupsNav extends React.Component {
                   console.log('group in map', group)
                   return (
                     <ListItem key={group.id} className={classes.listitem} button >
-                    <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
+                    <ListItemText  key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
 
                   </ListItem>
                   )

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import GroupForm from "./GroupForm";
 import Groups from "./Groups";
+import GroupJoinCode from './GroupJoinCode';
 
 import { Route, NavLink } from "react-router-dom";
 import axios from "../../axios-sleep.js";
@@ -145,6 +146,7 @@ class GroupPage extends Component {
         /> */}
         <GroupForm />
         <Groups />
+        <GroupJoinCode />
       </div>
     );
   }
