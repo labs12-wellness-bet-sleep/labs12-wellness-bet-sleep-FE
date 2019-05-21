@@ -6,7 +6,7 @@ import { groupTypes } from '../../Store/Actions/actionTypes';
 
 
 
-import axios from 'axios';
+import axios from '../../axios-sleep.js';
 
 const styles = theme => ({
   container: {
