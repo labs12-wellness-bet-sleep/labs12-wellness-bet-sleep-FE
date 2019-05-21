@@ -16,7 +16,9 @@ class GroupForm extends Component {
       endDate: "",
       groupMessage: "",
       potTotal: "",
-      joinCode: ""
+      joinCode: "",
+      groups: [],
+      error: ""
     };
   }
 
@@ -57,9 +59,9 @@ class GroupForm extends Component {
       // potTotal: "",
       joinCode: ""
     });
-    console.log('button clicked');
-      
+    console.log('button clicked');      
   }
+
 
   render() {
     return (
@@ -123,7 +125,7 @@ class GroupForm extends Component {
           <button
             type="submit"
             className="addBtn"
-            onSubmit={() => this.addGroup()}
+            onSubmit={this.addAnotherGroup}
           >
             Add Group
           </button>

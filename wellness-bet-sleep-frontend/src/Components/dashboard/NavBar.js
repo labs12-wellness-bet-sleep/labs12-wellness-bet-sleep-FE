@@ -178,7 +178,11 @@ class GroupsNav extends React.Component {
             updateAnchorEl(null)
           }
           const routeHandlerJoin = () => {
+<<<<<<< HEAD
             this.props.history.push(`/user/join`)
+=======
+            this.props.history.push(`/user/join/`)
+>>>>>>> 8de7c5abe215c0f11bd2e9a87491cf9fa713da8e
             updateAnchorEl(null)
           }
           return (
@@ -230,7 +234,7 @@ class GroupsNav extends React.Component {
                   console.log('group in map', group)
                   return (
                     <ListItem key={group.id} className={classes.listitem} button >
-                      <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
+                    <ListItemText  key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
 
                     </ListItem>
                   )
