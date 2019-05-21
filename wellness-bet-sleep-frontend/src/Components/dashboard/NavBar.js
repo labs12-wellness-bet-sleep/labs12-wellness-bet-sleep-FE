@@ -16,6 +16,8 @@ import {
   Button, Card, CardActionArea, CardMedia
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
+import accountCircle from '@material-ui/icons'
+import Icon from '@material-ui/core/Icon';
 import { Route } from 'react-router-dom';
 import toRenderProps from 'recompose/toRenderProps';
 import withState from 'recompose/withState';
@@ -38,7 +40,6 @@ const styles = theme => ({
   root: {
     display: 'flex',
     margin: '0 auto',
-    marginLeft: '400px'
   },
   appBar: {
     marginLeft: drawerWidth,
@@ -100,6 +101,9 @@ const styles = theme => ({
     height: 440,
     margin: '0 auto',
     boxShadow: 'none'
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
   }
 
 });
@@ -128,18 +132,19 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 class GroupsNav extends React.Component {
   state = {
-    group: []
+    groups: []
   }
 
-  
- 
+
+
   logout = () => {
     // localStorage.removeItem('token');
     localStorage.clear();
     auth.signOut()
     this.props.history.push('/')
     console.log('log out')
-}
+  }
+
 
 
   render() {
@@ -151,27 +156,24 @@ class GroupsNav extends React.Component {
         {({ anchorEl, updateAnchorEl }) => {
           const open = Boolean(anchorEl);
           const routeHandler = () => {
-          
+            console.log("route handler:", this.props.userId)
             this.props.addGroup(this.props.userId)
-            this.props.history.push(`/user/create/${this.props.userId}`)
+            this.props.history.push(`/user/create`)
             updateAnchorEl(null)
           }
           const handleClose = () => {
             updateAnchorEl(null)
           }
           const routeHandlerJoin = () => {
-            this.props.history.push(`/user/join/${localStorage.getItem('fb_id')}`)
+            this.props.history.push(`/user/join`)
             updateAnchorEl(null)
           }
           return (
             <div className={classes.root}>
               <CssBaseline />
               <AppBar position="fixed" className={classes.appBar}>
-              <button onClick={this.logout}>Logout</button>
-                <Toolbar>
-                  <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
-
-                  </Typography>
+                <Toolbar style={{display: 'flex', justifyContent: 'flex-end'}}>
+                  <Button onClick={this.logout} color="inherit" style={{backgroundColor:'lightBlue'}}>Log Out</Button>
                 </Toolbar>
               </AppBar>
               <Drawer
@@ -209,11 +211,11 @@ class GroupsNav extends React.Component {
                   console.log('group in map', group)
                   return (
                     <ListItem key={group.id} className={classes.listitem} button >
-                    <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
+                      <ListItemText key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
 
-                  </ListItem>
+                    </ListItem>
                   )
-                 
+
                 })}
 
               </Drawer>
@@ -234,16 +236,8 @@ class GroupsNav extends React.Component {
                   </Card>
                 </div> : null
               }
-              <Route path="/user/join/:id" component={JoinWithCode} />
-              <Route
-              path="/user/create/:id"
-              render={(props)=>(
-              <CreateForm
-              {...props}
-              group={this.state.group}
-              />
-              )}
-              />
+              <Route path="/user/join" component={JoinWithCode} />
+              <Route path="/user/create" component={CreateForm} />
             </div>
 
           )
@@ -256,7 +250,7 @@ class GroupsNav extends React.Component {
 
 const mapStateToProps = (state) => {
   console.log("user groups", state.groups.addedGroups)
-  
+
   return {
     groups: state.groups.addedGroups,
     userId: state.auth.user.firebase_id

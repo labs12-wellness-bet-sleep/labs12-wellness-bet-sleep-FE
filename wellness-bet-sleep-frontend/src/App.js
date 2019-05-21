@@ -80,7 +80,7 @@ class App extends Component {
 
 
         <Route
-          path="/user/:id"
+          path="/user"
           render={(props) => (
             <Dashboard
               {...props}
