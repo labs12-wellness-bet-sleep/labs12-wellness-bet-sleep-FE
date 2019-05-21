@@ -169,6 +169,7 @@ class Register extends Component {
       const {uid, email, ra} = user; 
       const id = uid
       localStorage.setItem("token", ra);
+      localStorage.setItem("fb_id", uid);
         let uploadImage = storage
         .ref(`images/${currentImageName}`)
         .put(this.state.file);
