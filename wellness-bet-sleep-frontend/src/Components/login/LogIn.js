@@ -86,17 +86,15 @@ class Login extends Component {
              .then(({user}) => {
                 const { uid, email, ra} = user;
                 localStorage.setItem("token", ra);
-                // localStorage.getItem('token');
-                // let id = uid
+                let id = uid
                 const data = {
                     email: this.state.email,
-                    // fullName: this.state.fullName,
+                    fullName: this.state.fullName,
                     // profilePhoto: url,
                     firebase_id: uid
                   };
                 this.props.emailLogin(user)
-                // this.props.history.push(`/user/${id}`)
-                this.props.history.push(`/user/${data.firebase_id}`)
+                this.props.history.push(`/user/${id}`)
              })
             .catch(
                 error => {

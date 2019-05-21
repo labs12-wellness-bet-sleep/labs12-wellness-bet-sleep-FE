@@ -6,9 +6,9 @@ import Group from "./Group";
 import { getGroups } from "../../Store/Actions/group-actions";
 
 class Groups extends Component {
-  componentDidMount() {
-    this.props.getGroups();
-  }
+  // componentDidMount() {
+  //   this.props.getGroups();
+  // }
   render() {
     return (
       <div className="groups">

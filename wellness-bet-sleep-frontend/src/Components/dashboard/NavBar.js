@@ -22,6 +22,7 @@ import withState from 'recompose/withState';
 
 import JoinWithCode from './JoinWithCode';
 import CreateForm from './CreateForm';
+import VenmoUpload from './VenmoUpload';
 import { renderComponent } from 'recompose';
 
 import { connect } from 'react-redux';
@@ -163,6 +164,10 @@ class GroupsNav extends React.Component {
             this.props.history.push(`/user/join/`)
             updateAnchorEl(null)
           }
+          const venmoUploadPage = () => {
+            this.props.history.push(`/user/venmoUpload`)
+           
+          }
           return (
             <div className={classes.root}>
               <CssBaseline />
@@ -209,7 +214,7 @@ class GroupsNav extends React.Component {
                   console.log('group in map', group)
                   return (
                     <ListItem key={group.id} className={classes.listitem} button >
-                    <ListItemText  key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} />
+                    <ListItemText  key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} onClick={venmoUploadPage}/>
 
                   </ListItem>
                   )
@@ -234,7 +239,8 @@ class GroupsNav extends React.Component {
                   </Card>
                 </div> : null
               }
-              <Route path="/user/join/:id" component={JoinWithCode} />
+              <Route path="/user/join" component={JoinWithCode} />
+              {/* <Route path="/user/venmoUpload" component={VenmoUpload} /> */}
               <Route
               path="/user/create/:id"
               render={(props)=>(
