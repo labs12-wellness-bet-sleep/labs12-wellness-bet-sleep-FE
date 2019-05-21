@@ -1,6 +1,6 @@
 import axios from "../../axios-sleep";
 import { groupTypes } from "./actionTypes";
-import axisUtils from "react-vis/dist/utils/axis-utils";
+
 
 export const getGroups = (id) => dispatch => {
   dispatch({ type: groupTypes.FETCH_GROUPS_START });

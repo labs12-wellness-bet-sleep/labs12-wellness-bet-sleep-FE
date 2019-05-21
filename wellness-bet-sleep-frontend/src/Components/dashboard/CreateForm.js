@@ -52,6 +52,7 @@ class CreateForm extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            group: [],
             groupName: '',
             startDate: null,
             endDate: null,
@@ -91,15 +92,24 @@ class CreateForm extends React.Component {
     }
 
     createGroup = () => {
+        const { groupName, startDate, endDate, buyInAmt, groupMessage, potTotal } = this.state;
         // console.log("id from createform",this.props.userId.id)
         // localStorage.setItem('userId', this.props.userId.id)
         const id = this.props.group.id
         console.log("id in creategroup:",id)
         const update = {
-            
-            ...this.state
+
+            groupName,
+            startDate,
+            endDate,
+            buyInAmt,
+            groupMessage,
+            potTotal
         }
         this.props.updateGroup(id, update)
+        this.setState({
+            group: this.props.group
+        })
         this.props.history.push(`/user/${this.props.userId.firebase_id}`)
     }
 
