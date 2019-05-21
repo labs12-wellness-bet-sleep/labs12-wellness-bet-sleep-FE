@@ -21,6 +21,7 @@ import Profile from './Components/profile/Profile'
 import GroupDashboard from "./Components/GroupDashboard/GroupDashboard.js";
 import TestUserDashboard from "./Components/GroupDashboard/TestUserDashboard.js";
 import GoogleFitAuthenticationPage from "./Components/GoogleFitAuthentication/GoogleFitAuthenticationPage.js";
+import VenmoUpload from './Components/dashboard/VenmoUpload';
 
 import SendEmail from './Components/Email/SendEmail.js';
 import GroupPage from './Components/group/GroupPage';
@@ -119,10 +120,11 @@ class App extends Component {
       <Route path="/dashboard/create" component={CreateForm} />
       <Route path="/dashboard/GoogleFitAuthentication" render={props => <GoogleFitAuthenticationPage {...props}/>} />
       <Route path="/dashboard/TestUserDashboard" render={props => <TestUserDashboard {...props}/>}/>
+      <Route path="/user/venmoUpload" component={VenmoUpload} />
      
 
         <Route
-          path="/user/:id"
+          path="/user"
           render={(props) => (
             <Dashboard
               {...props}
