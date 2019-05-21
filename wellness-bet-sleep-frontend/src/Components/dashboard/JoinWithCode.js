@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles, Typography, TextField, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 
-import {groupTypes} from '../../Store/Actions/actionTypes';
+import { groupTypes } from '../../Store/Actions/actionTypes';
 
 
 
@@ -68,14 +68,10 @@ class JoinWithCode extends React.Component {
     });
   };
 
-  joinGroup = () => {
-    const groupId = this.state.joincode;
-  };
-
   addParticipantJoinCode = (e) => {
     e.preventDefault();
     const joinCode = this.state.joincode;
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     // const firebaseId = localStorage.getItem("fb_id");
     const participantJoinCode = {
       groupId: joinCode,
@@ -83,7 +79,7 @@ class JoinWithCode extends React.Component {
     };
     axios
       .post(
-        `http://localhost:8080/api/participant/add`,
+        `/api/participant/add`,
         { ...participantJoinCode},
         // {
         //   "Content-Type": "application/json",
