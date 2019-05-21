@@ -16,6 +16,8 @@ import {
   Button, Card, CardActionArea, CardMedia
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
+import accountCircle from '@material-ui/icons'
+import Icon from '@material-ui/core/Icon';
 import { Route } from 'react-router-dom';
 import toRenderProps from 'recompose/toRenderProps';
 import withState from 'recompose/withState';
@@ -39,7 +41,6 @@ const styles = theme => ({
   root: {
     display: 'flex',
     margin: '0 auto',
-    marginLeft: '400px'
   },
   appBar: {
     marginLeft: drawerWidth,
@@ -101,7 +102,16 @@ const styles = theme => ({
     height: 440,
     margin: '0 auto',
     boxShadow: 'none'
-  }
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
 
 });
 
@@ -129,19 +139,30 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 class GroupsNav extends React.Component {
   state = {
-    group: []
+    groups: []
   }
 
-  
- 
+
+
   logout = () => {
     // localStorage.removeItem('token');
     localStorage.clear();
     auth.signOut()
     this.props.history.push('/')
     console.log('log out')
-}
+  }
 
+  updateSleepData = () => {
+    this.props.history.push('/dashboard/GoogleFitAuthentication');
+  }
+
+  checkSleepData = () => {
+    this.props.history.push('/dashboard/TestUserDashboard');
+  }
+
+  toGroupUser = () => {
+    this.props.history.push("/user/groupuser");
+  }
 
   render() {
 
@@ -152,16 +173,16 @@ class GroupsNav extends React.Component {
         {({ anchorEl, updateAnchorEl }) => {
           const open = Boolean(anchorEl);
           const routeHandler = () => {
-          
+            console.log("route handler:", this.props.userId)
             this.props.addGroup(this.props.userId)
-            this.props.history.push(`/user/create/${this.props.userId}`)
+            this.props.history.push(`/user/create`)
             updateAnchorEl(null)
           }
           const handleClose = () => {
             updateAnchorEl(null)
           }
           const routeHandlerJoin = () => {
-            this.props.history.push(`/user/join/`)
+            this.props.history.push(`/user/join`)
             updateAnchorEl(null)
           }
           const venmoUploadPage = () => {
@@ -172,11 +193,17 @@ class GroupsNav extends React.Component {
             <div className={classes.root}>
               <CssBaseline />
               <AppBar position="fixed" className={classes.appBar}>
-              <button onClick={this.logout}>Logout</button>
-                <Toolbar>
-                  <Typography variant="h6" style={{ color: '#229BD0' }} noWrap>
-
-                  </Typography>
+                <Toolbar style={{display: 'flex', justifyContent: 'flex-end'}}>
+                  <Button onClick={this.logout} color="inherit" style={{backgroundColor:'lightBlue'}}>Log Out</Button>
+                  <Button onClick={this.checkSleepData} variant="contained" color="primary" className={classes.button}>
+                    Check Sleep Data
+                  </Button>
+                  <Button onClick={this.updateSleepData} variant="contained" color="primary" className={classes.button}>
+                    Authenticate GoogleFit/Update SleepData
+                  </Button>
+                  <Button onClick={this.toGroupUser} variant="contained" color="primary" className={classes.button}>
+                    Group User
+                  </Button>
                 </Toolbar>
               </AppBar>
               <Drawer
@@ -216,9 +243,9 @@ class GroupsNav extends React.Component {
                     <ListItem key={group.id} className={classes.listitem} button >
                     <ListItemText  key={group.id} classes={{ primary: this.props.classes.text }} primary={group.groupName} onClick={venmoUploadPage}/>
 
-                  </ListItem>
+                    </ListItem>
                   )
-                 
+
                 })}
 
               </Drawer>
@@ -240,16 +267,9 @@ class GroupsNav extends React.Component {
                 </div> : null
               }
               <Route path="/user/join" component={JoinWithCode} />
+              <Route path="/user/create" component={CreateForm} />
               {/* <Route path="/user/venmoUpload" component={VenmoUpload} /> */}
-              <Route
-              path="/user/create/:id"
-              render={(props)=>(
-              <CreateForm
-              {...props}
-              group={this.state.group}
-              />
-              )}
-              />
+             
             </div>
 
           )
@@ -262,7 +282,7 @@ class GroupsNav extends React.Component {
 
 const mapStateToProps = (state) => {
   console.log("user groups", state.groups.addedGroups)
-  
+
   return {
     groups: state.groups.addedGroups,
     userId: state.auth.user.firebase_id

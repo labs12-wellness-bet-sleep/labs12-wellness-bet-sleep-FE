@@ -2,6 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios-sleep.js';
 import actions from '../../Store/Actions';
+import styled from 'styled-components';
+
+
+const Header = styled.div`
+    display: flex;
+    flex-directon: column; 
+    width: 500px;
+    margin: 25%;
+`
+
+const HeaderItem = styled.div`
+    width: 33%;
+`
+
+const HorizontalInfo = styled.div`
+    display: flex;
+    flex-directon: row; 
+`
+
+const Description = styled.div`
+    color: "#008BC9";
+    font-size: 24px;
+`
 
 class GoogleFitAuthenticationPage extends Component {
     constructor(props){
@@ -109,13 +132,13 @@ class GoogleFitAuthenticationPage extends Component {
                             .catch(err => console.log(err));
                                         
                                         
-                        
+                        this.props.history.push(`/dashboard/TestUserDashboard`);
 
                 })
                 .catch(err => console.log("Check out this error!", err));
 
                 
-               this.props.history.push(`/dashboard/TestUserDashboard`);
+               
 
                 
             } else {
@@ -170,18 +193,24 @@ class GoogleFitAuthenticationPage extends Component {
         }
         else {
             return(
-                <div className="Google Fit OAuth">
+                <Header>
                 
+                <HorizontalInfo>
+                <Description>
                 {this.state.loginStatus}
-    
-                <div className="description">
+                </Description>
+
+                <Description>
                 This connects/disconnects your Google Fitness sleep data to your Wellness Bet App. 
-                </div>
+                </Description>
+                </HorizontalInfo>
     
+                <HorizontalInfo>
                 <button onClick={this.handleAuthClick()}>{this.state.logInButtonName}</button>
                 <button onClick={this.handleAuthClick()} style={ButtonStyle}>Revoke Access To App</button>
-    
-                </div>
+                </HorizontalInfo>
+                
+                </Header>
             )
         }
     }
