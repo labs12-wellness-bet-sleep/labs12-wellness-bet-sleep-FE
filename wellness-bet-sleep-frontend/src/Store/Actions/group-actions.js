@@ -2,10 +2,10 @@ import axios from "../../axios-sleep";
 import { groupTypes } from "./actionTypes";
 import axisUtils from "react-vis/dist/utils/axis-utils";
 
-export const getGroups = () => dispatch => {
+export const getGroups = (id) => dispatch => {
   dispatch({ type: groupTypes.FETCH_GROUPS_START });
   axios
-    .get("/api/groups", {
+    .get(`/api/participant/${id}/groups`, {
       "Content-Type": "application/json",
       headers: { authorization: localStorage.getItem("token") }
     })
