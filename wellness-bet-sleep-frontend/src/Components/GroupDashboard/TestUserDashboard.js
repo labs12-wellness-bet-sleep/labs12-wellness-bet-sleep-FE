@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from '../../axios-sleep.js';
 import { connect } from 'react-redux';
 
+import actions from '../../Store/Actions';
+import { auth } from '../../FirebaseConfig';
 
 import AggregatedSleepGraph from "./AggregatedSleepGraph.js";
 import TimeLeft from "./TimeLeft.js";
@@ -59,8 +61,20 @@ class TestUserDashboard extends Component {
     }
 
     componentDidMount() {
-
+        // auth.onAuthStateChanged((user) => {
+        //     console.log(user, 'in auth listener')
+        //     if (user) {
+        //       const { uid, ra, email } = user;
+        //       localStorage.setItem('token', ra)
+        //       if (user.email) {
+        //         const { email } = user;
+        //         this.props.oAuth({ firebase_id: uid, email, token: ra });
+                
+        //         }
+        //     }
+        // })
         // this.getData();
+        
         this.getDataAfterStateUpdated();
 
         console.log("After component did mount: " , this.state);
@@ -245,11 +259,15 @@ class TestUserDashboard extends Component {
         this.setState({daysLeft: 10}); 
     }
 
-    async getCurrentUserSleepData() {
+    getCurrentUserSleepData = () => {
+
+        let fbId = localStorage.getItem("fb_id");
+        let token = localStorage.getItem("token");
 
         // this.setState({currentUserSleep: 8})
+        console.log("fbID ",fbId);
         console.log("props user", this.props.user);
-        await axios.get(`/api/users/${this.props.user.firebase_id}`)
+        axios.get(`/api/users/${fbId}`, {headers: {'authorization': token}})
             .then(response => { 
                 
                 let currentUser = response.data.user;
@@ -430,4 +448,10 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(TestUserDashboard);
+const mapDispatchToProps = dispatch => {
+    return {
+      oAuth: user => dispatch(actions.auth.initOAuth(user)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TestUserDashboard);
