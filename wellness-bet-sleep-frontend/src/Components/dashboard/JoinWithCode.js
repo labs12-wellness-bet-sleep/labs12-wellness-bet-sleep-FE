@@ -79,7 +79,7 @@ class JoinWithCode extends React.Component {
     };
     axios
       .post(
-        `/api/participant/add`,
+        `https://sleep-bet.herokuapp.com/api/participant/add`,
         { ...participantJoinCode},
         // {
         //   "Content-Type": "application/json",
