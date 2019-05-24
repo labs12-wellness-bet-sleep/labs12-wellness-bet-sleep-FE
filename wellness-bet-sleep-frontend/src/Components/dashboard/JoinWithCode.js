@@ -93,7 +93,6 @@ class JoinWithCode extends React.Component {
       )
       .then(res => {
         console.log("participant join code", res.data);
-        localStorage.setItem('joinCode', res.data.joinCode);
         this.props.onJoinGroup(res)
       }).catch(err => {
         console.log(err);
