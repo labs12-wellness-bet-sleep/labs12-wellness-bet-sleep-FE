@@ -50,7 +50,7 @@ class VenmoUpload extends Component {
             console.log(participantScreenshot);
 
             axios
-              .put(`/api/participant/${this.props.participantId}`, {
+              .put(`/api/participant/${this.props.partUserId}`, {
                 ...participantScreenshot
               })
               .then(res => {
@@ -87,7 +87,7 @@ const mapStateToProps = state => {
   return {
     joinCode: state.groups.groups.joinCode,
     partUserId: state.auth.user.firebase_id,
-    participantId: state.auth.user.id
+//     participantId: state.auth.user.id
   };
 };
 
