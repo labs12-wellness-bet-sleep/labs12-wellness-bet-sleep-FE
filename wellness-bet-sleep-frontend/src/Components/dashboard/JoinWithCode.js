@@ -84,7 +84,7 @@ class JoinWithCode extends React.Component {
     };
     axios
       .post(
-        `http://localhost:8080/api/participant/add`,
+        `api/participant/add`,
         { ...participantJoinCode},
         // {
         //   "Content-Type": "application/json",
