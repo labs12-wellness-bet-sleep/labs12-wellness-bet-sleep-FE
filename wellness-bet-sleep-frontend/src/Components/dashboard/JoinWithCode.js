@@ -70,25 +70,29 @@ class JoinWithCode extends React.Component {
 
   addParticipantJoinCode = (e) => {
     e.preventDefault();
-    const joinCode = this.state.joincode;
+    // const joinCode = this.state.joincode;
+    // console.log(this.state.joincode, 'this.state.joincode joinwithcode');
+    // console.log(joinCode);
+    // const joincodeObj = {joinCode}
+    // console.log(joincodeObj, 'joincodeObj')
+
     // const token = localStorage.getItem("token");
     // const firebaseId = localStorage.getItem("fb_id");
     const participantJoinCode = {
-      groupId: joinCode,
+      groupId: this.state.joincode,
       partUserId: this.props.firebaseId      
     };
     axios
       .post(
-        `https://sleep-bet.herokuapp.com/api/participant/add`,
+        `api/participant/add`,
         { ...participantJoinCode},
         // {
         //   "Content-Type": "application/json",
-        //   headers: { Authorization: token }
+        //   joincodeObjation: token }
         // }
       )
       .then(res => {
         console.log("participant join code", res.data);
-        
         this.props.onJoinGroup(res)
       }).catch(err => {
         console.log(err);
@@ -149,7 +153,7 @@ const mapStateToProps = state => {
   // console.log('state from join code', state.groups.groups);
   console.log(state.auth, 'state from joincode')
   return {
-    firebaseId: state.auth.user.firebase_id
+    firebaseId: state.auth.user.firebase_id,
   }
 }
 

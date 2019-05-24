@@ -30,7 +30,8 @@ export const addGroup = (userfirebase_id) => dispatch => {
       headers: { 'Authorization': token }
     })
     .then(res => {
-      console.log("res:",res.data.newGroup)
+      console.log("res:",res.data.newGroup);
+      localStorage.setItem('joinCode', res.data.newGroup.joinCode)
       return (
         dispatch({ type: groupTypes.ADD_GROUP_SUCCESS, payload: res.data.newGroup })
       )
@@ -57,7 +58,8 @@ export const updateGroup = (id, group) => dispatch => {
       headers: { Authorization: localStorage.getItem("token") }
     })
     .then(res => {
-      console.log("res::::11", res.data)
+      console.log("res::::11", res.data);
+      localStorage.setItem('joinCode', res.data.joinCode)
       return (
         dispatch({type: groupTypes.UPDATE_GROUP_SUCCESS, payload: res.data})
       )
